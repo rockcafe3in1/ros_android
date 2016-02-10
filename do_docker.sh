@@ -73,7 +73,7 @@ echo
 # Requires docker 1.3+
 cmd_exists docker || die 'docker was not found'
 
-echo -e '\e[34mPull base docker image.\e[39m'
+echo -e '\e[34mPulling base docker image.\e[39m'
 sudo docker pull ekumenlabs/rosndk
 
 
