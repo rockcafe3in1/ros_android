@@ -37,6 +37,7 @@ elif [ $1 == 'collada_dom' ]; then
 elif [ $1 == 'console_bridge' ]; then
     URL=https://github.com/ros/console_bridge.git
     COMP='git'
+    HASH='964a9a70e0fc607476e439b8947a36b07322c304'
 elif [ $1 == 'curl' ]; then
     URL=http://curl.haxx.se/download/curl-7.39.0.tar.bz2
     COMP='bz2'
@@ -114,8 +115,8 @@ fi
 if [ $1 == 'boost' ]; then
     cd $prefix/boost
     ./build-android.sh $ANDROID_NDK --boost=1.53.0
-elif [ $1 == 'urdfdom' ]; then
-    cd $prefix/urdfdom
+elif [ $1 == 'urdfdom' ] || [ $1 == 'console_bridge' ]; then
+    cd $prefix/$1
     git checkout $HASH
 elif [ $1 == 'bfl' ]; then
     mv $prefix/bfl-release-release-indigo-bfl-0.7.0-6 $prefix/bfl-0.7.0
