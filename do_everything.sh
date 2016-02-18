@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Define the number of simultaneous jobs to trigger for the different
+# tasks that allow it. Use the number of available processors in the
+# system.
+export PARALLEL_JOBS=$(nproc)
+
 if [[ -f /opt/ros/indigo/setup.bash ]] ; then
     source /opt/ros/indigo/setup.bash
 else

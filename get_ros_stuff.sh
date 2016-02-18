@@ -28,7 +28,7 @@ if [ -f src/.rosinstall ]; then
   wstool update
   cd ..
 else
-  wstool init -j8 src $my_loc/ndk.rosinstall
+  wstool init -j$PARALLEL_JOBS src $my_loc/ndk.rosinstall
 fi
 
 exit 0
