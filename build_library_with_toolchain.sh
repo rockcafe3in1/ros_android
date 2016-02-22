@@ -35,7 +35,7 @@ else
 fi
 
 export PATH=$PATH:$2/toolchain/bin
-make -s -j8
+make -s -j$PARALLEL_JOBS -l$PARALLEL_JOBS
 
 if [ $1 == 'poco' ]; then
     mkdir -p $CMAKE_PREFIX_PATH/lib
