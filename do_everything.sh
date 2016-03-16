@@ -261,6 +261,7 @@ echo
 echo -e '\e[34mBuilding library dependencies.\e[39m'
 echo
 
+# if the library doesn't exist, then build it
 [ -f $prefix/target/lib/libbz2.a ] || run_cmd build_library bzip2 $prefix/libs/bzip2
 [ -f $prefix/target/lib/libuuid.a ] || run_cmd build_library uuid $prefix/libs/uuid
 [ -f $prefix/target/lib/libboost_system.a ] || run_cmd copy_boost $prefix/libs/boost
