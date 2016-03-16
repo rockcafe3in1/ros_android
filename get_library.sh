@@ -84,7 +84,7 @@ elif [ $1 == 'pcrecpp' ]; then
     URL=https://github.com/brianb/pcre-7.8.git
     COMP='git'
 elif [ $1 == 'poco' ]; then
-    URL=http://pocoproject.org/releases/poco-1.4.6/poco-1.4.6p2.tar.gz
+    URL=http://pocoproject.org/releases/poco-1.6.1/poco-1.6.1.tar.gz
     COMP='gz'
 elif [ $1 == 'qhull' ]; then
     URL=http://www.qhull.org/download/qhull-2012.1-src.tgz
@@ -103,8 +103,12 @@ elif [ $1 == 'uuid' ]; then
     URL=https://github.com/chadrockey/uuid_cmake
     COMP='git'
 elif [ $1 == 'yaml-cpp' ]; then
-    URL=https://github.com/creativa77/yaml-cpp.git
+    URL=https://github.com/ekumenlabs/yaml-cpp.git
     COMP='git'
+elif [ $1 == 'rospkg' ]; then
+    URL=https://github.com/ros-infrastructure/rospkg.git
+    COMP='git'
+    HASH='93b1b72f256badf22ccc926b22646f2e83b720fd'
 fi
 
 if [ $COMP == 'gz' ]; then

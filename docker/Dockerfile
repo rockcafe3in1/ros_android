@@ -26,6 +26,9 @@ ENV PATH /opt/android-sdk-linux/tools:/opt/android-sdk-linux/platform-tools:$PAT
 ENV ANDROID_HOME /opt/android-sdk-linux
 RUN (while true; do echo 'y'; sleep 2; done) | android update sdk -u -t 2,3,7,8,9,11,13,16,56,57
 
+# Install Python libraries
+RUN apt-get install python-lxml -y
+
 ENV JAVA_HOME /usr/lib/jvm/java-6-openjdk-amd64/
 
 # Use ccache

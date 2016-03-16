@@ -100,14 +100,22 @@ mkdir -p $prefix/libs
 [ -d $prefix/target ] || mkdir -p $prefix/target
 export CMAKE_PREFIX_PATH=$prefix/target
 
-[ -e $prefix/android.toolchain.cmake ] || ( cd $prefix && download 'https://raw.github.com/taka-no-me/android-cmake/master/android.toolchain.cmake' && cat $my_loc/files/android.toolchain.cmake.addendum >> $prefix/android.toolchain.cmake)
+# Get the android ndk build helper script
+# If file doesn't exist, then download and patch it
+if ! [ -e $prefix/android.toolchain.cmake ]; then
+    cd $prefix
+    download 'https://raw.githubusercontent.com/taka-no-me/android-cmake/556cc14296c226f753a3778d99d8b60778b7df4f/android.toolchain.cmake'
+    patch -p0 -N -d $prefix < /opt/roscpp_android/patches/android.toolchain.cmake.patch
+    cat $my_loc/files/android.toolchain.cmake.addendum >> $prefix/android.toolchain.cmake
+fi
+
 export RBA_TOOLCHAIN=$prefix/android.toolchain.cmake
 
 # Now get boost with a specialized build
 [ -d $prefix/libs/boost ] || run_cmd get_library boost $prefix/libs
 [ -d $prefix/libs/bzip2 ] || run_cmd get_library bzip2 $prefix/libs
 [ -d $prefix/libs/uuid ] || run_cmd get_library uuid $prefix/libs
-[ -d $prefix/libs/poco-1.4.6p2 ] || run_cmd get_library poco $prefix/libs
+[ -d $prefix/libs/poco-1.6.1 ] || run_cmd get_library poco $prefix/libs
 [ -d $prefix/libs/tinyxml ] || run_cmd get_library tinyxml $prefix/libs
 [ -d $prefix/libs/catkin ] || run_cmd get_library catkin $prefix/libs
 [ -d $prefix/libs/console_bridge ] || run_cmd get_library console_bridge $prefix/libs
@@ -132,6 +140,8 @@ export RBA_TOOLCHAIN=$prefix/android.toolchain.cmake
 [ -d $prefix/libs/libccd-2.0 ] || run_cmd get_library libccd $prefix/libs
 [ -d $prefix/libs/fcl-0.3.2 ] || run_cmd get_library fcl $prefix/libs
 [ -d $prefix/libs/pcrecpp ] || run_cmd get_library pcrecpp $prefix/libs
+# get rospkg dependency for pluginlib support at build time
+[ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
 
 [ -f $prefix/target/bin/catkin_make ] || run_cmd build_library catkin $prefix/libs/catkin
 . $prefix/target/setup.bash
@@ -258,6 +268,13 @@ if [[ $skip -ne 1 ]] ; then
     # Wait for next release to remove (current 1.12.4)
     apply_patch /opt/roscpp_android/patches/global_planner.patch
 
+    # Plugin specific patches
+    if [ $use_pluginlib -ne 0 ]; then
+        # Patch Poco lib for use in the static version of pluginlib
+        apply_patch /opt/roscpp_android/patches/poco.patch
+        # Patch pluginlib for static loading
+        apply_patch /opt/roscpp_android/patches/pluginlib.patch
+    fi
 
     ## Demo Application specific patches
 
@@ -269,6 +286,36 @@ if [[ $skip -ne 1 ]] ; then
 
 fi
 
+# Before build
+# Search packages that depend on pluginlib and generate plugin loader.
+if [ $use_pluginlib -ne 0 ]; then
+    echo
+    echo -e '\e[34mBuilding pluginlib support...\e[39m'
+    echo
+
+    # Install Python libraries that are needed by the scripts
+    apt-get install python-lxml -y
+    rosdep init
+    rosdep update
+    pluginlib_helper_file=pluginlib_helper.cpp
+    $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
+    cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
+    line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
+    # temporally turn off error detection
+    set +e
+    grep "$line" $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+    # if line is not already added, then add it to the pluginlib cmake
+    if [ $? -ne 0 ]; then
+        # backup the file
+        cp $prefix/catkin_ws/src/pluginlib/CMakeLists.txt $prefix/catkin_ws/src/pluginlib/CMakeLists.txt.bak
+        sed -i '/INCLUDE_DIRS include/a LIBRARIES ${PROJECT_NAME}' $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+        echo -e "\n"$line >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+        echo 'install(TARGETS pluginlib RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})' >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+    fi
+    # turn error detection back on
+    set -e
+fi
+
 echo
 echo -e '\e[34mBuilding library dependencies.\e[39m'
 echo
@@ -277,7 +324,7 @@ echo
 [ -f $prefix/target/lib/libbz2.a ] || run_cmd build_library bzip2 $prefix/libs/bzip2
 [ -f $prefix/target/lib/libuuid.a ] || run_cmd build_library uuid $prefix/libs/uuid
 [ -f $prefix/target/lib/libboost_system.a ] || run_cmd copy_boost $prefix/libs/boost
-[ -f $prefix/target/lib/libPocoFoundation.a ] || run_cmd build_library_with_toolchain poco $prefix/libs/poco-1.4.6p2
+[ -f $prefix/target/lib/libPocoFoundation.a ] || run_cmd build_library_with_toolchain poco $prefix/libs/poco-1.6.1
 [ -f $prefix/target/lib/libtinyxml.a ] || run_cmd build_library tinyxml $prefix/libs/tinyxml
 [ -f $prefix/target/lib/libconsole_bridge.a ] || run_cmd build_library console_bridge $prefix/libs/console_bridge
 [ -f $prefix/target/lib/liblz4.a ] || run_cmd build_library lz4 $prefix/libs/lz4-r124/cmake_unofficial
@@ -363,6 +410,18 @@ echo
 (cd $prefix/move_base_app && ant debug)
 
 echo
+echo -e '\e[34mCreating pluginlib sample app.\e[39m'
+echo
+
+( cd $prefix && run_cmd sample_app pluginlib_sample_app $prefix/roscpp_android_ndk )
+
+echo
+echo -e '\e[34mBuilding apk.\e[39m'
+echo
+
+(cd $prefix/pluginlib_sample_app && ant debug)
+
+echo
 echo 'done.'
 echo 'summary of what just happened:'
 echo '  target/      was used to build static libraries for ros software'
@@ -373,3 +432,5 @@ echo '  sample_app/  is an example of such an app, a native activity'
 echo '  sample_app/bin/sample_app-debug.apk  is the built apk, it implements a subscriber and a publisher'
 echo '  move_base_sample_app/  is an example app that implements the move_base node'
 echo '  move_base_app/bin/move_base_app-debug.apk  is the built apk for the move_base example'
+echo '  pluginlib_sample_app/  is an example of an application using pluginlib'
+echo '  pluginlib_sample_app/bin/pluginlib_sample_app-debug.apk  is the built apk'
