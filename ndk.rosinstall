@@ -217,23 +217,23 @@
 - tar:
     local-name: geometry_experimental/tf2
     uri: https://github.com/ros-gbp/geometry_experimental-release/archive/release/indigo/tf2/0.5.11-0.tar.gz
-    version: geometry_experimental-release-release-indigo-tf2-0.5.11-0
+    version: geometry2-release-release-indigo-tf2-0.5.11-0
 - tar:
     local-name: geometry_experimental/tf2_geometry_msgs
     uri: https://github.com/ros-gbp/geometry_experimental-release/archive/release/indigo/tf2_geometry_msgs/0.5.11-0.tar.gz
-    version: geometry_experimental-release-release-indigo-tf2_geometry_msgs-0.5.11-0
+    version: geometry2-release-release-indigo-tf2_geometry_msgs-0.5.11-0
 - tar:
     local-name: geometry_experimental/tf2_msgs
     uri: https://github.com/ros-gbp/geometry_experimental-release/archive/release/indigo/tf2_msgs/0.5.11-0.tar.gz
-    version: geometry_experimental-release-release-indigo-tf2_msgs-0.5.11-0
+    version: geometry2-release-release-indigo-tf2_msgs-0.5.11-0
 #- tar:
 #    local-name: geometry_experimental/tf2_py
 #    uri: https://github.com/ros-gbp/geometry_experimental-release/archive/release/indigo/tf2_py/0.5.11-0.tar.gz
-#    version: geometry_experimental-release-release-indigo-tf2_py-0.5.11-0
+#    version: geometry2-release-release-indigo-tf2_py-0.5.11-0
 - tar:
     local-name: geometry_experimental/tf2_ros
     uri: https://github.com/ros-gbp/geometry_experimental-release/archive/release/indigo/tf2_ros/0.5.11-0.tar.gz
-    version: geometry_experimental-release-release-indigo-tf2_ros-0.5.11-0
+    version: geometry2-release-release-indigo-tf2_ros-0.5.11-0
 - tar:
     local-name: household_objects_database_msgs
     uri: https://github.com/ros-gbp/household_objects_database_msgs-release/archive/release/indigo/household_objects_database_msgs/0.1.1-2.tar.gz
