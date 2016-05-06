@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Abort script on any failures
+set -e
+
 # Define the number of simultaneous jobs to trigger for the different
 # tasks that allow it. Use the number of available processors in the
 # system.

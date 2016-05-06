@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Abort script on any failures
+set -e
+
 my_loc="$(cd "$(dirname $0)" && pwd)"
 source $my_loc/utils.sh
 
