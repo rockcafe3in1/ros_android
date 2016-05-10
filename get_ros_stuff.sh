@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Abort script on any failures
+set -e
+
 my_loc="$(cd "$(dirname $0)" && pwd)"
 source $my_loc/config.sh
 source $my_loc/utils.sh
@@ -30,5 +33,3 @@ if [ -f src/.rosinstall ]; then
 else
   wstool init -j$PARALLEL_JOBS src $my_loc/ndk.rosinstall
 fi
-
-exit 0
