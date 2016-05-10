@@ -1,30 +1,5 @@
---- catkin_ws/src/robot_state_publisher/CMakeLists.txt	2015-01-08 23:21:59.961049705 -0300
-+++ catkin_ws/src/robot_state_publisher/CMakeLists.txt	2015-01-09 12:21:05.093029445 -0300
-@@ -6,6 +6,10 @@
-   COMPONENTS roscpp rosconsole rostime tf tf_conversions kdl_parser cmake_modules
- )
- find_package(Eigen REQUIRED)
-+set(LOG4CXX_INCLUDE_DIRS "/opt/roscpp_output/target/include/log4cxx")
-+set(LOG4CXX_LIBRARY_DIRS "/opt/roscpp_output/target/lib")
-+set(LOG4CXX_LIBRARY_DIRS "/opt/roscpp_output/target/lib")
-+set(LOG4CXX_LIBRARIES "/opt/roscpp_output/target/lib/liblog4cxx.a")
- 
- catkin_package(
-   LIBRARIES ${PROJECT_NAME}_solver
-@@ -23,11 +27,11 @@
- target_link_libraries(${PROJECT_NAME}_solver ${catkin_LIBRARIES} ${orocos_kdl_LIBRARIES})
- 
- add_executable(${PROJECT_NAME} src/joint_state_listener.cpp)
--target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_solver log4cxx ${orocos_kdl_LIBRARIES})
-+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_solver ${LOG4CXX_LIBRARIES} ${orocos_kdl_LIBRARIES})
- 
- # compile the same executable using the old name as well
- add_executable(state_publisher src/joint_state_listener.cpp)
--target_link_libraries(state_publisher ${PROJECT_NAME}_solver log4cxx ${orocos_kdl_LIBRARIES})
-+target_link_libraries(state_publisher ${PROJECT_NAME}_solver ${LOG4CXX_LIBRARIES} ${orocos_kdl_LIBRARIES})
- 
- # CATKIN has no ROS test for now. Disabling
- 
+--- catkin_ws/src/robot_state_publisher/CMakeLists.txt	2016-05-10 16:10:02.284800164 -0400
++++ catkin_ws/src/robot_state_publisher/CMakeLists.txt	2016-05-10 16:58:36.717713582 -0400
 @@ -59,6 +63,7 @@
  #rosbuild_download_test_data(http://pr.willowgarage.com/data/robot_state_publisher/joint_states_indexed.bag test/joint_states_indexed.bag 793e0b566ebe4698265a936b92fa2bba)
  

@@ -1,6 +1,6 @@
 --- libs/lz4-r124/cmake_unofficial/CMakeLists.txt	2014-10-31 16:38:11.346334129 -0300
 +++ libs/lz4-r124/cmake_unofficial/CMakeLists.txt	2014-10-31 19:04:39.786517080 -0300
-@@ -15,8 +15,8 @@
+@@ -14,8 +14,8 @@
      MESSAGE( STATUS "64 bit architecture detected size of void * is " ${SIZEOF_VOID_P})
  ENDIF()
  
