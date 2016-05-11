@@ -252,7 +252,7 @@ diff -ur catkin_ws/src/navigation/move_base/src/move_base.cpp catkin_ws/src/navi
      }
  
      last_config_ = config;
-@@ -1030,122 +950,27 @@
+@@ -1032,122 +952,27 @@
    }
  
    bool MoveBase::loadRecoveryBehaviors(ros::NodeHandle node){

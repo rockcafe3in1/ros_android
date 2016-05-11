@@ -56,3 +56,13 @@ cmake_build() {
         -DPYTHON_EXECUTABLE=$python -DCMAKE_INSTALL_PREFIX=$target -DBUILD_SHARED_LIBS=0 -DPCL_SHARED_LIBS=FALSE
     make -j$PARALLEL_JOBS -l$PARALLEL_JOBS install
 }
+
+# Check if patch hasn't already applied and apply it
+apply_patch() {
+    echo "Checking patch: $1"
+    if patch -p0 -N --dry-run --silent -d $prefix < $1;
+    then
+        patch -p0 -N -d $prefix < $1
+    fi
+    echo ''
+}

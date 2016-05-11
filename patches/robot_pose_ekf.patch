@@ -1,5 +1,5 @@
---- catkin_ws/src/navigation/robot_pose_ekf/CMakeLists.txt	2014-12-23 15:08:45.470144825 -0300
-+++ catkin_ws/src/navigation/robot_pose_ekf/CMakeLists.txt	2015-01-09 12:06:24.105071358 -0300
+--- catkin_ws/src/navigation/robot_pose_ekf/CMakeLists.txt	2016-05-10 16:10:02.440800597 -0400
++++ catkin_ws/src/navigation/robot_pose_ekf/CMakeLists.txt	2016-05-10 16:43:05.032555201 -0400
 @@ -2,8 +2,15 @@
  project(robot_pose_ekf)
  
@@ -14,9 +14,9 @@
 +set(BFL_LIBRARIES "/opt/roscpp_output/target/lib/liborocos-bfl.a")
 +endif()
  
- # People building this branch of nav within groovy will need this version:
  include_directories(${BFL_INCLUDE_DIRS})
-@@ -81,7 +88,7 @@
+ link_directories(${BFL_LIBRARY_DIRS})
+@@ -69,7 +76,7 @@
  ## Tests are failing on OSX for an unknown reason
  include(CMakeDetermineSystem)
  if(CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -25,7 +25,7 @@
  
  catkin_download_test_data(
    download_data_ekf_test2_indexed.bag
-@@ -116,5 +123,5 @@
+@@ -104,5 +111,5 @@
  add_rostest(${CMAKE_CURRENT_SOURCE_DIR}/test/test_robot_pose_ekf.launch)
  add_rostest(${CMAKE_CURRENT_SOURCE_DIR}/test/test_robot_pose_ekf_zero_covariance.launch)
  
