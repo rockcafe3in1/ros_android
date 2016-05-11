@@ -3,16 +3,6 @@
 # Abort script on any failures
 set -e
 
-# Check if patch hasn't already applied and apply it
-function apply_patch {
-    echo "Checking patch: $1"
-    if patch -p0 -N --dry-run --silent -d $prefix < $1;
-    then
-        patch -p0 -N -d $prefix < $1
-    fi
-    echo ''
-}
-
 # Define the number of simultaneous jobs to trigger for the different
 # tasks that allow it. Use the number of available processors in the
 # system.
