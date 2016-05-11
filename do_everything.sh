@@ -328,6 +328,9 @@ if [[ $debugging -eq 1 ]];then
     sed -i "s/#LOCAL_EXPORT_CFLAGS/LOCAL_EXPORT_CFLAGS/g" $prefix/roscpp_android_ndk/Android.mk
 fi
 
+# copy Android makfile to use in building the apps with roscpp_android_ndk
+cp $my_loc/files/Android.mk.move_base $prefix/roscpp_android_ndk/Android.mk
+
 echo
 echo -e '\e[34mCreating sample app.\e[39m'
 echo
@@ -344,7 +347,6 @@ echo
 echo -e '\e[34mCreating move_base sample app.\e[39m'
 echo
 
-cp $my_loc/files/Android.mk.move_base $prefix/roscpp_android_ndk/Android.mk
 ( cd $prefix && run_cmd sample_app move_base_app $prefix/roscpp_android_ndk )
 
 echo
