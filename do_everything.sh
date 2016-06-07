@@ -23,6 +23,11 @@ skip=0
 portable=0
 help=0
 
+# verbose is a bool flag indicating if we want more verbose output in
+# the build process. Useful for debugging build system or compiler errors.
+verbose=0
+
+
 if [[ $# -lt 1 ]] ; then
     help=1
 fi
@@ -303,9 +308,11 @@ echo -e '\e[34mCross-compiling ROS.\e[39m'
 echo
 
 if [[ $debugging -eq 1 ]];then
-    run_cmd build_cpp $prefix --debug-symbols
+    echo "Build type = DEBUG"
+    run_cmd build_cpp -p $prefix -b Debug -v $verbose
 else
-    run_cmd build_cpp $prefix
+    echo "Build type = RELEASE"
+    run_cmd build_cpp -p $prefix -b Release -v $verbose
 fi
 
 echo
