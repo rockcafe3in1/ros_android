@@ -82,14 +82,14 @@ sudo docker pull ekumenlabs/rosndk
 if [[ $standard -eq 1 ]]; then
   echo -e '\e[34mSetting output_path to: '$output_path'.\e[39m'
   echo
-  sudo docker run -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output
+  sudo docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output
   exit $?
 fi
 
 if [[ $portable -eq 1 ]]; then
   echo -e '\e[34mBuilding in portable mode.\e[39m'
   echo
-  sudo docker run -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output --portable
+  sudo docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output --portable
   echo
   echo -e '\e[34mCreating output/roscpp_android_ndk.tar.gz.\e[39m'
   echo
