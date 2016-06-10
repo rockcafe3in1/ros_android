@@ -32,7 +32,7 @@ cmake ../find_libs -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH;$ANDROID_NDK/platform
 full_library_list=$(cat $CMAKE_PREFIX_PATH/find_libs/libraries.txt)
 
 # Parse this libraries (separated by ;), skip all libraries that start with the second argument paths (separated by ;)
-output=$($my_loc/parse_libs.py $full_library_list $ANDROID_NDK/platforms/android-14/arch-arm/usr/lib)
+lib_output=$($my_loc/parse_libs.py $full_library_list $ANDROID_NDK/platforms/android-14/arch-arm/usr/lib)
 
 # Go to the output library directory
 if [ ! -d $2 ]; then
@@ -40,7 +40,14 @@ if [ ! -d $2 ]; then
 fi
 cd $2
 
-# Create and Android.mk from the output
+# Create and Android.mk with the parsed libraries
 cp $my_loc/files/tfa/Android.mk.in1 ./Android.mk
-echo "$output" >> ./Android.mk
-cat $my_loc/files/tfa/Android.mk.in2 >> ./Android.mk
+echo "$lib_output" >> ./Android.mk
+pluginlib_helper_cpp=$my_loc/files/pluginlib_helper/pluginlib_helper.cpp
+if [ $use_pluginlib -ne 0 ]; then
+  # Replace commented line. Add the pluginlib helper module to the build.
+  sed "/^#LOCAL_SRC_FILES/ c LOCAL_SRC_FILES=$pluginlib_helper_cpp" $my_loc/files/tfa/Android.mk.in2 >> ./Android.mk
+else
+  cat $my_loc/files/tfa/Android.mk.in2 >> ./Android.mk
+fi
+

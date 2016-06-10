@@ -23,6 +23,7 @@ module_path=$(dirname $rbndk)
 tf2_ndk=$(basename $rbndk)
 
 mkdir -p $lib_name/jni/src
+mkdir -p $lib_name/jni/include
 prefix=$(cd $lib_name && pwd)
 
 android create project -n $lib_name -t 1 -p $prefix -k $package_name -a $lib_name
@@ -51,4 +52,3 @@ done
 # Copy app icon
 mkdir -p $prefix/res/drawable
 cp $my_loc/files/$lib_name/ic_launcher.png $prefix/res/drawable/ic_launcher.png
-
