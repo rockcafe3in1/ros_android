@@ -26,7 +26,7 @@ from rospkg import RosPack
 
 def test():
   root_scan_dir = "output"
-  collect_plugins(root_scan_dir)  
+  collect_plugins(root_scan_dir)
 
 def collect_plugins(root_scan_dir):
   """
@@ -45,8 +45,11 @@ def collect_plugins(root_scan_dir):
   #print packages
   debug_print()
 
-  # Find all packages that depend on pluginlib explicitely
+  # Find all packages that depend on pluginlib and nodelet explicitely
   pluginlib_users = rp.get_depends_on('pluginlib', implicit=False)
+  nodelet_users = rp.get_depends_on('nodelet', implicit=False)
+  # Concatenate both lists removing the duplicates
+  pluginlib_users += list(set(nodelet_users) - set(pluginlib_users))
   debug_print("Packages that depend on pluginlib:\n")
   debug_print(pluginlib_users)
   debug_print()
@@ -120,11 +123,11 @@ def escape_xml(str):
   Some plugin description files are badly formatted so we need to
   parse strings and escape the < and > chars.
   """
-  
+
   # Replace all non-printable characters by a space. This helps solve
   # some problems with newlines in the middle of a string.
   str = re.sub("\s+", " ", str)
-  
+
   apostrophe_count = 0
   out = ""
   for c in str:
@@ -144,7 +147,3 @@ def debug_print(msg=""):
 
 if __name__ == "__main__":
     test()
-    
-
-
-
