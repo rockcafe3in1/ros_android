@@ -422,6 +422,19 @@ echo
 (cd $prefix/pluginlib_sample_app && ant debug)
 
 echo
+echo -e '\e[34mCreating nodelet sample app.\e[39m'
+echo
+
+( cd $prefix && run_cmd sample_app nodelet_sample_app $prefix/roscpp_android_ndk )
+
+echo
+echo -e '\e[34mBuilding apk.\e[39m'
+echo
+
+(cd $prefix/nodelet_sample_app && ant debug)
+
+
+echo
 echo 'done.'
 echo 'summary of what just happened:'
 echo '  target/      was used to build static libraries for ros software'

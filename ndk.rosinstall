@@ -102,10 +102,10 @@
 #    local-name: common_tutorials/common_tutorials
 #    uri: https://github.com/ros-gbp/common_tutorials-release/archive/release/indigo/common_tutorials/0.1.8-0.tar.gz
 #    version: common_tutorials-release-release-indigo-common_tutorials-0.1.8-0
-#- tar:
-#    local-name: common_tutorials/nodelet_tutorial_math
-#    uri: https://github.com/ros-gbp/common_tutorials-release/archive/release/indigo/nodelet_tutorial_math/0.1.8-0.tar.gz
-#    version: common_tutorials-release-release-indigo-nodelet_tutorial_math-0.1.8-0
+- tar:
+    local-name: common_tutorials/nodelet_tutorial_math
+    uri: https://github.com/ros-gbp/common_tutorials-release/archive/release/indigo/nodelet_tutorial_math/0.1.8-0.tar.gz
+    version: common_tutorials-release-release-indigo-nodelet_tutorial_math-0.1.8-0
 - tar:
     local-name: common_tutorials/pluginlib_tutorials
     uri: https://github.com/ros-gbp/common_tutorials-release/archive/release/indigo/pluginlib_tutorials/0.1.8-0.tar.gz
