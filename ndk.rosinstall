@@ -768,7 +768,7 @@
     version: roslisp-release-release-indigo-roslisp-1.9.18-0
 - git:
     local-name: rospack
-    uri: https://github.com/algron/rospack.git
+    uri: https://github.com/ekumenlabs/rospack.git
     version: android
 - tar:
     local-name: shape_tools
