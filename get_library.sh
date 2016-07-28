@@ -95,6 +95,7 @@ elif [ $1 == 'tinyxml' ]; then
 elif [ $1 == 'urdfdom_headers' ]; then
     URL=https://github.com/ros/urdfdom_headers.git
     COMP='git'
+    HASH='9aed7256e06d62935966de2a9bc9ddfac96e7a85'
 elif [ $1 == 'urdfdom' ]; then
     URL=https://github.com/ros/urdfdom.git
     COMP='git'
@@ -122,7 +123,7 @@ fi
 if [ $1 == 'boost' ]; then
     cd $prefix/boost
     ./build-android.sh $ANDROID_NDK --boost=1.53.0
-elif [ $1 == 'urdfdom' ] || [ $1 == 'console_bridge' ]; then
+elif [ -v HASH ]; then
     cd $prefix/$1
     git checkout $HASH
 elif [ $1 == 'bfl' ]; then
