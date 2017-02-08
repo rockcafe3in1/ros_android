@@ -274,6 +274,8 @@ if [[ $skip -ne 1 ]] ; then
         apply_patch /opt/roscpp_android/patches/poco.patch
         # Patch pluginlib for static loading
         apply_patch /opt/roscpp_android/patches/pluginlib.patch
+	# Patch image_transport to fix faulty export plugins
+	apply_patch /opt/roscpp_android/patches/image_transport.patch
     fi
 
     ## Demo Application specific patches

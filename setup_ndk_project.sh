@@ -25,9 +25,11 @@ cd $1
 if [[ $2 -eq 0 ]]; then
   ln -fs $CMAKE_PREFIX_PATH/include ./
   ln -fs $CMAKE_PREFIX_PATH/lib ./
+  ln -fs $CMAKE_PREFIX_PATH/share ./
 else
   cp -r $CMAKE_PREFIX_PATH/include ./
   cp -r $CMAKE_PREFIX_PATH/lib ./
+  cp -r $CMAKE_PREFIX_PATH/share ./
 fi
 
 cp $my_loc/files/tfa/*.mk ./
