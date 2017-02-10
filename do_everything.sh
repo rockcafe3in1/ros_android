@@ -274,8 +274,8 @@ if [[ $skip -ne 1 ]] ; then
         apply_patch /opt/roscpp_android/patches/poco.patch
         # Patch pluginlib for static loading
         apply_patch /opt/roscpp_android/patches/pluginlib.patch
-	# Patch image_transport to fix faulty export plugins
-	apply_patch /opt/roscpp_android/patches/image_transport.patch
+        # Patch image_transport to fix faulty export plugins
+        apply_patch /opt/roscpp_android/patches/image_transport.patch
     fi
 
     ## Demo Application specific patches
@@ -438,8 +438,7 @@ echo
 echo
 echo -e '\e[34mCreating image transport sample app.\e[39m'
 echo
-# Copy opencv 3rdparty libraries. These are needed to build the compressed image transport plugin.
-( cp $prefix/roscpp_android_ndk/share/OpenCV/3rdparty/lib/* $prefix/roscpp_android_ndk/lib/)
+
 # Copy specific Android makefile to build the image_transport_sample_app
 # This makefile includes the missing opencv 3rd party libraries.
 ( cp $my_loc/files/Android.mk.image_transport $prefix/roscpp_android_ndk/Android.mk)
