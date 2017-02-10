@@ -48,8 +48,11 @@ def collect_plugins(root_scan_dir):
   # Find all packages that depend on pluginlib and nodelet explicitely
   pluginlib_users = rp.get_depends_on('pluginlib', implicit=False)
   nodelet_users = rp.get_depends_on('nodelet', implicit=False)
+  image_transport_users = rp.get_depends_on('image_transport', implicit=False)
   # Concatenate both lists removing the duplicates
   pluginlib_users += list(set(nodelet_users) - set(pluginlib_users))
+  pluginlib_users += list(set(image_transport_users) - set(pluginlib_users))
+
   debug_print("Packages that depend on pluginlib:\n")
   debug_print(pluginlib_users)
   debug_print()
