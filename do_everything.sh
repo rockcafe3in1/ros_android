@@ -280,12 +280,6 @@ if [[ $skip -ne 1 ]] ; then
 
     ## Demo Application specific patches
 
-    # Patch move_base - Remove pluginlib
-    apply_patch /opt/roscpp_android/patches/move_base.patch
-
-    # Patch costmap_2d - Remove pluginlib
-    apply_patch /opt/roscpp_android/patches/costmap_2d.patch
-
 fi
 
 # Before build
