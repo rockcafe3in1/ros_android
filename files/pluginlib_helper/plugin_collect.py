@@ -98,18 +98,18 @@ def parse_plugin_xml(xml_str, package="", manifest=""):
     for xml_class in xml_library.iter("class"):
       debug_print(xml_class.attrib)
       plugin_class = PluginDescription()
-      plugin_class.library_name = xml_library.attrib["path"]
+      try:
+        plugin_class.base_class = xml_class.attrib["base_class_type"]
+        plugin_class.library_name = xml_library.attrib["path"]
+        plugin_class.class_type = xml_class.attrib["type"]
+      except KeyError:
+        debug_print("ERROR: NO BASE CLASS / PATH / TYPE!")
+        exit(1)
       try:
         plugin_class.lookup_name = xml_class.attrib["name"]
       except KeyError:
-        plugin_class.lookup_name = ""
-      plugin_class.class_type = xml_class.attrib["type"]
-      try:
-        plugin_class.base_class = xml_class.attrib["base_class_type"]
-      except KeyError:
-        debug_print("ERROR: NO BASE CLASS!")
-        exit(1)
-        #plugin_class.lookup_name = ""
+        plugin_class.lookup_name = plugin_class.class_type
+
       desc = xml_class.find("description")
       if desc is not None:
         plugin_class.description = desc.text.strip()
