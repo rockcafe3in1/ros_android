@@ -25,9 +25,9 @@ echo
 [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
 
 if [ ! -d toolchain/ ]; then
-  mkdir toolchain/
-  $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-8 --install-dir=./toolchain --ndk-dir=$ANDROID_NDK --system=linux-x86_64
+  $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --install-dir=./toolchain --arch=arm64
 fi
+export PATH=$PATH:$2/toolchain/bin
 
 if [ $1 == 'poco' ]; then
     ./configure --config=Android_static --no-samples --no-tests
@@ -37,7 +37,6 @@ else
     ./configure --prefix=$CMAKE_PREFIX_PATH --enable-shared=no --enable-static
 fi
 
-export PATH=$PATH:$2/toolchain/bin
 make -s -j$PARALLEL_JOBS -l$PARALLEL_JOBS
 
 if [ $1 == 'poco' ]; then
@@ -50,7 +49,7 @@ else
     make install
 fi
 
-if [ $1 == 'curl' ]; then
-    sed -i 's/#define CURL_SIZEOF_LONG 8/#define CURL_SIZEOF_LONG 4/g' $CMAKE_PREFIX_PATH/include/curl/curlbuild.h
-    sed -i 's/#define CURL_SIZEOF_CURL_OFF_T 8/#define CURL_SIZEOF_CURL_OFF_T 4/g' $CMAKE_PREFIX_PATH/include/curl/curlbuild.h
-fi
+#if [ $1 == 'curl' ]; then
+#    sed -i 's/#define CURL_SIZEOF_LONG 8/#define CURL_SIZEOF_LONG 4/g' $CMAKE_PREFIX_PATH/include/curl/curlbuild.h
+#    sed -i 's/#define CURL_SIZEOF_CURL_OFF_T 8/#define CURL_SIZEOF_CURL_OFF_T 4/g' $CMAKE_PREFIX_PATH/include/curl/curlbuild.h
+#fi

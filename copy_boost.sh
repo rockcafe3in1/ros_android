@@ -21,7 +21,7 @@ echo
 
 [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
 mkdir -p $CMAKE_PREFIX_PATH/lib
-cd $prefix/build/lib
+cd $prefix/build/out/arm64-v8a/lib/
 for i in *.a # Rename and move libraries (remove the gcc type, so on)
 do
     #mv "$i" "`echo $i | sed 's/000//'`"
@@ -31,4 +31,4 @@ done
 
 cd ../include
 mkdir -p $CMAKE_PREFIX_PATH/include
-cp -R boost-1_53/boost $CMAKE_PREFIX_PATH/include/
+cp -R boost-1_68/boost $CMAKE_PREFIX_PATH/include/

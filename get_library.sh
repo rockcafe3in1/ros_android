@@ -26,7 +26,7 @@ elif [ $1 == 'bfl' ]; then
     URL=https://github.com/ros-gbp/bfl-release/archive/release/indigo/bfl/0.7.0-6.tar.gz
     COMP='gz'
 elif [ $1 == 'boost' ]; then
-    URL=https://github.com/ekumenlabs/Boost-for-Android.git
+    URL=https://github.com/moritz-wundke/Boost-for-Android.git
     COMP='git'
 elif [ $1 == 'bzip2' ]; then
     URL=https://github.com/osrf/bzip2_cmake.git
@@ -78,16 +78,16 @@ elif [ $1 == 'orocos_kdl' ]; then
     URL=https://github.com/smits/orocos-kdl-release/archive/release/indigo/orocos_kdl/1.3.0-0.tar.gz
     COMP='gz'
 elif [ $1 == 'pcl' ]; then
-    URL=https://github.com/chadrockey/pcl.git
-    COMP='git'
+    URL=https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz
+    COMP='gz'
 elif [ $1 == 'pcrecpp' ]; then
     URL=https://github.com/brianb/pcre-7.8.git
     COMP='git'
 elif [ $1 == 'poco' ]; then
-    URL=http://pocoproject.org/releases/poco-1.6.1/poco-1.6.1.tar.gz
+    URL=http://pocoproject.org/releases/poco-1.8.0/poco-1.8.0.tar.gz
     COMP='gz'
 elif [ $1 == 'qhull' ]; then
-    URL=http://www.qhull.org/download/qhull-2012.1-src.tgz
+    URL=http://www.qhull.org/download/qhull-2015-src-7.2.0.tgz
     COMP='gz'
 elif [ $1 == 'tinyxml' ]; then
     URL=https://github.com/chadrockey/tinyxml_cmake
@@ -104,8 +104,8 @@ elif [ $1 == 'uuid' ]; then
     URL=https://github.com/chadrockey/uuid_cmake
     COMP='git'
 elif [ $1 == 'yaml-cpp' ]; then
-    URL=https://github.com/ekumenlabs/yaml-cpp.git
-    COMP='git'
+    URL=https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-0.6.2.tar.gz
+    COMP='gz'
 elif [ $1 == 'rospkg' ]; then
     URL=https://github.com/ros-infrastructure/rospkg.git
     COMP='git'
@@ -122,7 +122,8 @@ fi
 
 if [ $1 == 'boost' ]; then
     cd $prefix/boost
-    ./build-android.sh $ANDROID_NDK --boost=1.53.0
+    apply_patch $my_loc/patches/boost.patch
+    bash -x ./build-android.sh $ANDROID_NDK --boost=1.68.0
 elif [ -v HASH ]; then
     cd $prefix/$1
     git checkout $HASH

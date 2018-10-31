@@ -8,8 +8,8 @@ set -e
 # system.
 export PARALLEL_JOBS=$(nproc)
 
-if [[ -f /opt/ros/indigo/setup.bash ]] ; then
-    source /opt/ros/indigo/setup.bash
+if [[ -f /opt/ros/kinetic/setup.bash ]] ; then
+    source /opt/ros/kinetic/setup.bash
 else
     echo "ROS environment not found, please install it"
     exit 1
@@ -85,7 +85,7 @@ if [ -z $ANDROID_NDK ] ; then
 fi
 
 if [ -z $ROS_DISTRO ] ; then
-    die "HOST ROS ENVIRONMENT NOT FOUND! Did you source /opt/ros/indigo/setup.bash"
+    die "HOST ROS ENVIRONMENT NOT FOUND! Did you source /opt/ros/kinetic/setup.bash"
 fi
 
 [ -d $standalone_toolchain_path ] || run_cmd setup_standalone_toolchain
@@ -102,20 +102,20 @@ export CMAKE_PREFIX_PATH=$prefix/target
 
 # Get the android ndk build helper script
 # If file doesn't exist, then download and patch it
-if ! [ -e $prefix/android.toolchain.cmake ]; then
-    cd $prefix
-    download 'https://raw.githubusercontent.com/taka-no-me/android-cmake/556cc14296c226f753a3778d99d8b60778b7df4f/android.toolchain.cmake'
-    patch -p0 -N -d $prefix < /opt/roscpp_android/patches/android.toolchain.cmake.patch
-    cat $my_loc/files/android.toolchain.cmake.addendum >> $prefix/android.toolchain.cmake
-fi
+#if ! [ -e $prefix/android.toolchain.cmake ]; then
+#    cd $prefix
+#    download 'https://raw.githubusercontent.com/taka-no-me/android-cmake/556cc14296c226f753a3778d99d8b60778b7df4f/android.toolchain.cmake'
+#    patch -p0 -N -d $prefix < $my_loc/patches/android.toolchain.cmake.patch
+#    cat $my_loc/files/android.toolchain.cmake.addendum >> $prefix/android.toolchain.cmake
+#fi
 
-export RBA_TOOLCHAIN=$prefix/android.toolchain.cmake
+export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 
 # Now get boost with a specialized build
 [ -d $prefix/libs/boost ] || run_cmd get_library boost $prefix/libs
 [ -d $prefix/libs/bzip2 ] || run_cmd get_library bzip2 $prefix/libs
 [ -d $prefix/libs/uuid ] || run_cmd get_library uuid $prefix/libs
-[ -d $prefix/libs/poco-1.6.1 ] || run_cmd get_library poco $prefix/libs
+[ -d $prefix/libs/poco-1.8.0 ] || run_cmd get_library poco $prefix/libs
 [ -d $prefix/libs/tinyxml ] || run_cmd get_library tinyxml $prefix/libs
 [ -d $prefix/libs/catkin ] || run_cmd get_library catkin $prefix/libs
 [ -d $prefix/libs/console_bridge ] || run_cmd get_library console_bridge $prefix/libs
@@ -128,12 +128,12 @@ export RBA_TOOLCHAIN=$prefix/android.toolchain.cmake
 [ -d $prefix/libs/collada-dom-2.4.0 ] || run_cmd get_library collada_dom $prefix/libs
 [ -d $prefix/libs/eigen ] || run_cmd get_library eigen $prefix/libs
 [ -d $prefix/libs/assimp-3.1.1 ] || run_cmd get_library assimp $prefix/libs
-[ -d $prefix/libs/qhull-2012.1 ] || run_cmd get_library qhull $prefix/libs
+[ -d $prefix/libs/qhull-2015.2 ] || run_cmd get_library qhull $prefix/libs
 [ -d $prefix/libs/octomap-1.6.8 ] || run_cmd get_library octomap $prefix/libs
-[ -d $prefix/libs/yaml-cpp ] || run_cmd get_library yaml-cpp $prefix/libs
-[ -d $prefix/libs/opencv-2.4.9 ] || run_cmd get_library opencv $prefix/libs
+[ -d $prefix/libs/yaml-cpp-yaml-cpp-0.6.2 ] || run_cmd get_library yaml-cpp $prefix/libs
+#[ -d $prefix/libs/opencv-2.4.9 ] || run_cmd get_library opencv $prefix/libs
 [ -d $prefix/libs/flann ] || run_cmd get_library flann $prefix/libs
-[ -d $prefix/libs/pcl ] || run_cmd get_library pcl $prefix/libs
+[ -d $prefix/libs/pcl-pcl-1.8.1 ] || run_cmd get_library pcl $prefix/libs
 [ -d $prefix/libs/bfl-0.7.0 ] || run_cmd get_library bfl $prefix/libs
 [ -d $prefix/libs/orocos_kdl-1.3.0 ] || run_cmd get_library orocos_kdl $prefix/libs
 [ -d $prefix/libs/apache-log4cxx-0.10.0 ] || run_cmd get_library log4cxx $prefix/libs
@@ -173,7 +173,7 @@ if [[ $skip -ne 1 ]] ; then
     apply_patch $my_loc/patches/libiconv.patch
 
     # Patch opencv - Fix installation path
-    apply_patch $my_loc/patches/opencv.patch
+    #apply_patch $my_loc/patches/opencv.patch
 
     # Patch qhull - Don't install shared libraries
     # TODO: Remove shared libraries to avoid hack in parse_libs.py
@@ -210,7 +210,7 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch collada_parser - cmake detects mkstemps even though Android does not support it
     # TODO: investigate how to prevent cmake to detect system mkstemps
-    apply_patch $my_loc/patches/collada_parser.patch
+#    apply_patch $my_loc/patches/collada_parser.patch
 
     # Patch laser_assembler - Remove testing for Android
     # TODO: It seems like there may be a better way to handle the test issues
@@ -243,12 +243,12 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch moveit_core - Add fcl library cmake variables
     # TODO: The correct way to handle this would be to create .cmake files for fcl and do a findpackage(fcl)
-    apply_patch $my_loc/patches/moveit_core.patch
+    #apply_patch $my_loc/patches/moveit_core.patch
 
     # Patch moveit_core plugins - Add ARCHIVE DESTINATION
     # TODO: PR merged: https://github.com/ros-planning/moveit_core/pull/251
     # Wait for next release to remove (current 0.6.15)
-    apply_patch $my_loc/patches/moveit_core_plugins.patch
+    #apply_patch $my_loc/patches/moveit_core_plugins.patch
 
     # Patch camera_calibration_parsers - Fix yaml-cpp dependency
     # TODO: PR created: https://github.com/ros-perception/image_common/pull/36
@@ -290,8 +290,8 @@ if [ $use_pluginlib -ne 0 ]; then
     echo
 
     # Install Python libraries that are needed by the scripts
-    apt-get install python-lxml -y
-    rosdep init
+    sudo apt-get install python-lxml -y
+    sudo rosdep init || true
     rosdep update
     pluginlib_helper_file=pluginlib_helper.cpp
     $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
@@ -320,7 +320,7 @@ echo
 [ -f $prefix/target/lib/libbz2.a ] || run_cmd build_library bzip2 $prefix/libs/bzip2
 [ -f $prefix/target/lib/libuuid.a ] || run_cmd build_library uuid $prefix/libs/uuid
 [ -f $prefix/target/lib/libboost_system.a ] || run_cmd copy_boost $prefix/libs/boost
-[ -f $prefix/target/lib/libPocoFoundation.a ] || run_cmd build_library_with_toolchain poco $prefix/libs/poco-1.6.1
+[ -f $prefix/target/lib/libPocoFoundation.a ] || run_cmd build_library_with_toolchain poco $prefix/libs/poco-1.8.0
 [ -f $prefix/target/lib/libtinyxml.a ] || run_cmd build_library tinyxml $prefix/libs/tinyxml
 [ -f $prefix/target/lib/libconsole_bridge.a ] || run_cmd build_library console_bridge $prefix/libs/console_bridge
 [ -f $prefix/target/lib/liblz4.a ] || run_cmd build_library lz4 $prefix/libs/lz4-r124/cmake_unofficial
@@ -332,12 +332,12 @@ echo
 [ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada-dom-2.4.0
 [ -f $prefix/target/lib/libassimp.a ] || run_cmd build_library assimp $prefix/libs/assimp-3.1.1
 [ -f $prefix/target/lib/libeigen.a ] || run_cmd build_eigen $prefix/libs/eigen
-[ -f $prefix/target/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull-2012.1
+[ -f $prefix/target/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull-2015.2
 [ -f $prefix/target/lib/liboctomap.a ] || run_cmd build_library octomap $prefix/libs/octomap-1.6.8
-[ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp
-[ -f $prefix/target/lib/libopencv_core.a ] || run_cmd build_library opencv $prefix/libs/opencv-2.4.9
+[ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
+#[ -f $prefix/target/lib/libopencv_core.a ] || run_cmd build_library opencv $prefix/libs/opencv-2.4.9
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
-[ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl
+[ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
 [ -f $prefix/target/lib/liborocos-bfl.a ] || run_cmd build_library bfl $prefix/libs/bfl-0.7.0
 [ -f $prefix/target/lib/liborocos-kdl.a ] || run_cmd build_library orocos_kdl $prefix/libs/orocos_kdl-1.3.0
 [ -f $prefix/target/lib/liblog4cxx.a ] || run_cmd build_library_with_toolchain log4cxx $prefix/libs/apache-log4cxx-0.10.0

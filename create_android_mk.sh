@@ -18,7 +18,7 @@ fi
 prefix=$(cd $1 && pwd)
 
 # Get list of packages from catkin
-package_list=$(/opt/ros/indigo/bin/catkin_topological_order --only-names $prefix | tr '\n' ';')
+package_list=$(/opt/ros/kinetic/bin/catkin_topological_order --only-names $prefix | tr '\n' ';')
 
 # Call a CMAKE script to get the equivalent of $catkin_LIBRARIES for all of the above packages
 rm -rf $CMAKE_PREFIX_PATH/find_libs
