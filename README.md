@@ -9,7 +9,7 @@ INSTALL
 
 Source ROS (for python tools):
 
-    source /opt/ros/hydro/setup.bash
+    source /opt/ros/kinetic/setup.bash
 
 The `do_everything.sh` script will call all the other scripts
 sequentially, you just have to give it a prefix path:
