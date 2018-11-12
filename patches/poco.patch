@@ -166,11 +166,11 @@
 +POCO_TARGET_OSARCH  = $(ANDROID_ABI)
 +
 +ifeq ($(ANDROID_ABI),armeabi)
-+TOOL      = arm-linux-androideabi
++TOOL      = aarch64-linux-android
 +ARCHFLAGS = -mthumb
 +else
 +ifeq ($(ANDROID_ABI),armeabi-v7a)
-+TOOL      = arm-linux-androideabi
++TOOL      = aarch64-linux-android
 +ARCHFLAGS = -march=armv7-a -mfloat-abi=softfp
 +LINKFLAGS = -Wl,--fix-cortex-a8
 +else
@@ -186,15 +186,15 @@
 +#
 +# Define Tools
 +#
-+CC      = $(TOOL)-gcc
-+CXX     = $(TOOL)-g++
++CC      = $(TOOL)-clang
++CXX     = $(TOOL)-clang++
 +LINK    = $(CXX)
 +STRIP   = $(TOOL)-strip
 +LIB     = $(TOOL)-ar -cr
 +RANLIB  = $(TOOL)-ranlib
 +SHLIB   = $(CXX) -shared -Wl,-soname,$(notdir $@) -o $@
 +SHLIBLN = $(POCO_BASE)/build/script/shlibln
-+DEP     = $(POCO_BASE)/build/script/makedepend.gcc
++DEP     = $(POCO_BASE)/build/script/makedepend.clang
 +SHELL   = sh
 +RM      = rm -rf
 +CP      = cp
