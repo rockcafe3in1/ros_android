@@ -25,12 +25,13 @@ echo
 [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
 
 if [ ! -d toolchain/ ]; then
-  $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --install-dir=./toolchain --arch=arm64
+  $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --install-dir=./toolchain --arch=$arch
 fi
 export PATH=$PATH:$2/toolchain/bin
 
 if [ $1 == 'poco' ]; then
     ./configure --config=Android_static --no-samples --no-tests
+    export ANDROID_ABI=$abi
 elif [ $1 == 'curl' ]; then
     ./configure --prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static --without-ssl --host=arm-linux-androideabi --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random
 else
@@ -42,7 +43,7 @@ make -s -j$PARALLEL_JOBS -l$PARALLEL_JOBS
 if [ $1 == 'poco' ]; then
     mkdir -p $CMAKE_PREFIX_PATH/lib
     cd $CMAKE_PREFIX_PATH/lib
-    cp $prefix/lib/Android/armeabi/lib*.a ./
+    cp $prefix/lib/Android/$abi/lib*.a ./
     mkdir -p ../include && cd ../include
     cp -r $prefix/Foundation/include/Poco ./
 else
