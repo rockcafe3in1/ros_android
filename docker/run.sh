@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-OUTPUT_DIR=$SCRIPTPATH/../
+REPO_ROOT=$SCRIPTPATH/../
 IMAGE=android_ndk
 
 if [ "$#" == 0 ]; then
@@ -10,9 +10,8 @@ else
   EXTRA_ARGS="bash -c \"$@\""
 fi
 
-#mkdir -p $OUTPUT_DIR
 docker run \
-  -v ${OUTPUT_DIR}:/opt/ros_android \
+  -v ${REPO_ROOT}:/opt/ros_android \
   --privileged \
   -it \
   ${IMAGE} "${EXTRA_ARGS}"
