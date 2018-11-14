@@ -151,7 +151,7 @@ echo -e '\e[34mGetting ROS packages\e[39m'
 echo
 
 if [[ $skip -ne 1 ]] ; then
-    run_cmd get_ros_stuff $prefix
+    # run_cmd get_ros_stuff $prefix
 
     echo
     echo -e '\e[34mApplying patches.\e[39m'
@@ -177,7 +177,7 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch qhull - Don't install shared libraries
     # TODO: Remove shared libraries to avoid hack in parse_libs.py
-    #apply_patch /opt/roscpp_android/patches/qhull.patch
+    # apply_patch /opt/roscpp_android/patches/qhull.patch
 
     # Patch eigen - Rename param as some constant already has the same name
     # TODO: Fork and push changes to creativa's repo
@@ -215,31 +215,31 @@ if [[ $skip -ne 1 ]] ; then
     # Patch laser_assembler - Remove testing for Android
     # TODO: It seems like there may be a better way to handle the test issues
     # http://stackoverflow.com/questions/22055741/googletest-for-android-ndk
-    apply_patch $my_loc/patches/laser_assembler.patch
+    # apply_patch $my_loc/patches/laser_assembler.patch
 
     # Patch laser_filters - Remove testing for Android
     # TODO: It seems like there may be a better way to handle the test issues
     # http://stackoverflow.com/questions/22055741/googletest-for-android-ndk
     # https://source.android.com/reference/com/android/tradefed/testtype/GTest.html
-    apply_patch $my_loc/patches/laser_filters.patch
+    # apply_patch $my_loc/patches/laser_filters.patch
 
     # Patch camera_info_manager - remove testing for Android
     # TODO: It seems like there may be a better way to handle the test issues
     # http://stackoverflow.com/questions/22055741/googletest-for-android-ndk
     # https://source.android.com/reference/com/android/tradefed/testtype/GTest.html
-    apply_patch $my_loc/patches/camera_info_manager.patch
+    # apply_patch $my_loc/patches/camera_info_manager.patch
 
     # Patch cv_bridge - remove Python dependencies
     # TODO: https://github.com/ros-perception/vision_opencv/pull/55 merged, need to wait until new version (current 1.11.7)
-    apply_patch $my_loc/patches/cv_bridge.patch
+    # apply_patch $my_loc/patches/cv_bridge.patch
 
     # Patch robot_pose_ekf - Add bfl library cmake variables, also, remove tests
     # TODO: The correct way to handle this would be to create .cmake files for bfl and do a findpackage(orocos-bfl)
-    apply_patch $my_loc/patches/robot_pose_ekf.patch
+    # apply_patch $my_loc/patches/robot_pose_ekf.patch
 
     # Patch robot_state_publisher - Add ARCHIVE DESTINATION
     # TODO: Create PR to add ARCHIVE DESTINATION
-    apply_patch $my_loc/patches/robot_state_publisher.patch
+    # apply_patch $my_loc/patches/robot_state_publisher.patch
 
     # Patch moveit_core - Add fcl library cmake variables
     # TODO: The correct way to handle this would be to create .cmake files for fcl and do a findpackage(fcl)
@@ -252,31 +252,31 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch camera_calibration_parsers - Fix yaml-cpp dependency
     # TODO: PR created: https://github.com/ros-perception/image_common/pull/36
-    apply_patch $my_loc/patches/camera_calibration_parsers.patch
+    # apply_patch $my_loc/patches/camera_calibration_parsers.patch
 
     # Patch image_view - Remove GTK definition
     # TODO: Fixed in https://github.com/ros-perception/image_pipeline/commit/829b7a1ab0fa1927ef3f17f66f9f77ac47dbaacc
     # Wait dor next release to remove (current 1.12.13)
-    apply_patch $my_loc/patches/image_view.patch
+    # apply_patch $my_loc/patches/image_view.patch
 
     # Patch urdf - Don't use pkconfig for android
     # TODO: PR created: https://github.com/ros/robot_model/pull/111
-    apply_patch $my_loc/patches/urdf.patch
+    # apply_patch $my_loc/patches/urdf.patch
 
     # Patch global_planner - Add angles dependency
     # TODO: PR merged: https://github.com/ros-planning/navigation/pull/359
     # Wait for next release to remove (current 1.12.4)
-    apply_patch $my_loc/patches/global_planner.patch
+    # apply_patch $my_loc/patches/global_planner.patch
 
     # Plugin specific patches
-    if [ $use_pluginlib -ne 0 ]; then
-        # Patch Poco lib for use in the static version of pluginlib
-        apply_patch $my_loc/patches/poco.patch
-        # Patch pluginlib for static loading
-        apply_patch $my_loc/patches/pluginlib.patch
-        # Patch image_transport to fix faulty export plugins
-        apply_patch $my_loc/patches/image_transport.patch
-    fi
+    # if [ $use_pluginlib -ne 0 ]; then
+    #     # Patch Poco lib for use in the static version of pluginlib
+    #     apply_patch $my_loc/patches/poco.patch
+    #     # Patch pluginlib for static loading
+    #     apply_patch $my_loc/patches/pluginlib.patch
+    #     apply_patch image_transport to fix faulty export plugins
+    #     apply_patch $my_loc/patches/image_transport.patch
+    # fi
 
     ## Demo Application specific patches
 
@@ -284,33 +284,33 @@ fi
 
 # Before build
 # Search packages that depend on pluginlib and generate plugin loader.
-if [ $use_pluginlib -ne 0 ]; then
-    echo
-    echo -e '\e[34mBuilding pluginlib support...\e[39m'
-    echo
+# if [ $use_pluginlib -ne 0 ]; then
+#     echo
+#     echo -e '\e[34mBuilding pluginlib support...\e[39m'
+#     echo
 
-    # Install Python libraries that are needed by the scripts
-    apt-get install python-lxml -y
-    rosdep init || true
-    rosdep update
-    pluginlib_helper_file=pluginlib_helper.cpp
-    $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
-    cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
-    line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
-    # temporally turn off error detection
-    set +e
-    grep "$line" $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-    # if line is not already added, then add it to the pluginlib cmake
-    if [ $? -ne 0 ]; then
-        # backup the file
-        cp $prefix/catkin_ws/src/pluginlib/CMakeLists.txt $prefix/catkin_ws/src/pluginlib/CMakeLists.txt.bak
-        sed -i '/INCLUDE_DIRS include/a LIBRARIES ${PROJECT_NAME}' $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-        echo -e "\n"$line >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-        echo 'install(TARGETS pluginlib RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})' >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-    fi
-    # turn error detection back on
-    set -e
-fi
+#     # Install Python libraries that are needed by the scripts
+#     apt-get install python-lxml -y
+#     rosdep init || true
+#     rosdep update
+#     pluginlib_helper_file=pluginlib_helper.cpp
+#     $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
+#     cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
+#     line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
+#     # temporally turn off error detection
+#     set +e
+#     grep "$line" $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+#     # if line is not already added, then add it to the pluginlib cmake
+#     if [ $? -ne 0 ]; then
+#         # backup the file
+#         cp $prefix/catkin_ws/src/pluginlib/CMakeLists.txt $prefix/catkin_ws/src/pluginlib/CMakeLists.txt.bak
+#         sed -i '/INCLUDE_DIRS include/a LIBRARIES ${PROJECT_NAME}' $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+#         echo -e "\n"$line >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+#         echo 'install(TARGETS pluginlib RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})' >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+#     fi
+#     # turn error detection back on
+#     set -e
+# fi
 
 echo
 echo -e '\e[34mBuilding library dependencies.\e[39m'
@@ -329,21 +329,21 @@ echo
 [ -f $prefix/target/lib/liburdfdom_model.a ] || run_cmd build_library urdfdom $prefix/libs/urdfdom
 [ -f $prefix/target/lib/libiconv.a ] || run_cmd build_library_with_toolchain libiconv $prefix/libs/libiconv-1.14
 [ -f $prefix/target/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $prefix/libs/libxml2-2.9.1
-[ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada-dom-2.4.0
+# [ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada-dom-2.4.0
 [ -f $prefix/target/lib/libassimp.a ] || run_cmd build_library assimp $prefix/libs/assimp-3.1.1
 [ -f $prefix/target/lib/libeigen.a ] || run_cmd build_eigen $prefix/libs/eigen
 [ -f $prefix/target/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull-2015.2
 [ -f $prefix/target/lib/liboctomap.a ] || run_cmd build_library octomap $prefix/libs/octomap-1.6.8
 [ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
-#[ -f $prefix/target/lib/libopencv_core.a ] || run_cmd build_library opencv $prefix/libs/opencv-2.4.9
-[ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
-[ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
-[ -f $prefix/target/lib/liborocos-bfl.a ] || run_cmd build_library bfl $prefix/libs/bfl-0.7.0
-[ -f $prefix/target/lib/liborocos-kdl.a ] || run_cmd build_library orocos_kdl $prefix/libs/orocos_kdl-1.3.0
-[ -f $prefix/target/lib/liblog4cxx.a ] || run_cmd build_library_with_toolchain log4cxx $prefix/libs/apache-log4cxx-0.10.0
-[ -f $prefix/target/lib/libccd.a ] || run_cmd build_library libccd $prefix/libs/libccd-2.0
-[ -f $prefix/target/lib/libfcl.a ] || run_cmd build_library fcl $prefix/libs/fcl-0.3.2
-[ -f $prefix/target/lib/libpcrecpp.a ] || run_cmd build_library pcrecpp $prefix/libs/pcrecpp
+# #[ -f $prefix/target/lib/libopencv_core.a ] || run_cmd build_library opencv $prefix/libs/opencv-2.4.9
+# [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
+# [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
+# [ -f $prefix/target/lib/liborocos-bfl.a ] || run_cmd build_library bfl $prefix/libs/bfl-0.7.0
+# [ -f $prefix/target/lib/liborocos-kdl.a ] || run_cmd build_library orocos_kdl $prefix/libs/orocos_kdl-1.3.0
+# [ -f $prefix/target/lib/liblog4cxx.a ] || run_cmd build_library_with_toolchain log4cxx $prefix/libs/apache-log4cxx-0.10.0
+# [ -f $prefix/target/lib/libccd.a ] || run_cmd build_library libccd $prefix/libs/libccd-2.0
+# [ -f $prefix/target/lib/libfcl.a ] || run_cmd build_library fcl $prefix/libs/fcl-0.3.2
+# [ -f $prefix/target/lib/libpcrecpp.a ] || run_cmd build_library pcrecpp $prefix/libs/pcrecpp
 
 
 echo

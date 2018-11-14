@@ -22,8 +22,10 @@ prefix=$(cd $1 && pwd)
 #cd $CMAKE_PREFIX_PATH
 cd $prefix
 mkdir -p catkin_ws/src && cd catkin_ws
+echo `pwd`
 
 if [ -f src/.rosinstall ]; then
+  echo "Updating wstool"
   cd src/
   wstool merge $my_loc/ndk.rosinstall --merge-replace
   wstool update
