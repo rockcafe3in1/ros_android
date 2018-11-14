@@ -290,8 +290,8 @@ if [ $use_pluginlib -ne 0 ]; then
     echo
 
     # Install Python libraries that are needed by the scripts
-    sudo apt-get install python-lxml -y
-    sudo rosdep init || true
+    apt-get install python-lxml -y
+    rosdep init || true
     rosdep update
     pluginlib_helper_file=pluginlib_helper.cpp
     $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
