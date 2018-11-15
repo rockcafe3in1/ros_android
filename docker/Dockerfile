@@ -26,6 +26,12 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2" "platform-tools" "platforms;android-26" --sdk_root=/opt/android/sdk
 ENV PATH /opt/android/sdk/tools:/opt/android/sdk/platform-tools:$PATH
 
+# Install CMake 3.6
+WORKDIR /opt
+RUN wget https://cmake.org/files/v3.6/cmake-3.6.3-Linux-x86_64.sh && chmod +x cmake-3.6.3-Linux-x86_64.sh
+RUN yes | sh '/opt/cmake-3.6.3-Linux-x86_64.sh'
+RUN ln -s /opt/cmake-3.6.3-Linux-x86_64/bin/* -t /usr/local/bin
+
 # Install Python libraries
 RUN apt-get install python-lxml -y
 
