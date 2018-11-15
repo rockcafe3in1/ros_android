@@ -1,0 +1,33 @@
+--- libs/pcl-pcl-1.8.1/CMakeLists.txt
++++ libs/pcl-pcl-1.8.1/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ ### ---[ PCL global CMake
+ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+ 
++include(android_pcl_config_minimal.cmake)
++
+ if(POLICY CMP0017)
+   # Do not include files in CMAKE_MODULE_PATH from files
+   # in CMake module directory. Fix MXE build
+diff --git a/android_pcl_config_minimal.cmake b/android_pcl_config_minimal.cmake
+new file mode 100644
+index 0000000..be84634
+--- /dev/null
++++ libs/pcl-pcl-1.8.1/android_pcl_config_minimal.cmake
+@@ -0,0 +1,15 @@
++set(WITH_FZAPI FALSE CACHE BOOL "fzapi: disabled (forced)" FORCE)
++set(WITH_LIBUSB FALSE CACHE BOOL "libusb: disabled (forced)" FORCE)
++set(WITH_OPENGL FALSE CACHE BOOL "qt: disabled (forced)" FORCE)
++set(WITH_OPENNI FALSE CACHE BOOL "openni: disabled (forced)" FORCE)
++set(WITH_OPENNI2 FALSE CACHE BOOL "openni2: disabled (forced)" FORCE)
++set(WITH_PCAP FALSE CACHE BOOL "pcap: disabled (forced)" FORCE)
++set(WITH_PXCAPI FALSE CACHE BOOL "pxcapi: disabled (forced)" FORCE)
++set(WITH_QT FALSE CACHE BOOL "qt: disabled (forced)" FORCE)
++set(WITH_VTK FALSE CACHE BOOL "vtk: disabled (forced)" FORCE)
++set(BUILD_apps FALSE CACHE BOOL "apps: disabled (forced)" FORCE)
++set(BUILD_tools FALSE CACHE BOOL "tools: disabled (forced)" FORCE)
++set(BUILD_tracking FALSE CACHE BOOL "tracking: disabled (forced)" FORCE)
++
++set(HAVE_MM_MALLOC_EXITCODE "2" CACHE STRING "Result from TRY_RUN for HAVE_MM_MALLOC" FORCE)
++set(HAVE_POSIX_MEMALIGN_EXITCODE "2" CACHE STRING "Result from TRY_RUN for HAVE_POSIX_MEMALIGN" FORCE)
++

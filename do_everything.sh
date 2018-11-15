@@ -201,6 +201,8 @@ if [[ $skip -ne 1 ]] ; then
     # Patch pcrecpp - Add findpackage configs
     apply_patch $my_loc/patches/pcrecpp.patch
 
+    # Patch PCL - Disable optionals.
+    apply_patch $my_loc/patches/pcl-1.8.1.patch
 
     ## ROS patches
 
