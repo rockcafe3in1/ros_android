@@ -1,0 +1,34 @@
+--- catkin_ws/src/actionlib/include/actionlib/client/simple_action_client.h
++++ catkin_ws/src/actionlib/include/actionlib/client/simple_action_client.h
+@@ -601,7 +601,7 @@ bool SimpleActionClient<ActionSpec>::waitForResult(const ros::Duration & timeout
+       time_left = loop_period;
+     }
+ 
+-    done_condition_.timed_wait(lock, boost::posix_time::milliseconds(time_left.toSec() * 1000.0f));
++    done_condition_.timed_wait(lock, boost::posix_time::milliseconds(uint32_t(time_left.toSec() * 1000.0f)));
+   }
+ 
+   return cur_simple_state_ == SimpleGoalState::DONE;
+
+--- catkin_ws/src/actionlib/include/actionlib/destruction_guard.h
++++ catkin_ws/src/actionlib/include/actionlib/destruction_guard.h
+@@ -59,7 +59,7 @@ public:
+     boost::mutex::scoped_lock lock(mutex_);
+     destructing_ = true;
+     while (use_count_ > 0) {
+-      count_condition_.timed_wait(lock, boost::posix_time::milliseconds(1000.0f));
++      count_condition_.timed_wait(lock, boost::posix_time::milliseconds(1000));
+     }
+   }
+
+--- catkin_ws/src/actionlib/src/connection_monitor.cpp
++++ catkin_ws/src/actionlib/src/connection_monitor.cpp
+@@ -275,7 +275,7 @@ bool actionlib::ConnectionMonitor::waitForActionServerToStart(const ros::Duratio
+     }
+ 
+     check_connection_condition_.timed_wait(lock,
+-      boost::posix_time::milliseconds(time_left.toSec() * 1000.0f));
++      boost::posix_time::milliseconds(uint32_t(time_left.toSec() * 1000.0f)));
+   }
+ 
+   return isServerConnected();

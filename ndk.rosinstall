@@ -2,10 +2,10 @@
     local-name: actionlib
     uri: https://github.com/ros-gbp/actionlib-release/archive/release/kinetic/actionlib/1.11.13-0.tar.gz
     version: actionlib-release-release-kinetic-actionlib-1.11.13-0
-# - tar:
-#     local-name: angles
-#     uri: https://github.com/ros-gbp/geometry_angles_utils-release/archive/release/kinetic/angles/1.9.11-0.tar.gz
-#     version: geometry_angles_utils-release-release-kinetic-angles-1.9.11-0
+- tar:
+    local-name: angles
+    uri: https://github.com/ros-gbp/geometry_angles_utils-release/archive/release/kinetic/angles/1.9.11-0.tar.gz
+    version: geometry_angles_utils-release-release-kinetic-angles-1.9.11-0
 # - tar:
 #     local-name: bfl
 #     uri: https://github.com/ros-gbp/bfl-release/archive/release/kinetic/bfl/0.7.0-2.tar.gz
@@ -118,10 +118,10 @@
 #     local-name: diagnostics/self_test
 #     uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/self_test/1.9.3-0.tar.gz
 #     version: diagnostics-release-release-kinetic-self_test-1.9.3-0
-# - tar:
-#     local-name: dynamic_reconfigure
-#     uri: https://github.com/ros-gbp/dynamic_reconfigure-release/archive/release/kinetic/dynamic_reconfigure/1.5.50-0.tar.gz
-#     version: dynamic_reconfigure-release-release-kinetic-dynamic_reconfigure-1.5.50-0
+- tar:
+    local-name: dynamic_reconfigure
+    uri: https://github.com/ros-gbp/dynamic_reconfigure-release/archive/release/kinetic/dynamic_reconfigure/1.5.50-0.tar.gz
+    version: dynamic_reconfigure-release-release-kinetic-dynamic_reconfigure-1.5.50-0
 # - tar:
 #     local-name: eigen_stl_containers
 #     uri: https://github.com/ros-gbp/eigen_stl_containers-release/archive/release/kinetic/eigen_stl_containers/0.1.8-0.tar.gz
@@ -422,10 +422,10 @@
 #     local-name: nodelet_core/nodelet_core
 #     uri: https://github.com/ros-gbp/nodelet_core-release/archive/release/kinetic/nodelet_core/1.9.14-0.tar.gz
 #     version: nodelet_core-release-release-kinetic-nodelet_core-1.9.14-0
-# - tar:
-#     local-name: nodelet_core/nodelet_topic_tools
-#     uri: https://github.com/ros-gbp/nodelet_core-release/archive/release/kinetic/nodelet_topic_tools/1.9.14-0.tar.gz
-#     version: nodelet_core-release-release-kinetic-nodelet_topic_tools-1.9.14-0
+- tar:
+    local-name: nodelet_core/nodelet_topic_tools
+    uri: https://github.com/ros-gbp/nodelet_core-release/archive/release/kinetic/nodelet_topic_tools/1.9.14-0.tar.gz
+    version: nodelet_core-release-release-kinetic-nodelet_topic_tools-1.9.14-0
 # - tar:
 #     local-name: octomap/octomap
 #     uri: https://github.com/ros-gbp/octomap-release/archive/release/kinetic/octomap/1.8.1-0.tar.gz
@@ -606,10 +606,10 @@
     local-name: ros_comm/roswtf
     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/roswtf/1.12.14-0.tar.gz
     version: ros_comm-release-release-kinetic-roswtf-1.12.14-0
-# - tar:
-#     local-name: ros_comm/topic_tools
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/topic_tools/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-topic_tools-1.12.14-0
+- tar:
+    local-name: ros_comm/topic_tools
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/topic_tools/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-topic_tools-1.12.14-0
 - tar:
     local-name: ros_comm/xmlrpcpp
     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/xmlrpcpp/1.12.14-0.tar.gz

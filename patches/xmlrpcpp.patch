@@ -1,0 +1,13 @@
+--- catkin_ws/src/ros_comm/xmlrpcpp/src/XmlRpcDispatch.cpp
++++ catkin_ws/src/ros_comm/xmlrpcpp/src/XmlRpcDispatch.cpp
+@@ -7,7 +7,9 @@
+ 
+ #include <math.h>
+ #include <errno.h>
+-#include <sys/timeb.h>
++#ifndef ANDROID
++# include <sys/timeb.h>
++#endif
+ #include <sys/poll.h>
+ 
+ #if defined(_WINDOWS)
