@@ -92,6 +92,9 @@ elif [ $1 == 'qhull' ]; then
 elif [ $1 == 'tinyxml' ]; then
     URL=https://github.com/chadrockey/tinyxml_cmake
     COMP='git'
+elif [ $1   == 'tinyxml2' ]; then
+    URL=https://github.com/leethomason/tinyxml2
+    COMP='git'
 elif [ $1 == 'urdfdom_headers' ]; then
     URL=https://github.com/ros/urdfdom_headers.git
     COMP='git'
@@ -122,7 +125,6 @@ fi
 
 if [ $1 == 'boost' ]; then
     cd $prefix/boost
-    apply_patch $my_loc/patches/boost.patch
     bash -x ./build-android.sh $ANDROID_NDK --boost=1.68.0
 elif [ -v HASH ]; then
     cd $prefix/$1
