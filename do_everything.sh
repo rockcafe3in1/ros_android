@@ -350,7 +350,7 @@ echo
 [ -f $prefix/target/lib/liburdfdom_model.a ] || run_cmd build_library urdfdom $prefix/libs/urdfdom
 [ -f $prefix/target/lib/libiconv.a ] || run_cmd build_library_with_toolchain libiconv $prefix/libs/libiconv-1.14
 [ -f $prefix/target/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $prefix/libs/libxml2-2.9.1
-[ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada-dom-2.4.0
+# [ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada-dom-2.4.0
 # [ -f $prefix/target/lib/libassimp.a ] || run_cmd build_library assimp $prefix/libs/assimp-3.1.1
 [ -f $prefix/target/lib/libeigen.a ] || run_cmd build_eigen $prefix/libs/eigen
 [ -f $prefix/target/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull-2015.2
