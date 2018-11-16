@@ -208,12 +208,14 @@ if [[ $skip -ne 1 ]] ; then
     apply_patch $my_loc/patches/actionlib.patch
 
     # Patch rospack - problems with Boost changes
-    # TODO: still having problems with python, check old patch.
+    # Also emptied some unnecessary functions to avoid problems related to including Python.
     apply_patch $my_loc/patches/rospack.patch
     
     # Patch xmlrpcpp - problems with Boost changes.
     apply_patch $my_loc/patches/xmlrpcpp.patch
 
+    # Remove
+    rm -fr $prefix/catkin_ws/src/geometry2/tf2_py
 
     # Patch roslib - weird issue with rospack.
     # TODO: Need to look further (only on catkin_make_isolated)
