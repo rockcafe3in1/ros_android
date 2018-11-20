@@ -31,4 +31,3 @@
 +#undef HAVE_STRTOQ
  
  namespace pcrecpp {
- 
