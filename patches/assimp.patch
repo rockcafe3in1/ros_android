@@ -12,18 +12,24 @@ index d332428..1af59dc 100644
  
  SET(ASSIMP_DEBUG_POSTFIX "d" CACHE STRING "Debug Postfitx for lib, samples and tools")
 diff --git libs/assimp-3.1.1/code/BlenderDNA.cpp libs/assimp-3.1.1/code/BlenderDNA.cpp
-index 16e639e..53e9706 100644
+index 16e639e..fdd49eb 100644
 --- libs/assimp-3.1.1/code/BlenderDNA.cpp
 +++ libs/assimp-3.1.1/code/BlenderDNA.cpp
-@@ -55,7 +55,7 @@ using namespace Assimp::Formatter;
- 
+@@ -56,10 +56,10 @@ using namespace Assimp::Formatter;
  #define for_each BOOST_FOREACH
  bool match4(StreamReaderAny& stream, const char* string) {
--	char tmp[] = { 
-+	int8_t tmp[] = { 
- 		(stream).GetI1(), 
- 		(stream).GetI1(),  
- 		(stream).GetI1(), 
+ 	char tmp[] = { 
+-		(stream).GetI1(), 
+-		(stream).GetI1(),  
+-		(stream).GetI1(), 
+-		(stream).GetI1()
++		static_cast<char>((stream).GetI1()), 
++		static_cast<char>((stream).GetI1()),  
++		static_cast<char>((stream).GetI1()), 
++		static_cast<char>((stream).GetI1())
+ 	};
+ 	return (tmp[0]==string[0] && tmp[1]==string[1] && tmp[2]==string[2] && tmp[3]==string[3]);
+ }
 @@ -344,10 +344,10 @@ void SectionParser :: Next()
  	stream.SetCurrentPos(current.start + current.size);
  
@@ -32,10 +38,10 @@ index 16e639e..53e9706 100644
 -		stream.GetI1(),
 -		stream.GetI1(),
 -		stream.GetI1()
-+		(char) stream.GetI1(),
-+		(char) stream.GetI1(),
-+		(char) stream.GetI1(),
-+		(char) stream.GetI1()
++		static_cast<char>(stream.GetI1()),
++		static_cast<char>(stream.GetI1()),
++		static_cast<char>(stream.GetI1()),
++		static_cast<char>(stream.GetI1())
  	};
  	current.id = std::string(tmp,tmp[3]?4:tmp[2]?3:tmp[1]?2:1);
  
