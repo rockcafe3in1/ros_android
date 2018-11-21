@@ -81,8 +81,8 @@ elif [ $1 == 'pcl' ]; then
     URL=https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz
     COMP='gz'
 elif [ $1 == 'pcrecpp' ]; then
-    URL=https://github.com/brianb/pcre-7.8.git
-    COMP='git'
+    URL=https://ftp.pcre.org/pub/pcre/pcre-8.38.tar.gz
+    COMP='gz'
 elif [ $1 == 'poco' ]; then
     URL=http://pocoproject.org/releases/poco-1.8.0/poco-1.8.0.tar.gz
     COMP='gz'

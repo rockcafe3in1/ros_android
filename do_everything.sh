@@ -140,7 +140,7 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/apache-log4cxx-0.10.0 ] || run_cmd get_library log4cxx $prefix/libs
 [ -d $prefix/libs/libccd-2.0 ] || run_cmd get_library libccd $prefix/libs
 [ -d $prefix/libs/fcl-0.3.2 ] || run_cmd get_library fcl $prefix/libs
-[ -d $prefix/libs/pcrecpp ] || run_cmd get_library pcrecpp $prefix/libs
+[ -d $prefix/libs/pcre-8.38 ] || run_cmd get_library pcrecpp $prefix/libs
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
 
@@ -364,7 +364,7 @@ echo
 [ -f $prefix/target/lib/liblog4cxx.a ] || run_cmd build_library_with_toolchain log4cxx $prefix/libs/apache-log4cxx-0.10.0
 [ -f $prefix/target/lib/libccd.a ] || run_cmd build_library libccd $prefix/libs/libccd-2.0
 # [ -f $prefix/target/lib/libfcl.a ] || run_cmd build_library fcl $prefix/libs/fcl-0.3.2
-# [ -f $prefix/target/lib/libpcrecpp.a ] || run_cmd build_library pcrecpp $prefix/libs/pcrecpp
+[ -f $prefix/target/lib/libpcrecpp.a ] || run_cmd build_library pcrecpp $prefix/libs/pcre-8.38
 
 
 echo
