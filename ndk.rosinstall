@@ -434,10 +434,10 @@
 #     local-name: octomap_msgs
 #     uri: https://github.com/ros-gbp/octomap_msgs-release/archive/release/kinetic/octomap_msgs/0.3.3-0.tar.gz
 #     version: octomap_msgs-release-release-kinetic-octomap_msgs-0.3.3-0
-# - tar:
-#     local-name: opencv3
-#     uri: https://github.com/ros-gbp/opencv3-release/archive/release/kinetic/opencv3/3.3.1-5.tar.gz
-#     version: opencv3-release-release-kinetic-opencv3-3.3.1-5
+- tar:
+    local-name: opencv3
+    uri: https://github.com/ros-gbp/opencv3-release/archive/release/kinetic/opencv3/3.3.1-5.tar.gz
+    version: opencv3-release-release-kinetic-opencv3-3.3.1-5
 # - tar:
 #     local-name: orocos_kinematics_dynamics/orocos_kdl
 #     uri: https://github.com/smits/orocos-kdl-release/archive/release/kinetic/orocos_kdl/1.3.1-0.tar.gz
@@ -678,10 +678,10 @@
 #     local-name: urdf/urdf_parser_plugin
 #     uri: https://github.com/ros-gbp/urdf-release/archive/release/kinetic/urdf_parser_plugin/1.12.12-0.tar.gz
 #     version: urdf-release-release-kinetic-urdf_parser_plugin-1.12.12-0
-# - tar:
-#     local-name: vision_opencv/cv_bridge
-#     uri: https://github.com/ros-gbp/vision_opencv-release/archive/release/kinetic/cv_bridge/1.12.8-0.tar.gz
-#     version: vision_opencv-release-release-kinetic-cv_bridge-1.12.8-0
+- tar:
+    local-name: vision_opencv/cv_bridge
+    uri: https://github.com/ros-gbp/vision_opencv-release/archive/release/kinetic/cv_bridge/1.12.8-0.tar.gz
+    version: vision_opencv-release-release-kinetic-cv_bridge-1.12.8-0
 # - tar:
 #     local-name: vision_opencv/image_geometry
 #     uri: https://github.com/ros-gbp/vision_opencv-release/archive/release/kinetic/image_geometry/1.12.8-0.tar.gz
