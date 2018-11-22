@@ -127,7 +127,7 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/libiconv-1.14 ] || run_cmd get_library libiconv $prefix/libs
 [ -d $prefix/libs/libxml2-2.9.1 ] || run_cmd get_library libxml2 $prefix/libs
 [ -d $prefix/libs/collada-dom-2.4.0 ] || run_cmd get_library collada_dom $prefix/libs
-[ -d $prefix/libs/eigen ] || run_cmd get_library eigen $prefix/libs
+[ -d $prefix/libs/eigen-3.3.5 ] || run_cmd get_library eigen $prefix/libs
 [ -d $prefix/libs/assimp-3.1.1 ] || run_cmd get_library assimp $prefix/libs
 [ -d $prefix/libs/qhull-2015.2 ] || run_cmd get_library qhull $prefix/libs
 [ -d $prefix/libs/octomap-1.6.8 ] || run_cmd get_library octomap $prefix/libs
@@ -178,7 +178,7 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch eigen - Rename param as some constant already has the same name
     # TODO: Fork and push changes to creativa's repo
-    apply_patch $my_loc/patches/eigen.patch
+    # apply_patch $my_loc/patches/eigen.patch
 
     # Patch bfl - Build as static lib
     apply_patch $my_loc/patches/bfl.patch
@@ -221,6 +221,8 @@ if [[ $skip -ne 1 ]] ; then
 
     # Remove
     rm -fr $prefix/catkin_ws/src/geometry2/tf2_py
+
+    apply_patch $my_loc/patches/pcl_ros.patch
 
     # Patch roslib - weird issue with rospack.
     # TODO: Need to look further (only on catkin_make_isolated)
@@ -290,12 +292,13 @@ if [[ $skip -ne 1 ]] ; then
     apply_patch $my_loc/patches/poco.patch
 
     # Plugin specific patches
-    # if [ $use_pluginlib -ne 0 ]; then
-    #     # Patch pluginlib for static loading
-    #     apply_patch $my_loc/patches/pluginlib.patch
-    #     apply_patch image_transport to fix faulty export plugins
-    #     apply_patch $my_loc/patches/image_transport.patch
-    # fi
+    if [ $use_pluginlib -ne 0 ]; then
+        # Patch pluginlib for static loading
+        apply_patch $my_loc/patches/pluginlib.patch
+        # TODO (@jubeira): deal with this later
+        # apply_patch image_transport # to fix faulty export plugins
+        # apply_patch $my_loc/patches/image_transport.patch
+    fi
 
     ## Demo Application specific patches
 
@@ -303,33 +306,33 @@ fi
 
 # Before build
 # Search packages that depend on pluginlib and generate plugin loader.
-# if [ $use_pluginlib -ne 0 ]; then
-#     echo
-#     echo -e '\e[34mBuilding pluginlib support...\e[39m'
-#     echo
+if [ $use_pluginlib -ne 0 ]; then
+    echo
+    echo -e '\e[34mBuilding pluginlib support...\e[39m'
+    echo
 
-#     # Install Python libraries that are needed by the scripts
-#     apt-get install python-lxml -y
-#     rosdep init || true
-#     rosdep update
-#     pluginlib_helper_file=pluginlib_helper.cpp
-#     $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
-#     cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
-#     line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
-#     # temporally turn off error detection
-#     set +e
-#     grep "$line" $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-#     # if line is not already added, then add it to the pluginlib cmake
-#     if [ $? -ne 0 ]; then
-#         # backup the file
-#         cp $prefix/catkin_ws/src/pluginlib/CMakeLists.txt $prefix/catkin_ws/src/pluginlib/CMakeLists.txt.bak
-#         sed -i '/INCLUDE_DIRS include/a LIBRARIES ${PROJECT_NAME}' $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-#         echo -e "\n"$line >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-#         echo 'install(TARGETS pluginlib RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})' >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-#     fi
-#     # turn error detection back on
-#     set -e
-# fi
+    # Install Python libraries that are needed by the scripts
+    apt-get install python-lxml -y
+    rosdep init || true
+    rosdep update
+    pluginlib_helper_file=pluginlib_helper.cpp
+    $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
+    cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
+    line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
+    # temporally turn off error detection
+    set +e
+    grep "$line" $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+    # if line is not already added, then add it to the pluginlib cmake
+    if [ $? -ne 0 ]; then
+        # backup the file
+        cp $prefix/catkin_ws/src/pluginlib/CMakeLists.txt $prefix/catkin_ws/src/pluginlib/CMakeLists.txt.bak
+        sed -i '/INCLUDE_DIRS include/a LIBRARIES ${PROJECT_NAME}' $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+        echo -e "\n"$line >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+        echo 'install(TARGETS pluginlib RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})' >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+    fi
+    # turn error detection back on
+    set -e
+fi
 
 echo
 echo -e '\e[34mBuilding library dependencies.\e[39m'
@@ -351,12 +354,12 @@ echo
 [ -f $prefix/target/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $prefix/libs/libxml2-2.9.1
 [ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada-dom-2.4.0
 [ -f $prefix/target/lib/libassimp.a ] || run_cmd build_library assimp $prefix/libs/assimp-3.1.1
-[ -f $prefix/target/lib/libeigen.a ] || run_cmd build_eigen $prefix/libs/eigen
+[ -f $prefix/target/lib/libeigen.a ] || run_cmd build_library eigen $prefix/libs/eigen-3.3.5
 [ -f $prefix/target/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull-2015.2
 # [ -f $prefix/target/lib/liboctomap.a ] || run_cmd build_library octomap $prefix/libs/octomap-1.6.8
 [ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
-# [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
+[ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
 [ -f $prefix/target/lib/liborocos-bfl.a ] || run_cmd build_library bfl $prefix/libs/bfl-0.7.0
 [ -f $prefix/target/lib/liborocos-kdl.a ] || run_cmd build_library orocos_kdl $prefix/libs/orocos_kdl-1.3.0
 [ -f $prefix/target/lib/liblog4cxx.a ] || run_cmd build_library_with_toolchain log4cxx $prefix/libs/apache-log4cxx-0.10.0
