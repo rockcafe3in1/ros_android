@@ -104,6 +104,7 @@ catkin config \
   --extend $prefix/target \
   --install-space $prefix/target \
   --install \
+  --isolate-devel \
   --cmake-args \
     -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
     -DUSE_CATKIN=ON -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
