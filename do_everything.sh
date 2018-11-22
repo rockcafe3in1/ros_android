@@ -176,10 +176,6 @@ if [[ $skip -ne 1 ]] ; then
     # TODO: Remove shared libraries to avoid hack in parse_libs.py
     # apply_patch /opt/roscpp_android/patches/qhull.patch
 
-    # Patch eigen - Rename param as some constant already has the same name
-    # TODO: Fork and push changes to creativa's repo
-    # apply_patch $my_loc/patches/eigen.patch
-
     # Patch bfl - Build as static lib
     apply_patch $my_loc/patches/bfl.patch
 
