@@ -132,7 +132,6 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/qhull-2015.2 ] || run_cmd get_library qhull $prefix/libs
 [ -d $prefix/libs/octomap-1.6.8 ] || run_cmd get_library octomap $prefix/libs
 [ -d $prefix/libs/yaml-cpp-yaml-cpp-0.6.2 ] || run_cmd get_library yaml-cpp $prefix/libs
-#[ -d $prefix/libs/opencv-2.4.9 ] || run_cmd get_library opencv $prefix/libs
 [ -d $prefix/libs/flann ] || run_cmd get_library flann $prefix/libs
 [ -d $prefix/libs/pcl-pcl-1.8.1 ] || run_cmd get_library pcl $prefix/libs
 [ -d $prefix/libs/bfl-0.7.0 ] || run_cmd get_library bfl $prefix/libs
@@ -173,9 +172,6 @@ if [[ $skip -ne 1 ]] ; then
     # Patch libiconv - Remove 'gets' error
     apply_patch $my_loc/patches/libiconv.patch
 
-    # Patch opencv - Fix installation path
-    #apply_patch $my_loc/patches/opencv.patch
-
     # Patch qhull - Don't install shared libraries
     # TODO: Remove shared libraries to avoid hack in parse_libs.py
     # apply_patch /opt/roscpp_android/patches/qhull.patch
@@ -209,6 +205,9 @@ if [[ $skip -ne 1 ]] ; then
     apply_patch $my_loc/patches/uuid.patch
 
     ## ROS patches
+
+    # Patch opencv - Fix installation path
+    apply_patch $my_loc/patches/opencv.patch
     
     # Patch actionlib - problems with Boost changes.
     apply_patch $my_loc/patches/actionlib.patch
@@ -356,7 +355,6 @@ echo
 [ -f $prefix/target/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull-2015.2
 # [ -f $prefix/target/lib/liboctomap.a ] || run_cmd build_library octomap $prefix/libs/octomap-1.6.8
 [ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
-# #[ -f $prefix/target/lib/libopencv_core.a ] || run_cmd build_library opencv $prefix/libs/opencv-2.4.9
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
 # [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
 [ -f $prefix/target/lib/liborocos-bfl.a ] || run_cmd build_library bfl $prefix/libs/bfl-0.7.0
