@@ -178,22 +178,22 @@
     local-name: geometry/eigen_conversions
     uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/eigen_conversions/1.11.9-0.tar.gz
     version: geometry-release-release-kinetic-eigen_conversions-1.11.9-0
-# - tar:
-#     local-name: geometry/geometry
-#     uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/geometry/1.11.9-0.tar.gz
-#     version: geometry-release-release-kinetic-geometry-1.11.9-0
-# - tar:
-#     local-name: geometry/kdl_conversions
-#     uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/kdl_conversions/1.11.9-0.tar.gz
-#     version: geometry-release-release-kinetic-kdl_conversions-1.11.9-0
+- tar:
+    local-name: geometry/geometry
+    uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/geometry/1.11.9-0.tar.gz
+    version: geometry-release-release-kinetic-geometry-1.11.9-0
+- tar:
+    local-name: geometry/kdl_conversions
+    uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/kdl_conversions/1.11.9-0.tar.gz
+    version: geometry-release-release-kinetic-kdl_conversions-1.11.9-0
 - tar:
     local-name: geometry/tf
     uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/tf/1.11.9-0.tar.gz
     version: geometry-release-release-kinetic-tf-1.11.9-0
-# - tar:
-#     local-name: geometry/tf_conversions
-#     uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/tf_conversions/1.11.9-0.tar.gz
-#     version: geometry-release-release-kinetic-tf_conversions-1.11.9-0
+- tar:
+    local-name: geometry/tf_conversions
+    uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/tf_conversions/1.11.9-0.tar.gz
+    version: geometry-release-release-kinetic-tf_conversions-1.11.9-0
 - tar:
     local-name: geometry2/tf2
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2/0.5.18-0.tar.gz
@@ -202,14 +202,14 @@
     local-name: geometry2/tf2_eigen
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_eigen/0.5.18-0.tar.gz
     version: geometry2-release-release-kinetic-tf2_eigen-0.5.18-0
-# - tar:
-#     local-name: geometry2/tf2_geometry_msgs
-#     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_geometry_msgs/0.5.18-0.tar.gz
-#     version: geometry2-release-release-kinetic-tf2_geometry_msgs-0.5.18-0
-# - tar:
-#     local-name: geometry2/tf2_kdl
-#     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_kdl/0.5.18-0.tar.gz
-#     version: geometry2-release-release-kinetic-tf2_kdl-0.5.18-0
+- tar:
+    local-name: geometry2/tf2_geometry_msgs
+    uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_geometry_msgs/0.5.18-0.tar.gz
+    version: geometry2-release-release-kinetic-tf2_geometry_msgs-0.5.18-0
+- tar:
+    local-name: geometry2/tf2_kdl
+    uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_kdl/0.5.18-0.tar.gz
+    version: geometry2-release-release-kinetic-tf2_kdl-0.5.18-0
 - tar:
     local-name: geometry2/tf2_msgs
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_msgs/0.5.18-0.tar.gz
