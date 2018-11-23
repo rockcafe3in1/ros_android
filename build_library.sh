@@ -22,6 +22,8 @@ cmake_build $2
 if [ $1 == 'catkin' ]; then
     echo 'done. please run the following:'
     echo "  . $target/setup.bash"
+elif [ $1 == 'eigen' ]; then
+	cp -r $CMAKE_PREFIX_PATH/include/eigen3/* $CMAKE_PREFIX_PATH/include
 fi
 
 # TODO(ivanpauno): Check this later.
