@@ -273,10 +273,8 @@ if [[ $skip -ne 1 ]] ; then
     # TODO: PR created: https://github.com/ros-perception/image_common/pull/36
     # apply_patch $my_loc/patches/camera_calibration_parsers.patch
 
-    # Patch image_view - Remove GTK definition
-    # TODO: Fixed in https://github.com/ros-perception/image_pipeline/commit/829b7a1ab0fa1927ef3f17f66f9f77ac47dbaacc
-    # Wait dor next release to remove (current 1.12.13)
-    # apply_patch $my_loc/patches/image_view.patch
+    # Patch image_view - Solved YAML linking problems
+    apply_patch $my_loc/patches/image_view.patch
 
     # Patch urdf - Don't use pkconfig for android
     # TODO: PR created: https://github.com/ros/robot_model/pull/111

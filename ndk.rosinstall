@@ -78,10 +78,10 @@
 #     local-name: common_msgs/shape_msgs
 #     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/shape_msgs/1.12.6-0.tar.gz
 #     version: common_msgs-release-release-kinetic-shape_msgs-1.12.6-0
-# - tar:
-#     local-name: common_msgs/stereo_msgs
-#     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/stereo_msgs/1.12.6-0.tar.gz
-#     version: common_msgs-release-release-kinetic-stereo_msgs-1.12.6-0
+- tar:
+    local-name: common_msgs/stereo_msgs
+    uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/stereo_msgs/1.12.6-0.tar.gz
+    version: common_msgs-release-release-kinetic-stereo_msgs-1.12.6-0
 # - tar:
 #     local-name: common_msgs/trajectory_msgs
 #     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/trajectory_msgs/1.12.6-0.tar.gz
@@ -202,10 +202,10 @@
     local-name: geometry2/tf2_eigen
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_eigen/0.5.18-0.tar.gz
     version: geometry2-release-release-kinetic-tf2_eigen-0.5.18-0
-# - tar:
-#     local-name: geometry2/tf2_geometry_msgs
-#     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_geometry_msgs/0.5.18-0.tar.gz
-#     version: geometry2-release-release-kinetic-tf2_geometry_msgs-0.5.18-0
+- tar:
+    local-name: geometry2/tf2_geometry_msgs
+    uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_geometry_msgs/0.5.18-0.tar.gz
+    version: geometry2-release-release-kinetic-tf2_geometry_msgs-0.5.18-0
 # - tar:
 #     local-name: geometry2/tf2_kdl
 #     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_kdl/0.5.18-0.tar.gz
@@ -258,14 +258,14 @@
 #     local-name: image_pipeline/image_proc
 #     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_proc/1.12.23-0.tar.gz
 #     version: image_pipeline-release-release-kinetic-image_proc-1.12.23-0
-- tar:
-    local-name: image_pipeline/image_publisher
-    uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_publisher/1.12.23-0.tar.gz
-    version: image_pipeline-release-release-kinetic-image_publisher-1.12.23-0
-- tar:
-    local-name: image_pipeline/image_rotate
-    uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_rotate/1.12.23-0.tar.gz
-    version: image_pipeline-release-release-kinetic-image_rotate-1.12.23-0
+# - tar:
+#     local-name: image_pipeline/image_publisher
+#     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_publisher/1.12.23-0.tar.gz
+#     version: image_pipeline-release-release-kinetic-image_publisher-1.12.23-0
+# - tar:
+#     local-name: image_pipeline/image_rotate
+#     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_rotate/1.12.23-0.tar.gz
+#     version: image_pipeline-release-release-kinetic-image_rotate-1.12.23-0
 - tar:
     local-name: image_pipeline/image_view
     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_view/1.12.23-0.tar.gz
