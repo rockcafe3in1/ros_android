@@ -243,7 +243,10 @@ if [[ $skip -ne 1 ]] ; then
     # TODO: It seems like there may be a better way to handle the test issues
     # http://stackoverflow.com/questions/22055741/googletest-for-android-ndk
     # https://source.android.com/reference/com/android/tradefed/testtype/GTest.html
-    # apply_patch $my_loc/patches/camera_info_manager.patch
+    apply_patch $my_loc/patches/camera_info_manager.patch
+
+    # Patch camera_calibration_parsers - deleted python things and solved problem finding Boost.
+    apply_patch $my_loc/patches/camera_calibration_parsers.patch
 
     # Patch cv_bridge - remove Python dependencies
     # TODO: https://github.com/ros-perception/vision_opencv/pull/55 merged, need to wait until new version (current 1.11.7)

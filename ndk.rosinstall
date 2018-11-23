@@ -222,70 +222,70 @@
     local-name: geometry2/tf2_ros
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_ros/0.5.18-0.tar.gz
     version: geometry2-release-release-kinetic-tf2_ros-0.5.18-0
-# - tar:
-#     local-name: image_common/camera_calibration_parsers
-#     uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/camera_calibration_parsers/1.11.13-0.tar.gz
-#     version: image_common-release-release-kinetic-camera_calibration_parsers-1.11.13-0
-# - tar:
-#     local-name: image_common/camera_info_manager
-#     uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/camera_info_manager/1.11.13-0.tar.gz
-#     version: image_common-release-release-kinetic-camera_info_manager-1.11.13-0
-# - tar:
-#     local-name: image_common/image_common
-#     uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/image_common/1.11.13-0.tar.gz
-#     version: image_common-release-release-kinetic-image_common-1.11.13-0
-# - tar:
-#     local-name: image_common/image_transport
-#     uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/image_transport/1.11.13-0.tar.gz
-#     version: image_common-release-release-kinetic-image_transport-1.11.13-0
-# - tar:
-#     local-name: image_common/polled_camera
-#     uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/polled_camera/1.11.13-0.tar.gz
-#     version: image_common-release-release-kinetic-polled_camera-1.11.13-0
-# - tar:
-#     local-name: image_pipeline/camera_calibration
-#     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/camera_calibration/1.12.23-0.tar.gz
-#     version: image_pipeline-release-release-kinetic-camera_calibration-1.12.23-0
+- tar:
+    local-name: image_common/camera_calibration_parsers
+    uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/camera_calibration_parsers/1.11.13-0.tar.gz
+    version: image_common-release-release-kinetic-camera_calibration_parsers-1.11.13-0
+- tar:
+    local-name: image_common/camera_info_manager
+    uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/camera_info_manager/1.11.13-0.tar.gz
+    version: image_common-release-release-kinetic-camera_info_manager-1.11.13-0
+- tar:
+    local-name: image_common/image_common
+    uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/image_common/1.11.13-0.tar.gz
+    version: image_common-release-release-kinetic-image_common-1.11.13-0
+- tar:
+    local-name: image_common/image_transport
+    uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/image_transport/1.11.13-0.tar.gz
+    version: image_common-release-release-kinetic-image_transport-1.11.13-0
+- tar:
+    local-name: image_common/polled_camera
+    uri: https://github.com/ros-gbp/image_common-release/archive/release/kinetic/polled_camera/1.11.13-0.tar.gz
+    version: image_common-release-release-kinetic-polled_camera-1.11.13-0
+- tar:
+    local-name: image_pipeline/camera_calibration
+    uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/camera_calibration/1.12.23-0.tar.gz
+    version: image_pipeline-release-release-kinetic-camera_calibration-1.12.23-0
 # - tar:
 #     local-name: image_pipeline/depth_image_proc
 #     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/depth_image_proc/1.12.23-0.tar.gz
 #     version: image_pipeline-release-release-kinetic-depth_image_proc-1.12.23-0
-# - tar:
-#     local-name: image_pipeline/image_pipeline
-#     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_pipeline/1.12.23-0.tar.gz
-#     version: image_pipeline-release-release-kinetic-image_pipeline-1.12.23-0
+- tar:
+    local-name: image_pipeline/image_pipeline
+    uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_pipeline/1.12.23-0.tar.gz
+    version: image_pipeline-release-release-kinetic-image_pipeline-1.12.23-0
 # - tar:
 #     local-name: image_pipeline/image_proc
 #     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_proc/1.12.23-0.tar.gz
 #     version: image_pipeline-release-release-kinetic-image_proc-1.12.23-0
-# - tar:
-#     local-name: image_pipeline/image_publisher
-#     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_publisher/1.12.23-0.tar.gz
-#     version: image_pipeline-release-release-kinetic-image_publisher-1.12.23-0
-# - tar:
-#     local-name: image_pipeline/image_rotate
-#     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_rotate/1.12.23-0.tar.gz
-#     version: image_pipeline-release-release-kinetic-image_rotate-1.12.23-0
-# - tar:
-#     local-name: image_pipeline/image_view
-#     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_view/1.12.23-0.tar.gz
-#     version: image_pipeline-release-release-kinetic-image_view-1.12.23-0
+- tar:
+    local-name: image_pipeline/image_publisher
+    uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_publisher/1.12.23-0.tar.gz
+    version: image_pipeline-release-release-kinetic-image_publisher-1.12.23-0
+- tar:
+    local-name: image_pipeline/image_rotate
+    uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_rotate/1.12.23-0.tar.gz
+    version: image_pipeline-release-release-kinetic-image_rotate-1.12.23-0
+- tar:
+    local-name: image_pipeline/image_view
+    uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/image_view/1.12.23-0.tar.gz
+    version: image_pipeline-release-release-kinetic-image_view-1.12.23-0
 # - tar:
 #     local-name: image_pipeline/stereo_image_proc
 #     uri: https://github.com/ros-gbp/image_pipeline-release/archive/release/kinetic/stereo_image_proc/1.12.23-0.tar.gz
 #     version: image_pipeline-release-release-kinetic-stereo_image_proc-1.12.23-0
-# - tar:
-#     local-name: image_transport_plugins/compressed_depth_image_transport
-#     uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/compressed_depth_image_transport/1.9.5-0.tar.gz
-#     version: image_transport_plugins-release-release-kinetic-compressed_depth_image_transport-1.9.5-0
-# - tar:
-#     local-name: image_transport_plugins/compressed_image_transport
-#     uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/compressed_image_transport/1.9.5-0.tar.gz
-#     version: image_transport_plugins-release-release-kinetic-compressed_image_transport-1.9.5-0
-# - tar:
-#     local-name: image_transport_plugins/image_transport_plugins
-#     uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/image_transport_plugins/1.9.5-0.tar.gz
-#     version: image_transport_plugins-release-release-kinetic-image_transport_plugins-1.9.5-0
+- tar:
+    local-name: image_transport_plugins/compressed_depth_image_transport
+    uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/compressed_depth_image_transport/1.9.5-0.tar.gz
+    version: image_transport_plugins-release-release-kinetic-compressed_depth_image_transport-1.9.5-0
+- tar:
+    local-name: image_transport_plugins/compressed_image_transport
+    uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/compressed_image_transport/1.9.5-0.tar.gz
+    version: image_transport_plugins-release-release-kinetic-compressed_image_transport-1.9.5-0
+- tar:
+    local-name: image_transport_plugins/image_transport_plugins
+    uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/image_transport_plugins/1.9.5-0.tar.gz
+    version: image_transport_plugins-release-release-kinetic-image_transport_plugins-1.9.5-0
 # - tar:
 #     local-name: image_transport_plugins/theora_image_transport
 #     uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/theora_image_transport/1.9.5-0.tar.gz
