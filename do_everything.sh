@@ -202,6 +202,9 @@ if [[ $skip -ne 1 ]] ; then
 
     ## ROS patches
 
+    # Patch bondcpp - Fix transitive linking problems
+    apply_patch $my_loc/patches/bondcpp.patch
+
     # Patch opencv - Fix installation path
     apply_patch $my_loc/patches/opencv.patch
     
