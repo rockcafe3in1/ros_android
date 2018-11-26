@@ -6,10 +6,10 @@
     local-name: angles
     uri: https://github.com/ros-gbp/geometry_angles_utils-release/archive/release/kinetic/angles/1.9.11-0.tar.gz
     version: geometry_angles_utils-release-release-kinetic-angles-1.9.11-0
-# - tar:
-#     local-name: bfl
-#     uri: https://github.com/ros-gbp/bfl-release/archive/release/kinetic/bfl/0.7.0-2.tar.gz
-#     version: bfl-release-release-kinetic-bfl-0.7.0-2
+- tar:
+    local-name: bfl
+    uri: https://github.com/ros-gbp/bfl-release/archive/release/kinetic/bfl/0.7.0-2.tar.gz
+    version: bfl-release-release-kinetic-bfl-0.7.0-2
 - tar:
     local-name: bond_core/bond
     uri: https://github.com/ros-gbp/bond_core-release/archive/release/kinetic/bond/1.8.3-0.tar.gz
@@ -438,10 +438,10 @@
     local-name: opencv3
     uri: https://github.com/ros-gbp/opencv3-release/archive/release/kinetic/opencv3/3.3.1-5.tar.gz
     version: opencv3-release-release-kinetic-opencv3-3.3.1-5
-# - tar:
-#     local-name: orocos_kinematics_dynamics/orocos_kdl
-#     uri: https://github.com/smits/orocos-kdl-release/archive/release/kinetic/orocos_kdl/1.3.1-0.tar.gz
-#     version: orocos-kdl-release-release-kinetic-orocos_kdl-1.3.1-0
+- tar:
+    local-name: orocos_kinematics_dynamics/orocos_kdl
+    uri: https://github.com/smits/orocos-kdl-release/archive/release/kinetic/orocos_kdl/1.3.1-0.tar.gz
+    version: orocos-kdl-release-release-kinetic-orocos_kdl-1.3.1-0
 # - tar:
 #     local-name: orocos_kinematics_dynamics/python_orocos_kdl
 #     uri: https://github.com/smits/orocos-kdl-release/archive/release/kinetic/python_orocos_kdl/1.3.1-0.tar.gz
