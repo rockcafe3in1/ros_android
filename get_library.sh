@@ -129,7 +129,7 @@ elif [ -v HASH ]; then
 elif [ $1 == 'bfl' ]; then
     mv $prefix/bfl-release-release-indigo-bfl-0.7.0-6 $prefix/bfl-0.7.0
 elif [ $1 == 'eigen' ]; then
-    mv $prefix/eigen-eigen-b3f3d4950030 $prefix/eigen-3.3.5
+    mv $prefix/eigen-eigen-* $prefix/eigen-3.3.5
 elif [ $1 == 'orocos_kdl' ]; then
     mv $prefix/orocos-kdl-release-release-indigo-orocos_kdl-1.3.0-0 $prefix/orocos_kdl-1.3.0
 elif [ $1 == 'fcl' ]; then
