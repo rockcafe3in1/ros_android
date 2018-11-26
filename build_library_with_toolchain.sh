@@ -29,13 +29,17 @@ if [ ! -d toolchain/ ]; then
 fi
 export PATH=$PATH:$2/toolchain/bin
 
+# Set --host: The system where built programs and libraries will run.
+# (https://www.gnu.org/software/automake/manual/html_node/Cross_002dCompilation.html)
+host=$(dirname $2/toolchain/*-linux-android)
+
 if [ $1 == 'poco' ]; then
     ./configure --config=Android_static --no-samples --no-tests
     export ANDROID_ABI=$abi
 elif [ $1 == 'curl' ]; then
-    ./configure --prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static --without-ssl --host=arm-linux-androideabi --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random
+    ./configure --prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static --host=${host} --without-ssl --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random
 else
-    ./configure --prefix=$CMAKE_PREFIX_PATH --enable-shared=no --enable-static
+    ./configure --prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static --host=${host}
 fi
 
 make -s -j$PARALLEL_JOBS -l$PARALLEL_JOBS
