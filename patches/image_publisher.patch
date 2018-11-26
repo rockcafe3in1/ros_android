@@ -28,7 +28,7 @@
 -include_directories(${catkin_INCLUDE_DIRS})
 +catkin_package(
 +  DEPENDS YAML_CPP
-+  CATKIN_DEPENDS sensor_msgs
++  CATKIN_DEPENDS cv_bridge dynamic_reconfigure camera_info_manager sensor_msgs image_transport nodelet roscpp
 +)
  
  add_library(${PROJECT_NAME} SHARED src/nodelet/image_publisher_nodelet.cpp)

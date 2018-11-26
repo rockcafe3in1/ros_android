@@ -205,8 +205,11 @@ if [[ $skip -ne 1 ]] ; then
     # Patch bondcpp - Fix transitive linking problems
     apply_patch $my_loc/patches/bondcpp.patch
 
-    # Patch bondcpp - Fix linking problems
+    # Patch image_publisher - Fix linking problems
     apply_patch $my_loc/patches/image_publisher.patch
+
+    # Patch image_rotate - Fix find opencv and transitive linking problem
+    apply_patch $my_loc/patches/image_rotate.patch
 
     # Patch opencv - Fix installation path
     apply_patch $my_loc/patches/opencv.patch
