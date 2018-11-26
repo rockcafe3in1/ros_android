@@ -245,9 +245,8 @@ if [[ $skip -ne 1 ]] ; then
     # https://source.android.com/reference/com/android/tradefed/testtype/GTest.html
     # apply_patch $my_loc/patches/camera_info_manager.patch
 
-    # Patch cv_bridge - remove Python dependencies
-    # TODO: https://github.com/ros-perception/vision_opencv/pull/55 merged, need to wait until new version (current 1.11.7)
-    # apply_patch $my_loc/patches/cv_bridge.patch
+    # Patch cv_bridge - fix transitive linking in cv_bridge-extras.cmake
+    apply_patch $my_loc/patches/cv_bridge.patch
 
     # Patch robot_pose_ekf - Add bfl library cmake variables, also, remove tests
     # TODO: The correct way to handle this would be to create .cmake files for bfl and do a findpackage(orocos-bfl)
