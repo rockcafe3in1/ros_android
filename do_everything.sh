@@ -160,6 +160,9 @@ if [[ $skip -ne 1 ]] ; then
     # patch CMakeLists.txt for lz4 library - Build as a library
     apply_patch $my_loc/patches/lz4.patch
 
+    # patch rosbag_storage - Fix static linking due to missing BZIP2 dependency
+    apply_patch $my_loc/patches/rosbag_storage
+
     # Patch collada - Build as static lib
     apply_patch $my_loc/patches/collada_dom.patch
 
