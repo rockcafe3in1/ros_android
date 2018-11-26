@@ -54,46 +54,46 @@
     local-name: common_msgs/actionlib_msgs
     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/actionlib_msgs/1.12.6-0.tar.gz
     version: common_msgs-release-release-kinetic-actionlib_msgs-1.12.6-0
-# - tar:
-#     local-name: common_msgs/common_msgs
-#     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/common_msgs/1.12.6-0.tar.gz
-#     version: common_msgs-release-release-kinetic-common_msgs-1.12.6-0
-# - tar:
-#     local-name: common_msgs/diagnostic_msgs
-#     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/diagnostic_msgs/1.12.6-0.tar.gz
-#     version: common_msgs-release-release-kinetic-diagnostic_msgs-1.12.6-0
+- tar:
+    local-name: common_msgs/common_msgs
+    uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/common_msgs/1.12.6-0.tar.gz
+    version: common_msgs-release-release-kinetic-common_msgs-1.12.6-0
+- tar:
+    local-name: common_msgs/diagnostic_msgs
+    uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/diagnostic_msgs/1.12.6-0.tar.gz
+    version: common_msgs-release-release-kinetic-diagnostic_msgs-1.12.6-0
 - tar:
     local-name: common_msgs/geometry_msgs
     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/geometry_msgs/1.12.6-0.tar.gz
     version: common_msgs-release-release-kinetic-geometry_msgs-1.12.6-0
-# - tar:
-#     local-name: common_msgs/nav_msgs
-#     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/nav_msgs/1.12.6-0.tar.gz
-#     version: common_msgs-release-release-kinetic-nav_msgs-1.12.6-0
+- tar:
+    local-name: common_msgs/nav_msgs
+    uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/nav_msgs/1.12.6-0.tar.gz
+    version: common_msgs-release-release-kinetic-nav_msgs-1.12.6-0
 - tar:
     local-name: common_msgs/sensor_msgs
     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/sensor_msgs/1.12.6-0.tar.gz
     version: common_msgs-release-release-kinetic-sensor_msgs-1.12.6-0
-# - tar:
-#     local-name: common_msgs/shape_msgs
-#     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/shape_msgs/1.12.6-0.tar.gz
-#     version: common_msgs-release-release-kinetic-shape_msgs-1.12.6-0
-# - tar:
-#     local-name: common_msgs/stereo_msgs
-#     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/stereo_msgs/1.12.6-0.tar.gz
-#     version: common_msgs-release-release-kinetic-stereo_msgs-1.12.6-0
-# - tar:
-#     local-name: common_msgs/trajectory_msgs
-#     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/trajectory_msgs/1.12.6-0.tar.gz
-#     version: common_msgs-release-release-kinetic-trajectory_msgs-1.12.6-0
-# - tar:
-#     local-name: common_msgs/visualization_msgs
-#     uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/visualization_msgs/1.12.6-0.tar.gz
-#     version: common_msgs-release-release-kinetic-visualization_msgs-1.12.6-0
-# - tar:
-#     local-name: control_msgs
-#     uri: https://github.com/ros-gbp/control_msgs-release/archive/release/kinetic/control_msgs/1.4.0-0.tar.gz
-#     version: control_msgs-release-release-kinetic-control_msgs-1.4.0-0
+- tar:
+    local-name: common_msgs/shape_msgs
+    uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/shape_msgs/1.12.6-0.tar.gz
+    version: common_msgs-release-release-kinetic-shape_msgs-1.12.6-0
+- tar:
+    local-name: common_msgs/stereo_msgs
+    uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/stereo_msgs/1.12.6-0.tar.gz
+    version: common_msgs-release-release-kinetic-stereo_msgs-1.12.6-0
+- tar:
+    local-name: common_msgs/trajectory_msgs
+    uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/trajectory_msgs/1.12.6-0.tar.gz
+    version: common_msgs-release-release-kinetic-trajectory_msgs-1.12.6-0
+- tar:
+    local-name: common_msgs/visualization_msgs
+    uri: https://github.com/ros-gbp/common_msgs-release/archive/release/kinetic/visualization_msgs/1.12.6-0.tar.gz
+    version: common_msgs-release-release-kinetic-visualization_msgs-1.12.6-0
+- tar:
+    local-name: control_msgs
+    uri: https://github.com/ros-gbp/control_msgs-release/archive/release/kinetic/control_msgs/1.4.0-0.tar.gz
+    version: control_msgs-release-release-kinetic-control_msgs-1.4.0-0
 # - tar:
 #     local-name: diagnostics/diagnostic_aggregator
 #     uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostic_aggregator/1.9.3-0.tar.gz
