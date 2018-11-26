@@ -1,10 +1,10 @@
 --- catkin_ws/src/image_common/camera_calibration_parsers/CMakeLists.txt
 +++ catkin_ws/src/image_common/camera_calibration_parsers/CMakeLists.txt
-@@ -2,16 +2,9 @@ cmake_minimum_required(VERSION 2.8)
+@@ -2,22 +2,9 @@ cmake_minimum_required(VERSION 2.8)
  project(camera_calibration_parsers)
  
  find_package(catkin REQUIRED sensor_msgs rosconsole roscpp roscpp_serialization)
-+find_package(Boost REQUIRED)# COMPONENTS filesystem)
++find_package(Boost REQUIRED COMPONENTS filesystem)
  
 -find_package(PythonLibs REQUIRED)
 -if(PYTHONLIBS_VERSION_STRING VERSION_LESS 3)
@@ -15,10 +15,29 @@
 -include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 -
 -catkin_python_setup()
+-
+-catkin_package(
+-  INCLUDE_DIRS include
+-  LIBRARIES ${PROJECT_NAME}
+-  CATKIN_DEPENDS sensor_msgs
+-)
 +include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
  
- catkin_package(
-   INCLUDE_DIRS include
+ find_package(PkgConfig)
+ 
+@@ -34,6 +21,12 @@ else()
+ endif()
+ include_directories(${YAML_CPP_INCLUDE_DIRS})
+ 
++catkin_package(
++  INCLUDE_DIRS include
++  DEPENDS YAML_CPP Boost
++  CATKIN_DEPENDS sensor_msgs
++)
++
+ # define the library
+ add_library(${PROJECT_NAME}
+   src/parse.cpp
 @@ -41,17 +34,7 @@ add_library(${PROJECT_NAME}
    src/parse_yml.cpp
  )
@@ -34,7 +53,7 @@
 -        PREFIX ""
 -        LIBRARY_OUTPUT_DIRECTORY ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_PYTHON_DESTINATION}
 -        )
-+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${YAML_CPP_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_LIBRARIES})
++target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${YAML_CPP_LIBRARIES} ${Boost_LIBRARIES})
  
  add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
  
