@@ -42,7 +42,7 @@ elif [ $1 == 'console_bridge' ]; then
     COMP='git'
     HASH='964a9a70e0fc607476e439b8947a36b07322c304'
 elif [ $1 == 'curl' ]; then
-    URL=http://curl.haxx.se/download/curl-7.39.0.tar.bz2
+    URL=http://curl.haxx.se/download/curl-7.47.0.tar.bz2
     COMP='bz2'
 elif [ $1 == 'eigen' ]; then
     URL=https://bitbucket.org/eigen/eigen/get/3.3.5.tar.gz
@@ -57,13 +57,13 @@ elif [ $1 == 'libccd' ]; then
     URL=https://github.com/danfis/libccd/archive/v2.0.tar.gz
     COMP='gz'
 elif [ $1 == 'libiconv' ]; then
-    URL=http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz
+    URL=http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
     COMP='gz'
 elif [ $1 == 'log4cxx' ]; then
     URL=http://mirrors.sonic.net/apache/logging/log4cxx/0.10.0/apache-log4cxx-0.10.0.tar.gz
     COMP='gz'
 elif [ $1 == 'libxml2' ]; then
-    URL=ftp://xmlsoft.org/libxml2/libxml2-2.9.1.tar.gz
+    URL=ftp://xmlsoft.org/libxml2/libxml2-2.9.7.tar.gz
     COMP='gz'
 elif [ $1 == 'lz4' ]; then
     URL=https://github.com/Cyan4973/lz4/archive/r124.tar.gz
