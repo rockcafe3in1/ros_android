@@ -77,11 +77,6 @@ cmd_exists catkin_make || die 'catkin_make was not found'
 [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
 [ "$RBA_TOOLCHAIN" = "" ] && die 'could not find android.toolchain.cmake, you should set RBA_TOOLCHAIN variable.'
 
-# check if system is 64 bits
-if echo $system | grep _64 >/dev/null; then
-    host64='-DANDROID_NDK_HOST_X64=YES'
-fi
-
 # get the prefix path
 prefix=$(cd $TARGET_PATH && pwd)
 
@@ -108,7 +103,7 @@ catkin config \
   --cmake-args \
     -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
     -DUSE_CATKIN=ON -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
-    -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=$platform $host64 \
+    -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=$platform \
     -DPYTHON_EXECUTABLE=$python -DPYTHON_LIBRARY=$python_lib \
     -DPYTHON_INCLUDE_DIR=$python_inc -DPYTHON_INCLUDE_DIR2=$python2_inc \
     -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX=$CMAKE_PREFIX_PATH \
