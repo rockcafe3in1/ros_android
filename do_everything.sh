@@ -221,8 +221,6 @@ if [[ $skip -ne 1 ]] ; then
     # Remove
     rm -fr $prefix/catkin_ws/src/geometry2/tf2_py
 
-    apply_patch $my_loc/patches/pcl_ros.patch
-
     # Patch roslib - weird issue with rospack.
     # TODO: Need to look further (only on catkin_make_isolated)
     # apply_patch /opt/roscpp_android/patches/roslib.patch
