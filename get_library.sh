@@ -19,7 +19,13 @@ echo
 
 prefix=$(cd $2 && pwd)
 
-if [ $1 == 'assimp' ]; then
+if [ $1 == 'apr' ]; then
+    URL=http://apache.dattatec.com//apr/apr-1.6.5.tar.gz
+    COMP='gz'
+elif [ $1 == 'apr-util' ]; then
+    URL=http://apache.dattatec.com//apr/apr-util-1.6.1.tar.gz
+    COMP='gz'
+elif [ $1 == 'assimp' ]; then
     URL=https://github.com/assimp/assimp/archive/v3.1.1.tar.gz
     COMP='gz'
 elif [ $1 == 'bfl' ]; then

@@ -140,6 +140,8 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/libccd-2.0 ] || run_cmd get_library libccd $prefix/libs
 [ -d $prefix/libs/fcl-0.3.2 ] || run_cmd get_library fcl $prefix/libs
 [ -d $prefix/libs/pcrecpp ] || run_cmd get_library pcrecpp $prefix/libs
+[ -d $prefix/libs/apr-1.6.5 ] || run_cmd get_library apr $prefix/libs
+[ -d $prefix/libs/apr-util-1.6.1 ] || run_cmd get_library apr-util $prefix/libs
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
 
@@ -343,7 +345,7 @@ echo
 [ -f $prefix/target/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $prefix/libs/libxml2-2.9.7
 [ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada-dom-2.4.0
 [ -f $prefix/target/lib/libassimp.a ] || run_cmd build_library assimp $prefix/libs/assimp-3.1.1
-[ -f $prefix/target/lib/libeigen.a ] || run_cmd build_library eigen $prefix/libs/eigen-3.3.5
+# [ -f $prefix/target/lib/libeigen.a ] || run_cmd build_library eigen $prefix/libs/eigen-3.3.5
 [ -f $prefix/target/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull-2015.2
 # [ -f $prefix/target/lib/liboctomap.a ] || run_cmd build_library octomap $prefix/libs/octomap-1.6.8
 [ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
@@ -351,6 +353,8 @@ echo
 [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
 [ -f $prefix/target/lib/liborocos-bfl.a ] || run_cmd build_library bfl $prefix/libs/bfl-0.7.0
 [ -f $prefix/target/lib/liborocos-kdl.a ] || run_cmd build_library orocos_kdl $prefix/libs/orocos_kdl-1.3.0
+[ -f $prefix/target/lib/libapr.a ] || run_cmd build_library_with_toolchain apr $prefix/libs/apr-1.6.5
+[ -f $prefix/target/lib/libapr-util.a ] || run_cmd build_library_with_toolchain apr-util $prefix/libs/apr-util-1.6.1
 [ -f $prefix/target/lib/liblog4cxx.a ] || run_cmd build_library_with_toolchain log4cxx $prefix/libs/apache-log4cxx-0.10.0
 [ -f $prefix/target/lib/libccd.a ] || run_cmd build_library libccd $prefix/libs/libccd-2.0
 # [ -f $prefix/target/lib/libfcl.a ] || run_cmd build_library fcl $prefix/libs/fcl-0.3.2

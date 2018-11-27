@@ -49,6 +49,8 @@ elif [ $1 == 'log4cxx' ]; then
     # config.guess and config.sub are out-of-date and do not support arm64 builds. Regenerate...
     rm -f config.guess config.sub
     autoreconf -i
+elif [ $1 == 'apr-util' ]; then
+    configure_options="$configure_options --with-apr=$CMAKE_PREFIX_PATH/bin/apr-1-config"
 fi
 
 # Configure and build
