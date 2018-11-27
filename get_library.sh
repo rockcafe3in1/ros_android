@@ -35,12 +35,13 @@ elif [ $1 == 'catkin' ]; then
     URL='-b 0.6.5 https://github.com/ros/catkin.git'
     COMP='git'
 elif [ $1 == 'collada_dom' ]; then
-    URL=http://ufpr.dl.sourceforge.net/project/collada-dom/Collada%20DOM/Collada%20DOM%202.4/collada-dom-2.4.0.tgz
-    COMP='gz'
+    URL=https://github.com/rdiankov/collada-dom.git
+    COMP='git'
+    HASH='v2.4.4'
 elif [ $1 == 'console_bridge' ]; then
     URL=https://github.com/ros/console_bridge.git
     COMP='git'
-    HASH='964a9a70e0fc607476e439b8947a36b07322c304'
+    HASH='0.3.2'
 elif [ $1 == 'curl' ]; then
     URL=http://curl.haxx.se/download/curl-7.39.0.tar.bz2
     COMP='bz2'
@@ -95,11 +96,11 @@ elif [ $1   == 'tinyxml2' ]; then
 elif [ $1 == 'urdfdom_headers' ]; then
     URL=https://github.com/ros/urdfdom_headers.git
     COMP='git'
-    HASH='9aed7256e06d62935966de2a9bc9ddfac96e7a85'
+    HASH='0.4.2'
 elif [ $1 == 'urdfdom' ]; then
     URL=https://github.com/ros/urdfdom.git
     COMP='git'
-    HASH='c4ac03caf55369c64c61605b78f1b6071bb4acce'
+    HASH='0.4.2'
 elif [ $1 == 'uuid' ]; then
     URL=https://github.com/chadrockey/uuid_cmake
     COMP='git'

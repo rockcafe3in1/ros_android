@@ -126,7 +126,7 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/urdfdom_headers ] || run_cmd get_library urdfdom_headers $prefix/libs
 [ -d $prefix/libs/libiconv-1.14 ] || run_cmd get_library libiconv $prefix/libs
 [ -d $prefix/libs/libxml2-2.9.1 ] || run_cmd get_library libxml2 $prefix/libs
-[ -d $prefix/libs/collada-dom-2.4.0 ] || run_cmd get_library collada_dom $prefix/libs
+[ -d $prefix/libs/collada_dom ] || run_cmd get_library collada_dom $prefix/libs
 [ -d $prefix/libs/eigen-3.3.5 ] || run_cmd get_library eigen $prefix/libs
 [ -d $prefix/libs/assimp-3.1.1 ] || run_cmd get_library assimp $prefix/libs
 [ -d $prefix/libs/qhull-2015.2 ] || run_cmd get_library qhull $prefix/libs
@@ -165,6 +165,9 @@ if [[ $skip -ne 1 ]] ; then
 
     #  Patch assimp - Build as static lib
     apply_patch $my_loc/patches/assimp.patch
+
+    # Patch console_bridge - Disable unit tests (unsatisfied dependencies)
+    apply_patch $my_loc/patches/console_bridge.patch
 
     # Patch urdfdom - Build as static lib
     apply_patch $my_loc/patches/urdfdom.patch
@@ -344,7 +347,7 @@ echo
 [ -f $prefix/target/lib/liburdfdom_model.a ] || run_cmd build_library urdfdom $prefix/libs/urdfdom
 [ -f $prefix/target/lib/libiconv.a ] || run_cmd build_library_with_toolchain libiconv $prefix/libs/libiconv-1.14
 [ -f $prefix/target/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $prefix/libs/libxml2-2.9.1
-[ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada-dom-2.4.0
+[ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada_dom
 [ -f $prefix/target/lib/libassimp.a ] || run_cmd build_library assimp $prefix/libs/assimp-3.1.1
 [ -f $prefix/target/lib/libeigen.a ] || run_cmd build_library eigen $prefix/libs/eigen-3.3.5
 [ -f $prefix/target/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull-2015.2
