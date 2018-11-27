@@ -101,7 +101,7 @@ export ROS_PARALLEL_JOBS="-j$PARALLEL_JOBS -l$PARALLEL_JOBS"
 # export ROS_PARALLEL_JOBS="-j1"
 
 catkin config \
-  --extend $prefix/target \
+  --no-extend \
   --install-space $prefix/target \
   --install \
   --isolate-devel \
