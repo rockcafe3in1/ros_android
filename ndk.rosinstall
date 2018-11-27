@@ -174,10 +174,10 @@
 #     local-name: geometric_shapes
 #     uri: https://github.com/ros-gbp/geometric_shapes-release/archive/release/kinetic/geometric_shapes/0.5.4-1.tar.gz
 #     version: geometric_shapes-release-release-kinetic-geometric_shapes-0.5.4-1
-# - tar:
-#     local-name: geometry/eigen_conversions
-#     uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/eigen_conversions/1.11.9-0.tar.gz
-#     version: geometry-release-release-kinetic-eigen_conversions-1.11.9-0
+- tar:
+    local-name: geometry/eigen_conversions
+    uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/eigen_conversions/1.11.9-0.tar.gz
+    version: geometry-release-release-kinetic-eigen_conversions-1.11.9-0
 # - tar:
 #     local-name: geometry/geometry
 #     uri: https://github.com/ros-gbp/geometry-release/archive/release/kinetic/geometry/1.11.9-0.tar.gz
@@ -690,7 +690,7 @@
     local-name: vision_opencv/vision_opencv
     uri: https://github.com/ros-gbp/vision_opencv-release/archive/release/kinetic/vision_opencv/1.12.8-0.tar.gz
     version: vision_opencv-release-release-kinetic-vision_opencv-1.12.8-0
-- tar:
-    local-name: xacro
-    uri: https://github.com/ros-gbp/xacro-release/archive/release/kinetic/xacro/1.11.3-0.tar.gz
-    version: xacro-release-release-kinetic-xacro-1.11.3-0
+# - tar:
+#     local-name: xacro
+#     uri: https://github.com/ros-gbp/xacro-release/archive/release/kinetic/xacro/1.11.3-0.tar.gz
+#     version: xacro-release-release-kinetic-xacro-1.11.3-0
