@@ -31,9 +31,6 @@ elif [ $1 == 'boost' ]; then
 elif [ $1 == 'bzip2' ]; then
     URL=https://github.com/osrf/bzip2_cmake.git
     COMP='git'
-elif [ $1 == 'catkin' ]; then
-    URL='-b 0.6.5 https://github.com/ros/catkin.git'
-    COMP='git'
 elif [ $1 == 'collada_dom' ]; then
     URL=http://ufpr.dl.sourceforge.net/project/collada-dom/Collada%20DOM/Collada%20DOM%202.4/collada-dom-2.4.0.tgz
     COMP='gz'
