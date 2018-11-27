@@ -25,12 +25,13 @@
  
  find_package(PkgConfig)
  
-@@ -34,6 +21,12 @@ else()
+@@ -34,6 +21,13 @@ else()
  endif()
  include_directories(${YAML_CPP_INCLUDE_DIRS})
  
 +catkin_package(
 +  INCLUDE_DIRS include
++  LIBRARIES ${PROJECT_NAME}
 +  DEPENDS YAML_CPP Boost
 +  CATKIN_DEPENDS sensor_msgs
 +)
@@ -38,7 +39,7 @@
  # define the library
  add_library(${PROJECT_NAME}
    src/parse.cpp
-@@ -41,17 +34,7 @@ add_library(${PROJECT_NAME}
+@@ -41,17 +35,7 @@ add_library(${PROJECT_NAME}
    src/parse_yml.cpp
  )
  
@@ -57,7 +58,7 @@
  
  add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
  
-@@ -74,10 +57,6 @@ install(
+@@ -74,10 +58,6 @@ install(
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
  
