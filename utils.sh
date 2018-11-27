@@ -50,7 +50,8 @@ cmake_build() {
     cmake .. -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
         -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=$platform \
         -DPYTHON_EXECUTABLE=$python -DCMAKE_INSTALL_PREFIX=$target -DBUILD_SHARED_LIBS=0 -DPCL_SHARED_LIBS=FALSE \
-        -DCMAKE_FIND_ROOT_PATH=$target
+        -DCMAKE_FIND_ROOT_PATH=$target \
+        -DBUILD_TESTING=OFF
     make -j$PARALLEL_JOBS -l$PARALLEL_JOBS install
 }
 
