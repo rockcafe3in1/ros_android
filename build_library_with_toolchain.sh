@@ -34,17 +34,26 @@ export PATH=$PATH:$2/toolchain/bin
 build=`uname -m`-linux
 host=$(basename $2/toolchain/*-linux-android)
 
+# General options to pass to ./configure script
+configure_options="--prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static --build=${build} --host=${host}"
+
+# Overwrite/extend for specific packages
 if [ $1 == 'poco' ]; then
-    ./configure --config=Android_static --no-samples --no-tests
+    configure_options="--config=Android_static --no-samples --no-tests"
     export ANDROID_ABI=$abi
 elif [ $1 == 'curl' ]; then
-    ./configure --prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static --build=${build} --host=${host} --without-ssl --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random
-else
-    ./configure --prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static --build=${build} --host=${host}
+    configure_options="$configure_options --without-ssl --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random"
+elif [ $1 == 'log4cxx' ]; then
+    # config.guess and config.sub are out-of-date and do not support arm64 builds. Regenerate...
+    rm -f config.guess config.sub
+    autoreconf -i
 fi
 
-make -s -j$PARALLEL_JOBS -l$PARALLEL_JOBS
+# Configure and build
+./configure ${configure_options}
+make -j$PARALLEL_JOBS -l$PARALLEL_JOBS V=1
 
+# Install
 if [ $1 == 'poco' ]; then
     mkdir -p $CMAKE_PREFIX_PATH/lib
     cd $CMAKE_PREFIX_PATH/lib
@@ -54,8 +63,3 @@ if [ $1 == 'poco' ]; then
 else
     make install
 fi
-
-#if [ $1 == 'curl' ]; then
-#    sed -i 's/#define CURL_SIZEOF_LONG 8/#define CURL_SIZEOF_LONG 4/g' $CMAKE_PREFIX_PATH/include/curl/curlbuild.h
-#    sed -i 's/#define CURL_SIZEOF_CURL_OFF_T 8/#define CURL_SIZEOF_CURL_OFF_T 4/g' $CMAKE_PREFIX_PATH/include/curl/curlbuild.h
-#fi
