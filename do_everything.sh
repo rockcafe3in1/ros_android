@@ -205,7 +205,8 @@ if [[ $skip -ne 1 ]] ; then
     # Patch bondcpp - Fix transitive linking problems
     apply_patch $my_loc/patches/bondcpp.patch
 
-    # Patch image_publisher - Fix linking problems
+    # Patch image_publisher - Fix linking problems, transitive linking,
+    # and changed shared to static library building.
     apply_patch $my_loc/patches/image_publisher.patch
 
     # Patch image_rotate - Fix find opencv and transitive linking problem
@@ -282,8 +283,11 @@ if [[ $skip -ne 1 ]] ; then
     # TODO: PR created: https://github.com/ros-perception/image_common/pull/36
     # apply_patch $my_loc/patches/camera_calibration_parsers.patch
 
-    # Patch image_view - Solved YAML linking problems
+    # Patch image_view - Solved YAML linking problems, and transitive linking.
     apply_patch $my_loc/patches/image_view.patch
+
+    # Patch depth_image_proc - Solved transitive linking problems
+    apply_patch $my_loc/patches/depth_image_proc.patch
 
     # Patch urdf - Don't use pkconfig for android
     # TODO: PR created: https://github.com/ros/robot_model/pull/111
