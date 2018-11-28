@@ -113,7 +113,7 @@ elif [ -v HASH ]; then
     cd $prefix/$1
     git checkout $HASH
 elif [ $1 == 'eigen' ]; then
-    mv $prefix/eigen-eigen-b3f3d4950030 $prefix/eigen-3.3.5
+    mv $prefix/eigen-eigen-* $prefix/eigen-3.3.5
 elif [ $1 == 'fcl' ]; then
     mv $prefix/fcl-release-release-indigo-fcl-0.3.2-0 $prefix/fcl-0.3.2
 fi
