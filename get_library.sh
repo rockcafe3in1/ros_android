@@ -54,6 +54,9 @@ elif [ $1 == 'libccd' ]; then
 elif [ $1 == 'libiconv' ]; then
     URL=http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
     COMP='gz'
+elif [ $1 == 'libjpeg8' ]; then
+    URL=http://www.ijg.org/files/jpegsrc.v8c.tar.gz
+    COMP='gz'
 elif [ $1 == 'libpng' ]; then
     URL=https://sourceforge.net/projects/libpng/files/libpng12/1.2.59/libpng-1.2.59.tar.gz/download
     COMP='gz'
