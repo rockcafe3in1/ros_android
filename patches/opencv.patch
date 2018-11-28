@@ -88,3 +88,17 @@
  
  # ----------------------------------------------------------------------------
  # Finalization: generate configuration-based files
+@@ -850,11 +845,11 @@
+ if(ANDROID OR NOT UNIX)
+   install(FILES ${OPENCV_LICENSE_FILE}
+         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ
+-        DESTINATION ./ COMPONENT libs)
++        DESTINATION ${OPENCV_OTHER_INSTALL_PATH} COMPONENT libs)
+   if(OPENCV_README_FILE)
+     install(FILES ${OPENCV_README_FILE}
+             PERMISSIONS OWNER_READ GROUP_READ WORLD_READ
+-            DESTINATION ./ COMPONENT libs)
++            DESTINATION ${OPENCV_OTHER_INSTALL_PATH} COMPONENT libs)
+   endif()
+ endif()
+ 
