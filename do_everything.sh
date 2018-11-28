@@ -120,11 +120,11 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/tinyxml2 ] || run_cmd get_library tinyxml2 $prefix/libs
 [ -d $prefix/libs/console_bridge ] || run_cmd get_library console_bridge $prefix/libs
 [ -d $prefix/libs/lz4-r124 ] || run_cmd get_library lz4 $prefix/libs
-[ -d $prefix/libs/curl-7.39.0 ] || run_cmd get_library curl $prefix/libs
+[ -d $prefix/libs/curl-7.47.0 ] || run_cmd get_library curl $prefix/libs
 [ -d $prefix/libs/urdfdom/ ] || run_cmd get_library urdfdom $prefix/libs
 [ -d $prefix/libs/urdfdom_headers ] || run_cmd get_library urdfdom_headers $prefix/libs
-[ -d $prefix/libs/libiconv-1.14 ] || run_cmd get_library libiconv $prefix/libs
-[ -d $prefix/libs/libxml2-2.9.1 ] || run_cmd get_library libxml2 $prefix/libs
+[ -d $prefix/libs/libiconv-1.15 ] || run_cmd get_library libiconv $prefix/libs
+[ -d $prefix/libs/libxml2-2.9.7 ] || run_cmd get_library libxml2 $prefix/libs
 [ -d $prefix/libs/collada_dom ] || run_cmd get_library collada_dom $prefix/libs
 [ -d $prefix/libs/eigen-3.3.5 ] || run_cmd get_library eigen $prefix/libs
 [ -d $prefix/libs/assimp-3.1.1 ] || run_cmd get_library assimp $prefix/libs
@@ -167,9 +167,6 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch urdfdom - Build as static lib
     apply_patch $my_loc/patches/urdfdom.patch
-
-    # Patch libiconv - Remove 'gets' error
-    apply_patch $my_loc/patches/libiconv.patch
 
     # Patch qhull - Don't install shared libraries
     # TODO: Remove shared libraries to avoid hack in parse_libs.py
@@ -335,11 +332,11 @@ echo
 [ -f $prefix/target/lib/libtinyxml2.a ] || run_cmd build_library tinyxml2 $prefix/libs/tinyxml2
 [ -f $prefix/target/lib/libconsole_bridge.a ] || run_cmd build_library console_bridge $prefix/libs/console_bridge
 [ -f $prefix/target/lib/liblz4.a ] || run_cmd build_library lz4 $prefix/libs/lz4-r124/cmake_unofficial
-[ -f $prefix/target/lib/libcurl.a ] || run_cmd build_library_with_toolchain curl $prefix/libs/curl-7.39.0
+[ -f $prefix/target/lib/libcurl.a ] || run_cmd build_library_with_toolchain curl $prefix/libs/curl-7.47.0
 [ -f $prefix/target/include/urdf_model/model.h ] || run_cmd build_library urdfdom_headers $prefix/libs/urdfdom_headers
 [ -f $prefix/target/lib/liburdfdom_model.a ] || run_cmd build_library urdfdom $prefix/libs/urdfdom
-[ -f $prefix/target/lib/libiconv.a ] || run_cmd build_library_with_toolchain libiconv $prefix/libs/libiconv-1.14
-[ -f $prefix/target/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $prefix/libs/libxml2-2.9.1
+[ -f $prefix/target/lib/libiconv.a ] || run_cmd build_library_with_toolchain libiconv $prefix/libs/libiconv-1.15
+[ -f $prefix/target/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $prefix/libs/libxml2-2.9.7
 [ -f $prefix/target/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada_dom
 [ -f $prefix/target/lib/libassimp.a ] || run_cmd build_library assimp $prefix/libs/assimp-3.1.1
 [ -f $prefix/target/lib/libeigen.a ] || run_cmd build_library eigen $prefix/libs/eigen-3.3.5
