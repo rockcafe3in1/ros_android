@@ -4,7 +4,7 @@ MAINTAINER Gary Servin <gary@ekumenlabs.com>
 MAINTAINER Juan Ignacio Ubeira <jubeira@ekumenlabs.com>
 
 # Install basic tools
-RUN apt-get update && apt-get install -y wget git unzip tmux python-catkin-tools python-lxml autoconf
+RUN apt-get update && apt-get install -y wget git unzip tmux python-catkin-tools python-lxml
 
 # Install Android NDK
 WORKDIR /opt/android/sdk
