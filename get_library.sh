@@ -22,25 +22,20 @@ prefix=$(cd $2 && pwd)
 if [ $1 == 'assimp' ]; then
     URL=https://github.com/assimp/assimp/archive/v3.1.1.tar.gz
     COMP='gz'
-elif [ $1 == 'bfl' ]; then
-    URL=https://github.com/ros-gbp/bfl-release/archive/release/indigo/bfl/0.7.0-6.tar.gz
-    COMP='gz'
 elif [ $1 == 'boost' ]; then
     URL=https://github.com/moritz-wundke/Boost-for-Android.git
     COMP='git'
 elif [ $1 == 'bzip2' ]; then
     URL=https://github.com/osrf/bzip2_cmake.git
     COMP='git'
-elif [ $1 == 'catkin' ]; then
-    URL='-b 0.6.5 https://github.com/ros/catkin.git'
-    COMP='git'
 elif [ $1 == 'collada_dom' ]; then
-    URL=http://ufpr.dl.sourceforge.net/project/collada-dom/Collada%20DOM/Collada%20DOM%202.4/collada-dom-2.4.0.tgz
-    COMP='gz'
+    URL=https://github.com/rdiankov/collada-dom.git
+    COMP='git'
+    HASH='v2.4.4'
 elif [ $1 == 'console_bridge' ]; then
     URL=https://github.com/ros/console_bridge.git
     COMP='git'
-    HASH='964a9a70e0fc607476e439b8947a36b07322c304'
+    HASH='0.3.2'
 elif [ $1 == 'curl' ]; then
     URL=http://curl.haxx.se/download/curl-7.39.0.tar.bz2
     COMP='bz2'
@@ -65,12 +60,6 @@ elif [ $1 == 'libxml2' ]; then
 elif [ $1 == 'lz4' ]; then
     URL=https://github.com/Cyan4973/lz4/archive/r124.tar.gz
     COMP='gz'
-elif [ $1 == 'octomap' ]; then
-    URL=https://github.com/OctoMap/octomap/archive/v1.6.8.tar.gz
-    COMP='gz'
-elif [ $1 == 'orocos_kdl' ]; then
-    URL=https://github.com/smits/orocos-kdl-release/archive/release/indigo/orocos_kdl/1.3.0-0.tar.gz
-    COMP='gz'
 elif [ $1 == 'pcl' ]; then
     URL=https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz
     COMP='gz'
@@ -92,11 +81,11 @@ elif [ $1   == 'tinyxml2' ]; then
 elif [ $1 == 'urdfdom_headers' ]; then
     URL=https://github.com/ros/urdfdom_headers.git
     COMP='git'
-    HASH='9aed7256e06d62935966de2a9bc9ddfac96e7a85'
+    HASH='0.4.2'
 elif [ $1 == 'urdfdom' ]; then
     URL=https://github.com/ros/urdfdom.git
     COMP='git'
-    HASH='c4ac03caf55369c64c61605b78f1b6071bb4acce'
+    HASH='0.4.2'
 elif [ $1 == 'uuid' ]; then
     URL=https://github.com/chadrockey/uuid_cmake
     COMP='git'
@@ -123,12 +112,8 @@ if [ $1 == 'boost' ]; then
 elif [ -v HASH ]; then
     cd $prefix/$1
     git checkout $HASH
-elif [ $1 == 'bfl' ]; then
-    mv $prefix/bfl-release-release-indigo-bfl-0.7.0-6 $prefix/bfl-0.7.0
 elif [ $1 == 'eigen' ]; then
     mv $prefix/eigen-eigen-b3f3d4950030 $prefix/eigen-3.3.5
-elif [ $1 == 'orocos_kdl' ]; then
-    mv $prefix/orocos-kdl-release-release-indigo-orocos_kdl-1.3.0-0 $prefix/orocos_kdl-1.3.0
 elif [ $1 == 'fcl' ]; then
     mv $prefix/fcl-release-release-indigo-fcl-0.3.2-0 $prefix/fcl-0.3.2
 fi
