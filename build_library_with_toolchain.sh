@@ -43,10 +43,6 @@ if [ $1 == 'poco' ]; then
     export ANDROID_ABI=$abi
 elif [ $1 == 'curl' ]; then
     configure_options="$configure_options --without-ssl --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random"
-elif [ $1 == 'log4cxx' ]; then
-    # config.guess and config.sub are out-of-date and do not support arm64 builds. Regenerate...
-    rm -f config.guess config.sub
-    autoreconf -i
 fi
 
 # Configure and build
