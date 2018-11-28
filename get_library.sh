@@ -65,9 +65,6 @@ elif [ $1 == 'libxml2' ]; then
 elif [ $1 == 'lz4' ]; then
     URL=https://github.com/Cyan4973/lz4/archive/r124.tar.gz
     COMP='gz'
-elif [ $1 == 'octomap' ]; then
-    URL=https://github.com/OctoMap/octomap/archive/v1.6.8.tar.gz
-    COMP='gz'
 elif [ $1 == 'pcl' ]; then
     URL=https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz
     COMP='gz'
