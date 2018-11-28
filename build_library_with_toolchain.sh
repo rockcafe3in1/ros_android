@@ -47,7 +47,7 @@ elif [ $1 == 'libxml2' ]; then
     configure_options="$configure_options --without-python"
 elif [ $1 == 'zlib' ]; then
     # Overwritten configure_options, as zlib doesn't support --disable-shared, --enable-static, --build=, --host=
-    configure_options='--prefix=$CMAKE_PREFIX_PATH --static --archs="'"-arch ${arch}"'"'
+    configure_options="--prefix=$CMAKE_PREFIX_PATH --static"
     # zlib needs CROSS_PREFIX exported
     export CROSS_PREFIX=${host}-
 fi
