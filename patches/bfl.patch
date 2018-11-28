@@ -1,5 +1,5 @@
---- libs/bfl-0.7.0/CMakeLists.txt	2014-12-23 14:57:42.998174978 -0300
-+++ libs/bfl-0.7.0/CMakeLists.txt	2014-12-23 14:58:22.034173201 -0300
+--- catkin_ws/src/bfl/CMakeLists.txt
++++ catkin_ws/src/bfl/CMakeLists.txt
 @@ -54,7 +54,7 @@
  # Shared or static library
  # ------------------------
