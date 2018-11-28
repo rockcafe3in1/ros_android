@@ -690,6 +690,7 @@
     local-name: vision_opencv/vision_opencv
     uri: https://github.com/ros-gbp/vision_opencv-release/archive/release/kinetic/vision_opencv/1.12.8-0.tar.gz
     version: vision_opencv-release-release-kinetic-vision_opencv-1.12.8-0
+# Python based package, not needed.
 # - tar:
 #     local-name: xacro
 #     uri: https://github.com/ros-gbp/xacro-release/archive/release/kinetic/xacro/1.11.3-0.tar.gz

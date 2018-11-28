@@ -1,7 +1,5 @@
-diff --git a/image_pipeline/image_publisher/CMakeLists.txt b/image_pipeline/image_publisher/CMakeLists.txt
-index b17dec9..55445ff 100644
---- a/image_pipeline/image_publisher/CMakeLists.txt
-+++ b/image_pipeline/image_publisher/CMakeLists.txt
+--- catkin_ws/src/image_pipeline/image_publisher/CMakeLists.txt
++++ catkin_ws/src/image_pipeline/image_publisher/CMakeLists.txt
 @@ -13,15 +13,32 @@ else()
    find_package(OpenCV 3 REQUIRED COMPONENTS ${opencv_3_components})  
  endif()

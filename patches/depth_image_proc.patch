@@ -1,7 +1,5 @@
-diff --git a/image_pipeline/depth_image_proc/CMakeLists.txt b/image_pipeline/depth_image_proc/CMakeLists.txt
-index 7bb99d5..a528af9 100644
---- a/image_pipeline/depth_image_proc/CMakeLists.txt
-+++ b/image_pipeline/depth_image_proc/CMakeLists.txt
+--- catkin_ws/src/image_pipeline/depth_image_proc/CMakeLists.txt
++++ catkin_ws/src/image_pipeline/depth_image_proc/CMakeLists.txt
 @@ -7,17 +7,23 @@ if(cv_bridge_VERSION VERSION_GREATER "1.12.0")
    add_compile_options(-std=c++11)
  endif()

@@ -1,7 +1,5 @@
-diff --git a/image_pipeline/image_view/CMakeLists.txt b/image_pipeline/image_view/CMakeLists.txt
-index 0b98148..f21e3df 100644
---- a/image_pipeline/image_view/CMakeLists.txt
-+++ b/image_pipeline/image_view/CMakeLists.txt
+--- catkin_ws/src/image_pipeline/image_view/CMakeLists.txt
++++ catkin_ws/src/image_pipeline/image_view/CMakeLists.txt
 @@ -4,10 +4,21 @@ project(image_view)
  find_package(catkin REQUIRED COMPONENTS camera_calibration_parsers cv_bridge dynamic_reconfigure image_transport message_filters message_generation nodelet rosconsole roscpp std_srvs stereo_msgs)
  generate_dynamic_reconfigure_options(cfg/ImageView.cfg)
