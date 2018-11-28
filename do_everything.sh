@@ -160,6 +160,9 @@ if [[ $skip -ne 1 ]] ; then
     # patch CMakeLists.txt for lz4 library - Build as a library
     apply_patch $my_loc/patches/lz4.patch
 
+    # patch rosbag_storage - Fix static linking due to missing BZIP2 dependency
+    apply_patch $my_loc/patches/rosbag_storage.patch
+
     # Patch collada - Build as static lib
     apply_patch $my_loc/patches/collada_dom.patch
 
@@ -227,8 +230,6 @@ if [[ $skip -ne 1 ]] ; then
 
     # Remove
     rm -fr $prefix/catkin_ws/src/geometry2/tf2_py
-
-    apply_patch $my_loc/patches/pcl_ros.patch
 
     # Patch roslib - weird issue with rospack.
     # TODO: Need to look further (only on catkin_make_isolated)

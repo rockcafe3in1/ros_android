@@ -9,6 +9,7 @@ del_image=0
 del_tmp=0
 portable=0
 standard=0
+pull=
 
 if [[ $# -lt 1 ]] ; then
     standard=1
@@ -33,6 +34,10 @@ do
         portable=1
     fi
 
+    if [[ ${var} == "--pull" ]] ; then
+        pull=--pull
+    fi
+
     if [[ ${var} == "--raw" ]] ; then
         standard=1
         output_path=$my_loc"/output"
@@ -43,7 +48,7 @@ do
 done
 
 if [[ $help -eq 1 ]] ; then
-    echo "Usage: $0 [-h | --help] [--delete-image] [--delete-tmp] [--portable] [--standard] [output_dir]"
+    echo "Usage: $0 [-h | --help] [--delete-image] [--delete-tmp] [--portable] [--pull] [--standard] [output_dir]"
     echo "  example: $0 --raw /path/to/output/dir, will create a raw output in the desired path (only useful from Docker)"
     echo "  example: $0 --portable, will create a portable tar.gz output in the current directory."
     echo "  example: $0 --delete-image, will delete the Docker image created for the build."
@@ -56,7 +61,7 @@ if [[ $del_image -eq 1 ]]; then
   echo
   echo -e '\e[34mDeleting docker image.\e[39m'
   echo
-  sudo docker rmi -f ekumenlabs/rosndk
+  docker rmi -f ekumenlabs/rosndk
   exit $?
 fi
 
@@ -75,21 +80,17 @@ echo
 # Requires docker 1.3+
 cmd_exists docker || die 'docker was not found'
 
-echo -e '\e[34mPulling base docker image.\e[39m'
-sudo docker pull ekumenlabs/rosndk
-
-
 if [[ $standard -eq 1 ]]; then
   echo -e '\e[34mSetting output_path to: '$output_path'.\e[39m'
   echo
-  sudo docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output
+  docker run --rm=true ${pull} -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output
   exit $?
 fi
 
 if [[ $portable -eq 1 ]]; then
   echo -e '\e[34mBuilding in portable mode.\e[39m'
   echo
-  sudo docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output --portable
+  docker run --rm=true ${pull} -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output --portable
   echo
   echo -e '\e[34mCreating output/roscpp_android_ndk.tar.gz.\e[39m'
   echo
