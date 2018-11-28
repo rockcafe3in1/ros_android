@@ -118,7 +118,6 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/poco-1.8.0 ] || run_cmd get_library poco $prefix/libs
 [ -d $prefix/libs/tinyxml ] || run_cmd get_library tinyxml $prefix/libs
 [ -d $prefix/libs/tinyxml2 ] || run_cmd get_library tinyxml2 $prefix/libs
-[ -d $prefix/libs/catkin ] || run_cmd get_library catkin $prefix/libs
 [ -d $prefix/libs/console_bridge ] || run_cmd get_library console_bridge $prefix/libs
 [ -d $prefix/libs/lz4-r124 ] || run_cmd get_library lz4 $prefix/libs
 [ -d $prefix/libs/curl-7.39.0 ] || run_cmd get_library curl $prefix/libs
@@ -139,9 +138,6 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/pcrecpp ] || run_cmd get_library pcrecpp $prefix/libs
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
-
-[ -f $prefix/target/bin/catkin_make ] || run_cmd build_library catkin $prefix/libs/catkin
-. $prefix/target/setup.bash
 
 echo
 echo -e '\e[34mGetting ROS packages\e[39m'
