@@ -54,6 +54,9 @@ elif [ $1 == 'libccd' ]; then
 elif [ $1 == 'libiconv' ]; then
     URL=http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
     COMP='gz'
+elif [ $1 == 'libpng' ]; then
+    URL=https://sourceforge.net/projects/libpng/files/libpng12/1.2.59/libpng-1.2.59.tar.gz/download
+    COMP='gz'
 elif [ $1 == 'libxml2' ]; then
     URL=ftp://xmlsoft.org/libxml2/libxml2-2.9.7.tar.gz
     COMP='gz'
@@ -96,6 +99,9 @@ elif [ $1 == 'rospkg' ]; then
     URL=https://github.com/ros-infrastructure/rospkg.git
     COMP='git'
     HASH='93b1b72f256badf22ccc926b22646f2e83b720fd'
+elif [ $1 == 'zlib' ]; then
+    URL=http://prdownloads.sourceforge.net/libpng/zlib-1.2.11.tar.gz
+    COMP='gz'
 fi
 
 if [ $COMP == 'gz' ]; then

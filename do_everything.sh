@@ -135,6 +135,8 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/libccd-2.0 ] || run_cmd get_library libccd $prefix/libs
 [ -d $prefix/libs/fcl-0.3.2 ] || run_cmd get_library fcl $prefix/libs
 [ -d $prefix/libs/pcrecpp ] || run_cmd get_library pcrecpp $prefix/libs
+[ -d $prefix/libs/zlib-1.2.11 ] || run_cmd get_library zlib $prefix/libs
+[ -d $prefix/libs/libpng-1.2.59 ] || run_cmd get_library libpng $prefix/libs
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
 
@@ -341,6 +343,8 @@ echo
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
 [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
 [ -f $prefix/target/lib/libccd.a ] || run_cmd build_library libccd $prefix/libs/libccd-2.0
+[ -f $prefix/target/lib/libz.a ] || run_cmd build_library_with_toolchain zlib $prefix/libs/zlib-1.2.11
+[ -f $prefix/target/lib/libpng.a ] || run_cmd build_library_with_toolchain libpng $prefix/libs/libpng-1.2.59
 # [ -f $prefix/target/lib/libfcl.a ] || run_cmd build_library fcl $prefix/libs/fcl-0.3.2
 # [ -f $prefix/target/lib/libpcrecpp.a ] || run_cmd build_library pcrecpp $prefix/libs/pcrecpp
 

@@ -45,6 +45,11 @@ elif [ $1 == 'curl' ]; then
     configure_options="$configure_options --without-ssl --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random"
 elif [ $1 == 'libxml2' ]; then
     configure_options="$configure_options --without-python"
+elif [ $1 == 'zlib' ]; then
+    # Overwritten configure_options, as zlib doesn't support --disable-shared, --enable-static, --build=, --host=
+    configure_options='--prefix=$CMAKE_PREFIX_PATH --static --archs="'"-arch ${arch}"'"'
+    # zlib needs CROSS_PREFIX exported
+    export CROSS_PREFIX=${host}-
 fi
 
 # Configure and build
