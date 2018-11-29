@@ -1,6 +1,6 @@
---- catkin_ws/src/image_common/camera_info_manager/CMakeLists.txt	2014-12-12 12:17:14.245252860 -0300
-+++ catkin_ws/src/image_common/camera_info_manager/CMakeLists.txt	2014-12-12 12:17:26.965252568 -0300
-@@ -33,7 +33,7 @@
+--- catkin_ws/src/image_common/camera_info_manager/CMakeLists.txt
++++ catkin_ws/src/image_common/camera_info_manager/CMakeLists.txt
+@@ -25,7 +25,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
          DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
  )
  
