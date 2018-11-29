@@ -194,6 +194,16 @@ if [[ $skip -ne 1 ]] ; then
 
     ## ROS patches
 
+    # Patch bondcpp - Fix transitive linking problems
+    apply_patch $my_loc/patches/bondcpp.patch
+
+    # Patch image_publisher - Fix linking problems, transitive linking,
+    # and changed shared to static library building.
+    apply_patch $my_loc/patches/image_publisher.patch
+
+    # Patch image_rotate - Fix find opencv and transitive linking problem
+    apply_patch $my_loc/patches/image_rotate.patch
+
     # Patch opencv - Fix installation path
     apply_patch $my_loc/patches/opencv.patch
     
@@ -233,7 +243,10 @@ if [[ $skip -ne 1 ]] ; then
     # TODO: It seems like there may be a better way to handle the test issues
     # http://stackoverflow.com/questions/22055741/googletest-for-android-ndk
     # https://source.android.com/reference/com/android/tradefed/testtype/GTest.html
-    # apply_patch $my_loc/patches/camera_info_manager.patch
+    apply_patch $my_loc/patches/camera_info_manager.patch
+
+    # Patch camera_calibration_parsers - deleted python things and solved problem finding Boost.
+    apply_patch $my_loc/patches/camera_calibration_parsers.patch
 
     # Patch cv_bridge - fix transitive linking in cv_bridge-extras.cmake
     apply_patch $my_loc/patches/cv_bridge.patch
@@ -259,10 +272,11 @@ if [[ $skip -ne 1 ]] ; then
     # TODO: PR created: https://github.com/ros-perception/image_common/pull/36
     # apply_patch $my_loc/patches/camera_calibration_parsers.patch
 
-    # Patch image_view - Remove GTK definition
-    # TODO: Fixed in https://github.com/ros-perception/image_pipeline/commit/829b7a1ab0fa1927ef3f17f66f9f77ac47dbaacc
-    # Wait dor next release to remove (current 1.12.13)
-    # apply_patch $my_loc/patches/image_view.patch
+    # Patch image_view - Solved YAML linking problems, and transitive linking.
+    apply_patch $my_loc/patches/image_view.patch
+
+    # Patch depth_image_proc - Solved transitive linking problems
+    apply_patch $my_loc/patches/depth_image_proc.patch
 
     # Patch urdf - Don't use pkconfig for android
     # TODO: PR created: https://github.com/ros/robot_model/pull/111
@@ -280,9 +294,8 @@ if [[ $skip -ne 1 ]] ; then
     if [ $use_pluginlib -ne 0 ]; then
         # Patch pluginlib for static loading
         apply_patch $my_loc/patches/pluginlib.patch
-        # TODO (@jubeira): deal with this later
         # apply_patch image_transport # to fix faulty export plugins
-        # apply_patch $my_loc/patches/image_transport.patch
+        apply_patch $my_loc/patches/image_transport.patch
     fi
 
     ## Demo Application specific patches
