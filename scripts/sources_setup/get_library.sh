@@ -3,9 +3,9 @@
 # Abort script on any failures
 set -e
 
-my_loc="$(cd "$(dirname $0)" && pwd)"
-source $my_loc/config.sh
-source $my_loc/utils.sh
+# my_loc="$(cd "$(dirname $0)" && pwd)"
+# source $my_loc/config.sh
+# source $my_loc/utils.sh
 
 if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: $0 library_name library_prefix_path"
@@ -17,7 +17,7 @@ echo
 echo -e '\e[34mGetting '$1'.\e[39m'
 echo
 
-prefix=$(cd $2 && pwd)
+lib_prefix=$2
 
 if [ $1 == 'assimp' ]; then
     URL=https://github.com/assimp/assimp/archive/v3.1.1.tar.gz
@@ -90,19 +90,26 @@ elif [ $1 == 'rospkg' ]; then
 fi
 
 if [ $COMP == 'gz' ]; then
-    download_gz $URL $prefix
+    download_gz $URL $lib_prefix
 elif [ $COMP == 'bz2' ]; then
-    download_bz2 $URL $prefix
+    download_bz2 $URL $lib_prefix
 elif [ $COMP == 'git' ];then
-    git clone $URL $prefix/$1
+    git clone $URL $lib_prefix/$1
 fi
 
 if [ $1 == 'boost' ]; then
-    cd $prefix/boost
+    pushd $lib_prefix/boost
     bash -x ./build-android.sh $ANDROID_NDK --boost=1.68.0
+    popd
 elif [ -v HASH ]; then
-    cd $prefix/$1
+    pushd $lib_prefix/$1
+    # cd $lib_prefix/$1
     git checkout $HASH
+    popd
 elif [ $1 == 'eigen' ]; then
-    mv $prefix/eigen-eigen-* $prefix/eigen-3.3.5
+    mv $lib_prefix/eigen-eigen-* $lib_prefix/eigen-3.3.5
 fi
+
+unset URL
+unset COMP
+unset HASH

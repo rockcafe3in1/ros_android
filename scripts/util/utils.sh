@@ -58,10 +58,23 @@ cmake_build() {
 
 # Check if patch hasn't already applied and apply it
 apply_patch() {
+    set -e
     echo "Checking patch: $1"
     if patch -p0 -N --dry-run --silent -d $prefix < $1;
     then
         patch -p0 -N -d $prefix < $1 || return $?
     fi
     echo ''
+}
+
+echo_title() {
+    echo
+    echo -e '\e[34m' $1 '\e[39m'
+    echo
+}
+
+run_cmd() {
+    cmd=$1.sh
+    shift
+    . $cmd $@ || die "$cmd $@ died with error code $?"
 }

@@ -3,9 +3,9 @@
 # Abort script on any failures
 set -e
 
-my_loc="$(cd "$(dirname $0)" && pwd)"
-source $my_loc/config.sh
-source $my_loc/utils.sh
+# my_loc="$(cd "$(dirname $0)" && pwd)"
+# source $my_loc/config.sh
+# source $my_loc/utils.sh
 
 if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: $0 library_name library_source_dir"
@@ -13,9 +13,9 @@ if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     exit 1
 fi
 
-prefix=$(cd $2 && pwd)
+current_lib_prefix=$2
 
-cd $2
+pushd $current_lib_prefix
 
 # Create a stand alone version of the android toolchain
 echo
@@ -54,10 +54,11 @@ make -j$PARALLEL_JOBS -l$PARALLEL_JOBS V=1
 # Install
 if [ $1 == 'poco' ]; then
     mkdir -p $CMAKE_PREFIX_PATH/lib
-    cd $CMAKE_PREFIX_PATH/lib
-    cp $prefix/lib/Android/$abi/lib*.a ./
-    mkdir -p ../include && cd ../include
-    cp -r $prefix/Foundation/include/Poco ./
+    cp $prefix/lib/Android/$abi/lib*.a $CMAKE_PREFIX_PATH/lib
+    mkdir -p $CMAKE_PREFIX_PATH/include
+    cp -r $prefix/Foundation/include/Poco $CMAKE_PREFIX_PATH/include
 else
     make install
 fi
+
+popd
