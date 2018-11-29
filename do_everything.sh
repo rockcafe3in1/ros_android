@@ -135,6 +135,7 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/libccd-2.0 ] || run_cmd get_library libccd $prefix/libs
 [ -d $prefix/libs/fcl-0.3.2 ] || run_cmd get_library fcl $prefix/libs
 [ -d $prefix/libs/pcrecpp ] || run_cmd get_library pcrecpp $prefix/libs
+[ -d $prefix/libs/bullet ] || run_cmd get_library bullet $prefix/libs
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
 
@@ -192,11 +193,14 @@ if [[ $skip -ne 1 ]] ; then
     # Patch uuid - Avoiding stdlib.h include
     apply_patch $my_loc/patches/uuid.patch
 
+    # Patch bullet - Avoid building examples
+    apply_patch $my_loc/patches/bullet.patch
+
     ## ROS patches
 
     # Patch opencv - Fix installation path
     apply_patch $my_loc/patches/opencv.patch
-    
+
     # Patch actionlib - problems with Boost changes.
     apply_patch $my_loc/patches/actionlib.patch
 
@@ -341,6 +345,7 @@ echo
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
 [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
 [ -f $prefix/target/lib/libccd.a ] || run_cmd build_library libccd $prefix/libs/libccd-2.0
+[ -f $prefix/target/lib/libBulletSoftBody.a ] || run_cmd build_library bullet $prefix/libs/bullet
 # [ -f $prefix/target/lib/libfcl.a ] || run_cmd build_library fcl $prefix/libs/fcl-0.3.2
 # [ -f $prefix/target/lib/libpcrecpp.a ] || run_cmd build_library pcrecpp $prefix/libs/pcrecpp
 

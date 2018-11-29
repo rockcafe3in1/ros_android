@@ -1,0 +1,31 @@
+--- libs/bullet/CMakeLists.txt
++++ libs/bullet/CMakeLists.txt
+@@ -125,9 +125,11 @@ ENDIF(INTERNAL_CREATE_MSVC_RELATIVE_PATH_PROJECTFILES)
+ 
+ ENDIF (WIN32)
+ 
+-
+-OPTION(BUILD_CPU_DEMOS "Build original Bullet CPU examples"        ON)
+-
++IF (NOT ANDROID)
++	OPTION(BUILD_CPU_DEMOS "Build original Bullet CPU examples"        ON)
++ELSE ()
++        OPTION(BUILD_CPU_DEMOS "Don't build original Bullet CPU examples"  OFF)
++ENDIF()
+ 
+ 
+ OPTION(INTERNAL_UPDATE_SERIALIZATION_STRUCTURES "Internal update serialization structures" OFF)
+@@ -218,7 +220,12 @@ ELSE()
+ 	ADD_DEFINITIONS(-DNO_OPENGL3)
+ ENDIF(BUILD_OPENGL3_DEMOS)
+ 
+-OPTION(BUILD_BULLET2_DEMOS "Set when you want to build the Bullet 2 demos" ON)
++IF (NOT ANDROID)
++	OPTION(BUILD_BULLET2_DEMOS "Set when you want to build the Bullet 2 demos" ON)
++ELSE()
++        OPTION(BUILD_BULLET2_DEMOS "Set when you want to build the Bullet 2 demos" OFF)
++ENDIF()
++
+ IF(BUILD_BULLET2_DEMOS)
+ 
+         IF(EXISTS ${BULLET_PHYSICS_SOURCE_DIR}/examples AND IS_DIRECTORY ${BULLET_PHYSICS_SOURCE_DIR}/examples)

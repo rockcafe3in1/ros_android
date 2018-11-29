@@ -25,6 +25,10 @@ if [ $1 == 'assimp' ]; then
 elif [ $1 == 'boost' ]; then
     URL=https://github.com/moritz-wundke/Boost-for-Android.git
     COMP='git'
+elif [ $1 == 'bullet' ]; then
+    URL=https://github.com/bulletphysics/bullet3
+    COMP='git'
+    HASH='2.83.6'
 elif [ $1 == 'bzip2' ]; then
     URL=https://github.com/osrf/bzip2_cmake.git
     COMP='git'
