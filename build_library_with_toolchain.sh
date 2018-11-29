@@ -50,6 +50,13 @@ elif [ $1 == 'sdl' ]; then
     cp /usr/share/automake*/config* build-scripts/
     # Update ./configure
     ./autogen.sh
+elif [ $1 == 'sdl-image' ]; then
+    # Update old config.sub and config.guess
+    cp /usr/share/automake*/config* .
+    # Update ./configure
+    ./autogen.sh
+    # Export sdl-config file location
+    export SDL_CONFIG=$prefix/../../target/bin/sdl-config
 fi
 
 # Configure and build

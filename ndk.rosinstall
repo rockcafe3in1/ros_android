@@ -374,10 +374,10 @@
     local-name: navigation/global_planner
     uri: https://github.com/ros-gbp/navigation-release/archive/release/kinetic/global_planner/1.14.4-0.tar.gz
     version: navigation-release-release-kinetic-global_planner-1.14.4-0
-# - tar:
-#     local-name: navigation/map_server
-#     uri: https://github.com/ros-gbp/navigation-release/archive/release/kinetic/map_server/1.14.4-0.tar.gz
-#     version: navigation-release-release-kinetic-map_server-1.14.4-0
+- tar:
+    local-name: navigation/map_server
+    uri: https://github.com/ros-gbp/navigation-release/archive/release/kinetic/map_server/1.14.4-0.tar.gz
+    version: navigation-release-release-kinetic-map_server-1.14.4-0
 - tar:
     local-name: navigation/move_base
     uri: https://github.com/ros-gbp/navigation-release/archive/release/kinetic/move_base/1.14.4-0.tar.gz

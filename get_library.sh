@@ -79,6 +79,9 @@ elif [ $1 == 'qhull' ]; then
 elif [ $1 == 'sdl' ]; then
     URL=https://www.libsdl.org/release/SDL-1.2.15.tar.gz
     COMP='gz'
+elif [ $1 == 'sdl-image' ]; then
+    URL=http://hg.libsdl.org/SDL_image/archive/d46c630f2cd6.tar.gz
+    COMP='gz'
 elif [ $1 == 'tinyxml' ]; then
     URL=https://github.com/chadrockey/tinyxml_cmake
     COMP='git'
@@ -119,6 +122,8 @@ if [ $1 == 'boost' ]; then
 elif [ -v HASH ]; then
     cd $prefix/$1
     git checkout $HASH
+elif [ $1 == 'sdl-image' ]; then
+    mv $prefix/SDL_image* $prefix/SDL_image
 elif [ $1 == 'eigen' ]; then
     mv $prefix/eigen-eigen-* $prefix/eigen-3.3.5
 elif [ $1 == 'fcl' ]; then
