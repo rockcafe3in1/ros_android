@@ -61,7 +61,7 @@ apply_patch() {
     echo "Checking patch: $1"
     if patch -p0 -N --dry-run --silent -d $prefix < $1;
     then
-        patch -p0 -N -d $prefix < $1
+        patch -p0 -N -d $prefix < $1 || return $?
     fi
     echo ''
 }
