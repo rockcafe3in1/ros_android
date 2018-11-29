@@ -136,6 +136,7 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/fcl-0.3.2 ] || run_cmd get_library fcl $prefix/libs
 [ -d $prefix/libs/pcrecpp ] || run_cmd get_library pcrecpp $prefix/libs
 [ -d $prefix/libs/bullet ] || run_cmd get_library bullet $prefix/libs
+[ -d $prefix/libs/SDL-1.2.15 ] || run_cmd get_library sdl $prefix/libs
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
 
@@ -346,6 +347,7 @@ echo
 [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
 [ -f $prefix/target/lib/libccd.a ] || run_cmd build_library libccd $prefix/libs/libccd-2.0
 [ -f $prefix/target/lib/libBulletSoftBody.a ] || run_cmd build_library bullet $prefix/libs/bullet
+[ -f $prefix/target/lib/libSDL.a ] || run_cmd build_library_with_toolchain sdl $prefix/libs/SDL-1.2.15
 # [ -f $prefix/target/lib/libfcl.a ] || run_cmd build_library fcl $prefix/libs/fcl-0.3.2
 # [ -f $prefix/target/lib/libpcrecpp.a ] || run_cmd build_library pcrecpp $prefix/libs/pcrecpp
 

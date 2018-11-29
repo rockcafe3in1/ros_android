@@ -76,6 +76,9 @@ elif [ $1 == 'poco' ]; then
 elif [ $1 == 'qhull' ]; then
     URL=http://www.qhull.org/download/qhull-2015-src-7.2.0.tgz
     COMP='gz'
+elif [ $1 == 'sdl' ]; then
+    URL=https://www.libsdl.org/release/SDL-1.2.15.tar.gz
+    COMP='gz'
 elif [ $1 == 'tinyxml' ]; then
     URL=https://github.com/chadrockey/tinyxml_cmake
     COMP='git'
