@@ -48,6 +48,7 @@ cmake_build() {
     cd $1
     mkdir -p build && cd build
     cmake .. -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
+        -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
         -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=$platform \
         -DPYTHON_EXECUTABLE=$python -DCMAKE_INSTALL_PREFIX=$target -DBUILD_SHARED_LIBS=0 -DPCL_SHARED_LIBS=FALSE \
         -DCMAKE_FIND_ROOT_PATH=$target \
