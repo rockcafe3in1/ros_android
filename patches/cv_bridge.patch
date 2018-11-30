@@ -10,7 +10,7 @@
  
 --- catkin_ws/src/vision_opencv/cv_bridge/cmake/cv_bridge-extras.cmake.in
 +++ catkin_ws/src/vision_opencv/cv_bridge/cmake/cv_bridge-extras.cmake.in
-@@ -1,12 +1,7 @@
+@@ -1,11 +1,10 @@
 -set(OpenCV_VERSION @OpenCV_VERSION@)
 -set(OpenCV_VERSION_MAJOR @OpenCV_VERSION_MAJOR@)
 -set(OpenCV_VERSION_MINOR @OpenCV_VERSION_MINOR@)
@@ -29,6 +29,6 @@
 +    opencv_imgcodecs
 +  CONFIG
 +)
- 
++
 +list(APPEND @PROJECT_NAME@_LIBRARIES ${OpenCV_LIBRARIES})
 +list(APPEND @PROJECT_NAME@_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS})
