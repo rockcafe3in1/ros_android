@@ -55,16 +55,15 @@ elif [ $1 == 'vorbis' ]; then
 elif [ $1 == 'theora' ]; then
     # Update old config.sub and config.guess
     cp /usr/share/automake*/config* .
-    # Regenerate ./configure
-    ./autogen.sh
     # Disable building examples
     configure_options="$configure_options --disable-examples"
     # Specify OGG and vorbis location
-    export CFLAGS=-I${CMAKE_PREFIX_PATH}/include
-    export LIBS=-L${CMAKE_PREFIX_PATH}/lib
+    export OGG_CFLAGS=-I${CMAKE_PREFIX_PATH}/include
+    export OGG_LIBS=-L${CMAKE_PREFIX_PATH}/lib
+    # Regenerate ./configure
+    ./autogen.sh
 fi
 
-echo "configure_options=${configure_options}"
 # Configure and build
 ./configure ${configure_options}
 make -j$PARALLEL_JOBS -l$PARALLEL_JOBS V=1
