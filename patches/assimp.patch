@@ -1,6 +1,8 @@
---- libs/assimp-3.1.1/CMakeLists.txt	2014-11-13 14:45:09.216454875 -0300
-+++ libs/assimp-3.1.1/CMakeLists.txt	2014-11-13 14:45:18.832454438 -0300
-@@ -76,7 +76,7 @@
+diff --git libs/assimp-3.1.1/CMakeLists.txt libs/assimp-3.1.1/CMakeLists.txt
+index d332428..1af59dc 100644
+--- libs/assimp-3.1.1/CMakeLists.txt
++++ libs/assimp-3.1.1/CMakeLists.txt
+@@ -76,7 +76,7 @@ SET( ASSIMP_INCLUDE_INSTALL_DIR "include" CACHE PATH
  	"Path the header files are installed to." )
  SET( ASSIMP_BIN_INSTALL_DIR "bin" CACHE PATH
  	"Path the tool executables are installed to." )
@@ -9,3 +11,37 @@
      "Build a static (.a) version of the library" )
  
  SET(ASSIMP_DEBUG_POSTFIX "d" CACHE STRING "Debug Postfitx for lib, samples and tools")
+diff --git libs/assimp-3.1.1/code/BlenderDNA.cpp libs/assimp-3.1.1/code/BlenderDNA.cpp
+index 16e639e..fdd49eb 100644
+--- libs/assimp-3.1.1/code/BlenderDNA.cpp
++++ libs/assimp-3.1.1/code/BlenderDNA.cpp
+@@ -56,10 +56,10 @@ using namespace Assimp::Formatter;
+ #define for_each BOOST_FOREACH
+ bool match4(StreamReaderAny& stream, const char* string) {
+ 	char tmp[] = { 
+-		(stream).GetI1(), 
+-		(stream).GetI1(),  
+-		(stream).GetI1(), 
+-		(stream).GetI1()
++		static_cast<char>((stream).GetI1()), 
++		static_cast<char>((stream).GetI1()),  
++		static_cast<char>((stream).GetI1()), 
++		static_cast<char>((stream).GetI1())
+ 	};
+ 	return (tmp[0]==string[0] && tmp[1]==string[1] && tmp[2]==string[2] && tmp[3]==string[3]);
+ }
+@@ -344,10 +344,10 @@ void SectionParser :: Next()
+ 	stream.SetCurrentPos(current.start + current.size);
+ 
+ 	const char tmp[] = {
+-		stream.GetI1(),
+-		stream.GetI1(),
+-		stream.GetI1(),
+-		stream.GetI1()
++		static_cast<char>(stream.GetI1()),
++		static_cast<char>(stream.GetI1()),
++		static_cast<char>(stream.GetI1()),
++		static_cast<char>(stream.GetI1())
+ 	};
+ 	current.id = std::string(tmp,tmp[3]?4:tmp[2]?3:tmp[1]?2:1);
+ 

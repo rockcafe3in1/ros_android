@@ -1,0 +1,32 @@
+--- catkin_ws/src/image_pipeline/image_rotate/CMakeLists.txt
++++ catkin_ws/src/image_pipeline/image_rotate/CMakeLists.txt
+@@ -6,14 +6,25 @@ find_package(catkin REQUIRED COMPONENTS cmake_modules cv_bridge dynamic_reconfig
+ # generate the dynamic_reconfigure config file
+ generate_dynamic_reconfigure_options(cfg/ImageRotate.cfg)
+ 
+-catkin_package()
+-
+-find_package(OpenCV REQUIRED core imgproc)
++set(opencv_2_components core imgproc)
++set(opencv_3_components core imgproc imgcodecs)
++find_package(OpenCV REQUIRED COMPONENTS core)
++message(STATUS "opencv version ${OpenCV_VERSION}")
++if(OpenCV_VERSION VERSION_LESS "3.0.0")
++  find_package(OpenCV 2 REQUIRED COMPONENTS ${opencv_2_components})  
++else()
++  find_package(OpenCV 3 REQUIRED COMPONENTS ${opencv_3_components})  
++endif()
+ 
+ # add the executable
+ include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
+ 
+-add_library(${PROJECT_NAME} SHARED src/nodelet/image_rotate_nodelet.cpp)
++catkin_package(
++  CATKIN_DEPENDS cv_bridge dynamic_reconfigure image_transport nodelet roscpp tf2 tf2_geometry_msgs
++  DEPENDS OpenCV
++)
++
++add_library(${PROJECT_NAME} src/nodelet/image_rotate_nodelet.cpp)
+ target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencfg)
+ install(TARGETS image_rotate

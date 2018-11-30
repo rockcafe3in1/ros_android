@@ -1,0 +1,575 @@
+--- catkin_ws/src/rospack/CMakeLists.txt
++++ catkin_ws/src/rospack/CMakeLists.txt
+@@ -3,13 +3,11 @@ project(rospack)
+ 
+ find_package(catkin REQUIRED COMPONENTS cmake_modules)
+ find_package(Boost REQUIRED COMPONENTS filesystem program_options system)
+-set(Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+-find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" REQUIRED)
+ find_package(TinyXML REQUIRED)
+ 
+ catkin_package(
+   INCLUDE_DIRS include
+-  LIBRARIES rospack ${PYTHON_LIBRARIES}
++  LIBRARIES rospack
+   DEPENDS Boost TinyXML
+ )
+ 
+@@ -21,7 +19,7 @@ if(API_BACKCOMPAT_V1)
+   set(backcompat_source src/rospack_backcompat.cpp)
+ endif()
+ 
+-include_directories(include ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
++include_directories(include ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+ 
+ add_library(rospack
+   src/rospack.cpp
+@@ -29,7 +27,7 @@ add_library(rospack
+   src/rospack_cmdline.cpp
+   src/utils.cpp
+ )
+-target_link_libraries(rospack ${TinyXML_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
++target_link_libraries(rospack ${TinyXML_LIBRARIES} ${Boost_LIBRARIES})
+ 
+ add_executable(rospackexe src/rospack_main.cpp)
+ # Set the name, and make it a "global" executable
+
+--- catkin_ws/src/rospack/include/rospack/rospack.h
++++ catkin_ws/src/rospack/include/rospack/rospack.h
+@@ -105,8 +105,8 @@ and Rosstack.
+ #ifndef ROSPACK_ROSPACK_H
+ #define ROSPACK_ROSPACK_H
+ 
+-#include <boost/tr1/unordered_set.hpp>
+-#include <boost/tr1/unordered_map.hpp>
++#include <boost/unordered_set.hpp>
++#include <boost/unordered_map.hpp>
+ #include <list>
+ #include <map>
+ #include <set>
+@@ -194,8 +194,8 @@ class ROSPACK_DECL Rosstackage
+     std::string tag_;
+     bool quiet_;
+     std::vector<std::string> search_paths_;
+-    std::tr1::unordered_map<std::string, std::vector<std::string> > dups_;
+-    std::tr1::unordered_map<std::string, Stackage*> stackages_;
++    boost::unordered_map<std::string, std::vector<std::string> > dups_;
++    boost::unordered_map<std::string, Stackage*> stackages_;
+     Stackage* findWithRecrawl(const std::string& name);
+     void log(const std::string& level, const std::string& msg, bool append_errno);
+     void clearStackages();
+@@ -205,7 +205,7 @@ class ROSPACK_DECL Rosstackage
+                      int depth,
+                      bool collect_profile_data,
+                      std::vector<DirectoryCrawlRecord*>& profile_data,
+-                     std::tr1::unordered_set<std::string>& profile_hash);
++                     boost::unordered_set<std::string>& profile_hash);
+     bool isStackage(const std::string& path);
+     void loadManifest(Stackage* stackage);
+     void computeDeps(Stackage* stackage, bool ignore_errors=false, bool ignore_missing=false);
+@@ -217,7 +217,7 @@ class ROSPACK_DECL Rosstackage
+                     bool no_recursion_on_wet=false);
+     void gatherDepsFull(Stackage* stackage, bool direct,
+                         traversal_order_t order, int depth,
+-                        std::tr1::unordered_set<Stackage*>& deps_hash,
++                        boost::unordered_set<Stackage*>& deps_hash,
+                         std::vector<Stackage*>& deps,
+                         bool get_indented_deps,
+                         std::vector<std::string>& indented_deps,
+
+--- catkin_ws/src/rospack/src/rospack.cpp
++++ catkin_ws/src/rospack/src/rospack.cpp
+@@ -69,18 +69,6 @@
+ #include <string.h>
+ #include <errno.h>
+ 
+-#include <Python.h>
+-
+-/* re-define some String functions for python 2.x */
+-#if PY_VERSION_HEX < 0x03000000
+-#undef PyBytes_AsString
+-#undef PyUnicode_AsUTF8
+-#undef PyUnicode_FromString
+-#define PyBytes_AsString PyString_AsString
+-#define PyUnicode_AsUTF8 PyString_AsString
+-#define PyUnicode_FromString PyString_FromString
+-#endif
+-
+ // TODO:
+ //   recrawl on:
+ //     package not found in cache
+@@ -258,7 +246,7 @@ Rosstackage::~Rosstackage()
+ 
+ void Rosstackage::clearStackages()
+ {
+-  for(std::tr1::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
++  for(boost::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
+       it != stackages_.end();
+       ++it)
+   {
+@@ -381,7 +369,7 @@ Rosstackage::crawl(std::vector<std::string> search_path,
+   search_paths_ = search_path;
+ 
+   std::vector<DirectoryCrawlRecord*> dummy;
+-  std::tr1::unordered_set<std::string> dummy2;
++  boost::unordered_set<std::string> dummy2;
+   for(std::vector<std::string>::const_iterator p = search_paths_.begin();
+       p != search_paths_.end();
+       ++p)
+@@ -446,7 +434,7 @@ Rosstackage::contents(const std::string& name,
+                       std::set<std::string>& packages)
+ {
+   Rospack rp2;
+-  std::tr1::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.find(name);
++  boost::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.find(name);
+   if(it != stackages_.end())
+   {
+     std::vector<std::string> search_paths;
+@@ -473,7 +461,7 @@ Rosstackage::contains(const std::string& name,
+                       std::string& path)
+ {
+   Rospack rp2;
+-  for(std::tr1::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
++  for(boost::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
+       it != stackages_.end();
+       ++it)
+   {
+@@ -502,7 +490,7 @@ Rosstackage::contains(const std::string& name,
+ void
+ Rosstackage::list(std::set<std::pair<std::string, std::string> >& list)
+ {
+-  for(std::tr1::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
++  for(boost::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
+       it != stackages_.end();
+       ++it)
+   {
+@@ -518,7 +506,7 @@ Rosstackage::listDuplicates(std::vector<std::string>& dups)
+ {
+   dups.resize(dups_.size());
+   int i = 0;
+-  for(std::tr1::unordered_map<std::string, std::vector<std::string> >::const_iterator it = dups_.begin();
++  for(boost::unordered_map<std::string, std::vector<std::string> >::const_iterator it = dups_.begin();
+       it != dups_.end();
+       ++it)
+   {
+@@ -531,7 +519,7 @@ void
+ Rosstackage::listDuplicatesWithPaths(std::map<std::string, std::vector<std::string> >& dups)
+ {
+   dups.clear();
+-  for(std::tr1::unordered_map<std::string, std::vector<std::string> >::const_iterator it = dups_.begin();
++  for(boost::unordered_map<std::string, std::vector<std::string> >::const_iterator it = dups_.begin();
+       it != dups_.end();
+       ++it)
+   {
+@@ -597,7 +585,7 @@ Rosstackage::depsIndent(const std::string& name, bool direct,
+   {
+     computeDeps(stackage);
+     std::vector<Stackage*> deps_vec;
+-    std::tr1::unordered_set<Stackage*> deps_hash;
++    boost::unordered_set<Stackage*> deps_hash;
+     std::vector<std::string> indented_deps;
+     gatherDepsFull(stackage, direct, POSTORDER, 0, deps_hash, deps_vec, true, indented_deps);
+     for(std::vector<std::string>::const_iterator it = indented_deps.begin();
+@@ -807,174 +795,13 @@ Rosstackage::cpp_exports(const std::string& name, const std::string& type,
+                      const std::string& attrib, bool deps_only,
+                      std::vector<std::pair<std::string, bool> >& flags)
+ {
+-  Stackage* stackage = findWithRecrawl(name);
+-  if(!stackage)
+-    return false;
+-
+-  static bool init_py = false;
+-  static PyObject* pName;
+-  static PyObject* pModule;
+-  static PyObject* pDict;
+-  static PyObject* pFunc;
+-
+-  try
+-  {
+-    computeDeps(stackage);
+-    std::vector<Stackage*> deps_vec;
+-    if(!deps_only)
+-      deps_vec.push_back(stackage);
+-    gatherDeps(stackage, false, PREORDER, deps_vec, true);
+-    for(std::vector<Stackage*>::const_iterator it = deps_vec.begin();
+-        it != deps_vec.end();
+-        ++it)
+-    {
+-      if(!(*it)->is_wet_package_)
+-      {
+-        std::vector<std::string> dry_flags;
+-        if(!exports_dry_package(*it, "cpp", attrib, dry_flags))
+-        {
+-          return false;
+-        }
+-        for(std::vector<std::string>::const_iterator it = dry_flags.begin(); it != dry_flags.end(); ++it)
+-        {
+-          flags.push_back(std::pair<std::string, bool>(*it, false));
+-        }
+-      }
+-      else
+-      {
+-        initPython();
+-        PyGILState_STATE gstate = PyGILState_Ensure();
+-
+-        if(!init_py)
+-        {
+-          init_py = true;
+-          pName = PyUnicode_FromString("rosdep2.rospack");
+-          pModule = PyImport_Import(pName);
+-          if(!pModule)
+-          {
+-            PyErr_Print();
+-            PyGILState_Release(gstate);
+-            std::string errmsg = "could not find python module 'rosdep2.rospack'. is rosdep up-to-date (at least 0.10.4)?";
+-            throw Exception(errmsg);
+-          }
+-          pDict = PyModule_GetDict(pModule);
+-          pFunc = PyDict_GetItemString(pDict, "call_pkg_config");
+-        }
+-
+-        if(!PyCallable_Check(pFunc))
+-        {
+-          PyErr_Print();
+-          PyGILState_Release(gstate);
+-          std::string errmsg = "could not find python function 'rosdep2.rospack.call_pkg_config'. is rosdep up-to-date (at least 0.10.7)?";
+-          throw Exception(errmsg);
+-        }
+-
+-        PyObject* pArgs = PyTuple_New(2);
+-        PyObject* pOpt = PyUnicode_FromString(type.c_str());
+-        PyTuple_SetItem(pArgs, 0, pOpt);
+-        PyObject* pPkg = PyUnicode_FromString((*it)->name_.c_str());
+-        PyTuple_SetItem(pArgs, 1, pPkg);
+-        PyObject* pValue = PyObject_CallObject(pFunc, pArgs);
+-        Py_DECREF(pArgs);
+-
+-        if(!pValue)
+-        {
+-          PyErr_Print();
+-          PyGILState_Release(gstate);
+-          std::string errmsg = "could not call python function 'rosdep2.rospack.call_pkg_config'";
+-          throw Exception(errmsg);
+-        }
+-        if(pValue == Py_None)
+-        {
+-          Py_DECREF(pValue);
+-          std::string errmsg = "python function 'rosdep2.rospack.call_pkg_config' could not call 'pkg-config " + type + " " + (*it)->name_ + "' without errors";
+-          throw Exception(errmsg);
+-        }
+-
+-        flags.push_back(std::pair<std::string, bool>(PyBytes_AsString(pValue), true));
+-        Py_DECREF(pValue);
+-
+-        // we want to keep the static objects alive for repeated access
+-        // so skip all garbage collection until process ends
+-        //Py_DECREF(pFunc);
+-        //Py_DECREF(pModule);
+-        //Py_DECREF(pName);
+-        //Py_Finalize();
+-
+-        PyGILState_Release(gstate);
+-      }
+-    }
+-  }
+-  catch(Exception& e)
+-  {
+-    logError(e.what());
+-    return false;
+-  }
+-  return true;
++  return false;
+ }
+ 
+ bool
+ Rosstackage::reorder_paths(const std::string& paths, std::string& reordered)
+ {
+-  static bool init_py = false;
+-  static PyObject* pName;
+-  static PyObject* pModule;
+-  static PyObject* pFunc;
+-
+-  initPython();
+-  PyGILState_STATE gstate = PyGILState_Ensure();
+-
+-  if(!init_py)
+-  {
+-    init_py = true;
+-    pName = PyUnicode_FromString("catkin_pkg.rospack");
+-    pModule = PyImport_Import(pName);
+-    if(!pModule)
+-    {
+-      PyErr_Print();
+-      PyGILState_Release(gstate);
+-      std::string errmsg = "could not find python module 'catkin_pkg.rospack'. is catkin_pkg up-to-date (at least 0.1.8)?";
+-      throw Exception(errmsg);
+-    }
+-    PyObject* pDict = PyModule_GetDict(pModule);
+-    pFunc = PyDict_GetItemString(pDict, "reorder_paths");
+-  }
+-
+-  if(!PyCallable_Check(pFunc))
+-  {
+-    PyErr_Print();
+-    PyGILState_Release(gstate);
+-    std::string errmsg = "could not find python function 'catkin_pkg.rospack.reorder_paths'. is catkin_pkg up-to-date (at least 0.1.8)?";
+-    throw Exception(errmsg);
+-  }
+-
+-
+-  PyObject* pArgs = PyTuple_New(1);
+-  PyTuple_SetItem(pArgs, 0, PyUnicode_FromString(paths.c_str()));
+-  PyObject* pValue = PyObject_CallObject(pFunc, pArgs);
+-  Py_DECREF(pArgs);
+-
+-  if(!pValue)
+-  {
+-    PyErr_Print();
+-    PyGILState_Release(gstate);
+-    std::string errmsg = "could not call python function 'catkin_pkg.rospack.reorder_paths'";
+-    throw Exception(errmsg);
+-  }
+-
+-  reordered = PyUnicode_AsUTF8(pValue);
+-  Py_DECREF(pValue);
+-
+-  // we want to keep the static objects alive for repeated access
+-  // so skip all garbage collection until process ends
+-  //Py_DECREF(pFunc);
+-  //Py_DECREF(pModule);
+-  //Py_DECREF(pName);
+-  //Py_Finalize();
+-
+-  PyGILState_Release(gstate);
+-
+-  return true;
++  return false;
+ }
+ 
+ bool
+@@ -1088,7 +915,7 @@ Rosstackage::plugins(const std::string& name, const std::string& attrib,
+   if(!depsOnDetail(name, true, stackages, true))
+     return false;
+   // Also look in the package itself
+-  std::tr1::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.find(name);
++  boost::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.find(name);
+   if(it != stackages_.end())
+   {
+     // don't warn here; it was done in depsOnDetail()
+@@ -1101,7 +928,7 @@ Rosstackage::plugins(const std::string& name, const std::string& attrib,
+     std::vector<Stackage*> top_deps;
+     if(!depsDetail(top, false, top_deps))
+       return false;
+-    std::tr1::unordered_set<Stackage*> top_deps_set;
++    boost::unordered_set<Stackage*> top_deps_set;
+     for(std::vector<Stackage*>::iterator it = top_deps.begin();
+         it != top_deps.end();
+         ++it)
+@@ -1291,7 +1118,7 @@ Rosstackage::depsOnDetail(const std::string& name, bool direct,
+   }
+   try
+   {
+-    for(std::tr1::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
++    for(boost::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
+         it != stackages_.end();
+         ++it)
+     {
+@@ -1326,7 +1153,7 @@ Rosstackage::profile(const std::vector<std::string>& search_path,
+ {
+   double start = time_since_epoch();
+   std::vector<DirectoryCrawlRecord*> dcrs;
+-  std::tr1::unordered_set<std::string> dcrs_hash;
++  boost::unordered_set<std::string> dcrs_hash;
+   for(std::vector<std::string>::const_iterator p = search_path.begin();
+       p != search_path.end();
+       ++p)
+@@ -1436,7 +1263,7 @@ Rosstackage::crawlDetail(const std::string& path,
+                          int depth,
+                          bool collect_profile_data,
+                          std::vector<DirectoryCrawlRecord*>& profile_data,
+-                         std::tr1::unordered_set<std::string>& profile_hash)
++                         boost::unordered_set<std::string>& profile_hash)
+ {
+   if(depth > MAX_CRAWL_DEPTH)
+     throw Exception("maximum depth exceeded during crawl");
+@@ -1662,121 +1489,13 @@ Rosstackage::computeDepsInternal(Stackage* stackage, bool ignore_errors, const s
+ void
+ Rosstackage::initPython()
+ {
+-  static bool initialized = false;
+-  if(!initialized)
+-  {
+-    initialized = true;
+-    Py_InitializeEx(0);
+-  }
++
+ }
+ 
+ bool
+ Rosstackage::isSysPackage(const std::string& pkgname)
+ {
+-  static std::map<std::string, bool> cache;
+-  if(cache.find(pkgname) != cache.end())
+-  {
+-    return cache.find(pkgname)->second;
+-  }
+-
+-  initPython();
+-  PyGILState_STATE gstate = PyGILState_Ensure();
+-
+-  static PyObject* pModule = 0;
+-  static PyObject* pDict = 0;
+-  if(!pModule)
+-  {
+-    PyObject* pName = PyUnicode_FromString("rosdep2.rospack");
+-    pModule = PyImport_Import(pName);
+-    Py_DECREF(pName);
+-    if(!pModule)
+-    {
+-      PyErr_Print();
+-      PyGILState_Release(gstate);
+-      std::string errmsg = "could not find python module 'rosdep2.rospack'. is rosdep up-to-date (at least 0.10.4)?";
+-      throw Exception(errmsg);
+-    }
+-    pDict = PyModule_GetDict(pModule);
+-  }
+-
+-  static PyObject* pView = 0;
+-  if(!pView)
+-  {
+-    PyObject* pFunc = PyDict_GetItemString(pDict, "init_rospack_interface");
+-    if(!PyCallable_Check(pFunc))
+-    {
+-      PyErr_Print();
+-      PyGILState_Release(gstate);
+-      std::string errmsg = "could not find python function 'rosdep2.rospack.init_rospack_interface'. is rosdep up-to-date (at least 0.10.4)?";
+-      throw Exception(errmsg);
+-    }
+-    pView = PyObject_CallObject(pFunc, NULL);
+-    if(!pView)
+-    {
+-      PyErr_Print();
+-      PyGILState_Release(gstate);
+-      std::string errmsg = "could not call python function 'rosdep2.rospack.init_rospack_interface'";
+-      throw Exception(errmsg);
+-    }
+-  }
+-  static bool rospack_view_not_empty = false;
+-  if(!rospack_view_not_empty)
+-  {
+-    PyObject* pFunc = PyDict_GetItemString(pDict, "is_view_empty");
+-    if(!PyCallable_Check(pFunc))
+-    {
+-      PyErr_Print();
+-      PyGILState_Release(gstate);
+-      std::string errmsg = "could not find python function 'rosdep2.rospack.is_view_empty'. is rosdep up-to-date (at least 0.10.8)?";
+-      throw Exception(errmsg);
+-    }
+-    PyObject* pArgs = PyTuple_New(1);
+-    PyTuple_SetItem(pArgs, 0, pView);
+-    PyObject* pValue = PyObject_CallObject(pFunc, pArgs);
+-    Py_INCREF(pView); // in order to keep the view when garbaging pArgs
+-    Py_DECREF(pArgs);
+-    if(PyObject_IsTrue(pValue))
+-    {
+-      PyErr_Print();
+-      PyGILState_Release(gstate);
+-      std::string errmsg = "the rosdep view is empty: call 'sudo rosdep init' and 'rosdep update'";
+-      throw Exception(errmsg);
+-    }
+-    rospack_view_not_empty = true;
+-  }
+-
+-  PyObject* pFunc = PyDict_GetItemString(pDict, "is_system_dependency");
+-  if(!PyCallable_Check(pFunc))
+-  {
+-    PyErr_Print();
+-    PyGILState_Release(gstate);
+-    std::string errmsg = "could not call python function 'rosdep2.rospack.is_system_dependency'. is rosdep up-to-date (at least 0.10.4)?";
+-    throw Exception(errmsg);
+-  }
+-
+-  PyObject* pArgs = PyTuple_New(2);
+-  PyTuple_SetItem(pArgs, 0, pView);
+-  PyObject* pDep = PyUnicode_FromString(pkgname.c_str());
+-  PyTuple_SetItem(pArgs, 1, pDep);
+-  PyObject* pValue = PyObject_CallObject(pFunc, pArgs);
+-  Py_INCREF(pView); // in order to keep the view when garbaging pArgs
+-  Py_DECREF(pArgs);
+-
+-  bool value = PyObject_IsTrue(pValue);
+-  Py_DECREF(pValue);
+-
+-  // we want to keep the static objects alive for repeated access
+-  // so skip all garbage collection until process ends
+-  //Py_DECREF(pView);
+-  //Py_DECREF(pDict);
+-  //Py_DECREF(pModule);
+-  //Py_Finalize();
+-
+-  PyGILState_Release(gstate);
+-
+-  cache[pkgname] = value;
+-
+-  return value;
++  return false;
+ }
+ 
+ void
+@@ -1785,7 +1504,7 @@ Rosstackage::gatherDeps(Stackage* stackage, bool direct,
+                         std::vector<Stackage*>& deps,
+                         bool no_recursion_on_wet)
+ {
+-  std::tr1::unordered_set<Stackage*> deps_hash;
++  boost::unordered_set<Stackage*> deps_hash;
+   std::vector<std::string> indented_deps;
+   gatherDepsFull(stackage, direct, order, 0,
+                  deps_hash, deps, false, indented_deps, no_recursion_on_wet);
+@@ -1794,7 +1513,7 @@ Rosstackage::gatherDeps(Stackage* stackage, bool direct,
+ void
+ _gatherDepsFull(Stackage* stackage, bool direct,
+                             traversal_order_t order, int depth,
+-                            std::tr1::unordered_set<Stackage*>& deps_hash,
++                            boost::unordered_set<Stackage*>& deps_hash,
+                             std::vector<Stackage*>& deps,
+                             bool get_indented_deps,
+                             std::vector<std::string>& indented_deps,
+@@ -1880,7 +1599,7 @@ _gatherDepsFull(Stackage* stackage, bool direct,
+ void
+ Rosstackage::gatherDepsFull(Stackage* stackage, bool direct,
+                             traversal_order_t order, int depth,
+-                            std::tr1::unordered_set<Stackage*>& deps_hash,
++                            boost::unordered_set<Stackage*>& deps_hash,
+                             std::vector<Stackage*>& deps,
+                             bool get_indented_deps,
+                             std::vector<std::string>& indented_deps,
+@@ -2067,7 +1786,7 @@ Rosstackage::writeCache()
+       {
+         char *rpp = getenv("ROS_PACKAGE_PATH");
+         fprintf(cache, "#ROS_PACKAGE_PATH=%s\n", (rpp ? rpp : ""));
+-        for(std::tr1::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
++        for(boost::unordered_map<std::string, Stackage*>::const_iterator it = stackages_.begin();
+             it != stackages_.end();
+             ++it)
+           fprintf(cache, "%s\n", it->second->path_.c_str());
+
+--- catkin_ws/src/rospack/src/utils.cpp
++++ catkin_ws/src/rospack/src/utils.cpp
+@@ -28,7 +28,7 @@
+ #include <string>
+ #include <vector>
+ #include <boost/algorithm/string.hpp>
+-#include <boost/tr1/unordered_set.hpp>
++#include <boost/unordered_set.hpp>
+ 
+ #include "utils.h"
+ 
+@@ -41,7 +41,7 @@ deduplicate_tokens(const std::string& instring,
+                    std::string& outstring)
+ {
+   std::vector<std::string> vec;
+-  std::tr1::unordered_set<std::string> set;
++  boost::unordered_set<std::string> set;
+   boost::split(vec, instring,
+                boost::is_any_of("\t "),
+                boost::token_compress_on);

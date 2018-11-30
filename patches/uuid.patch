@@ -1,0 +1,10 @@
+--- libs/uuid/include/uuid/uuid_types.h
++++ libs/uuid/include/uuid/uuid_types.h
+@@ -5,6 +5,7 @@
+  */
+ #if (!defined(_STDINT_H) && !defined(_UUID_STDINT_H))
+ #define _UUID_STDINT_H
++#define _STDINT_H
+ 
+ typedef unsigned char uint8_t;
+ typedef signed char int8_t;
