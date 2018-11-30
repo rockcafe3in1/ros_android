@@ -26,6 +26,7 @@ if [ ! -d $1 ]; then
 fi
 
 prefix=$(cd $1 && pwd)
+# TODO(jubeira): move these to config file.
 export OUTPUT_PREFIX=$prefix
 export UTIL_DIR=$my_loc/scripts/util
 export PATH=$PATH:$my_loc/scripts/build:$my_loc/scripts/sources_setup:$my_loc/scripts/util
@@ -97,16 +98,13 @@ run_cmd get_system_libraries
 
 run_cmd get_patched_ros_workspace $skip $my_loc/patches
 
-run_cmd build_pluginlib_support $my_loc/files $prefix
+run_cmd build_pluginlib_support $my_loc/files
 
 # System libraries.
 echo_title 'Building library dependencies.'
-run_cmd build_system_libraries $prefix
+run_cmd build_system_libraries
 
-echo
-echo -e '\e[34mCross-compiling ROS.\e[39m'
-echo
-
+echo_title 'Cross-compiling ROS.'
 
 if [[ $debugging -eq 1 ]];then
     echo "Build type = DEBUG"

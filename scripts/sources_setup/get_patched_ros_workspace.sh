@@ -16,7 +16,7 @@ if [[ $skip -ne 1 ]] ; then
 
     echo_title 'Getting ROS packages'
     
-    run_cmd get_ros_stuff $OUTPUT_PREFIX
+    run_cmd get_ros_stuff
 
     echo_title 'Applying patches'
 
