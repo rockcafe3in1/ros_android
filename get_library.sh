@@ -54,6 +54,9 @@ elif [ $1 == 'libxml2' ]; then
 elif [ $1 == 'lz4' ]; then
     URL=https://github.com/Cyan4973/lz4/archive/r124.tar.gz
     COMP='gz'
+elif [ $1 == 'ogg' ]; then
+    URL=http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.gz
+    COMP='gz'
 elif [ $1 == 'pcl' ]; then
     URL=https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz
     COMP='gz'
@@ -63,6 +66,9 @@ elif [ $1 == 'poco' ]; then
 elif [ $1 == 'qhull' ]; then
     URL=http://www.qhull.org/download/qhull-2015-src-7.2.0.tgz
     COMP='gz'
+elif [ $1 == 'theora' ]; then
+    URL=http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
+    COMP='bz2'    
 elif [ $1 == 'tinyxml' ]; then
     URL=https://github.com/chadrockey/tinyxml_cmake
     COMP='git'
@@ -80,6 +86,9 @@ elif [ $1 == 'urdfdom' ]; then
 elif [ $1 == 'uuid' ]; then
     URL=https://github.com/chadrockey/uuid_cmake
     COMP='git'
+elif [ $1 == 'vorbis' ]; then
+    URL=http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.6.tar.gz
+    COMP='gz'
 elif [ $1 == 'yaml-cpp' ]; then
     URL=https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-0.6.2.tar.gz
     COMP='gz'
