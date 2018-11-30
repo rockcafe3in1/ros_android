@@ -54,11 +54,11 @@ make -j$PARALLEL_JOBS -l$PARALLEL_JOBS V=1
 # Install
 if [ $1 == 'poco' ]; then
     mkdir -p $CMAKE_PREFIX_PATH/lib
-    cp $prefix/lib/Android/$abi/lib*.a $CMAKE_PREFIX_PATH/lib
+    cp $current_lib_prefix/lib/Android/$abi/lib*.a $CMAKE_PREFIX_PATH/lib
     mkdir -p $CMAKE_PREFIX_PATH/include
-    cp -r $prefix/Foundation/include/Poco $CMAKE_PREFIX_PATH/include
+    cp -r $current_lib_prefix/Foundation/include/Poco $CMAKE_PREFIX_PATH/include
 else
     make install
 fi
 
-popd
+popd # $current_lib_prefix

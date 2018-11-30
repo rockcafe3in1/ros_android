@@ -16,6 +16,7 @@ else
 fi
 
 my_loc="$(cd "$(dirname $0)" && pwd)"
+export ROS_ANDROID_ROOT=$my_loc
 source $my_loc/scripts/util/config.sh
 source $my_loc/scripts/util/utils.sh
 debugging=0
