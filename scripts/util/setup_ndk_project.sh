@@ -3,10 +3,6 @@
 # Abort script on any failures
 set -e
 
-my_loc="$(cd "$(dirname $0)" && pwd)"
-source $my_loc/config.sh
-source $my_loc/utils.sh
-
 if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: $0 project_path portable"
     echo "  example: $0 /home/user/my_workspace/tf2_ndk 0, will use external links"
@@ -32,4 +28,4 @@ else
   cp -r $CMAKE_PREFIX_PATH/share ./
 fi
 
-cp $my_loc/files/tfa/*.mk ./
+cp $ROS_ANDROID_ROOT/files/tfa/*.mk ./

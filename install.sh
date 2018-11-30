@@ -16,14 +16,23 @@ else
 fi
 
 my_loc="$(cd "$(dirname $0)" && pwd)"
-export ROS_ANDROID_ROOT=$my_loc
-source $my_loc/scripts/util/config.sh
-source $my_loc/scripts/util/utils.sh
 debugging=0
 skip=0
 portable=0
 help=0
+
+if [ ! -d $1 ]; then
+    mkdir -p $1
+fi
+
+prefix=$(cd $1 && pwd)
+export OUTPUT_PREFIX=$prefix
+export UTIL_DIR=$my_loc/scripts/util
 export PATH=$PATH:$my_loc/scripts/build:$my_loc/scripts/sources_setup:$my_loc/scripts/util
+
+export ROS_ANDROID_ROOT=$my_loc
+source $UTIL_DIR/config.sh
+source $UTIL_DIR/basic_utils.sh
 
 # verbose is a bool flag indicating if we want more verbose output in
 # the build process. Useful for debugging build system or compiler errors.
@@ -70,12 +79,6 @@ else
    echo "-- Building workspace without debugging symbols"
 fi
 
-if [ ! -d $1 ]; then
-    mkdir -p $1
-fi
-
-prefix=$(cd $1 && pwd)
-
 if [ -z $ANDROID_NDK ] ; then
     die "ANDROID_NDK ENVIRONMENT NOT FOUND!"
 fi
@@ -90,12 +93,14 @@ fi
 export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 export CMAKE_PREFIX_PATH=$prefix/target
 
-run_cmd get_system_libraries $prefix
+run_cmd get_system_libraries
 
 run_cmd get_patched_ros_workspace $skip $my_loc/patches
 
 run_cmd build_pluginlib_support $my_loc/files $prefix
 
+# System libraries.
+echo_title 'Building library dependencies.'
 run_cmd build_system_libraries $prefix
 
 echo

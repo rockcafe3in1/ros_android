@@ -1,11 +1,9 @@
 #!/bin/bash
+# This script uses the following environment variables:
+# - UTIL_DIR: Directory where basic utilities are located.
 
 # Abort script on any failures
 set -e
-
-my_loc="$(cd "$(dirname $0)" && pwd)"
-source $my_loc/config.sh
-source $my_loc/utils.sh
 
 if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: $0 libary library_source_dir"
@@ -13,9 +11,11 @@ if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     exit 1
 fi
 
-echo
-echo -e '\e[34mBuilding '$1.'\e[39m'
-echo
+# Source required scripts
+source $UTIL_DIR/basic_utils.sh
+source $UTIL_DIR/cmake_build.sh
+
+echo_title 'Building '$1'.'
 
 cmake_build $2
 

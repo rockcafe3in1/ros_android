@@ -1,10 +1,22 @@
+# This script uses the following environment variables:
+# - ANDROID_NDK: Android NDK's directory.
+# - OUTPUT_PREFIX: where the ROS workspace shall be created.
+# - UTIL_DIR: Directory where basic utilities are located.
+# Parameters:
+# - skip: True if this task has to be skipped
+# - patches_dir: Directory where the patch files are.
+
+
 skip=$1
-patches_dir=$2
+patches_dir=$(cd $2 && pwd)
 
 if [[ $skip -ne 1 ]] ; then
+    source $UTIL_DIR/basic_utils.sh
+    source $UTIL_DIR/apply_patch.sh
+
     echo_title 'Getting ROS packages'
     
-    run_cmd get_ros_stuff $prefix
+    run_cmd get_ros_stuff $OUTPUT_PREFIX
 
     echo_title 'Applying patches'
 
@@ -68,7 +80,7 @@ if [[ $skip -ne 1 ]] ; then
     apply_patch $patches_dir/xmlrpcpp.patch
 
     # Remove
-    rm -fr $prefix/catkin_ws/src/geometry2/tf2_py
+    rm -fr $OUTPUT_PREFIX/catkin_ws/src/geometry2/tf2_py
 
     # Patch roslib - weird issue with rospack.
     # TODO: Need to look further (only on catkin_make_isolated)

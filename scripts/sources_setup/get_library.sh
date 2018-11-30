@@ -1,11 +1,12 @@
 #!/bin/bash
+# This script uses the following environment variables:
+# - ANDROID_NDK: Android NDK's directory.
+# - UTIL_DIR: Directory where basic utilities are located.
+# Parameters:
+# - lib_prefix: directory for the library to get.
 
 # Abort script on any failures
 set -e
-
-# my_loc="$(cd "$(dirname $0)" && pwd)"
-# source $my_loc/config.sh
-# source $my_loc/utils.sh
 
 if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: $0 library_name library_prefix_path"
@@ -13,11 +14,12 @@ if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     exit 1
 fi
 
-echo
-echo -e '\e[34mGetting '$1'.\e[39m'
-echo
+source $UTIL_DIR/basic_utils.sh
+source $UTIL_DIR/download_utils.sh
 
-lib_prefix=$2
+echo_title 'Getting '$1'.'
+
+lib_prefix=$(cd $2 && pwd)
 
 if [ $1 == 'assimp' ]; then
     URL=https://github.com/assimp/assimp/archive/v3.1.1.tar.gz
@@ -103,7 +105,6 @@ if [ $1 == 'boost' ]; then
     popd
 elif [ -v HASH ]; then
     pushd $lib_prefix/$1
-    # cd $lib_prefix/$1
     git checkout $HASH
     popd
 elif [ $1 == 'eigen' ]; then

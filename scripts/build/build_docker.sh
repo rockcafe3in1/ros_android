@@ -7,7 +7,7 @@ my_loc="$(cd "$(dirname $0)" && pwd)"
 source $my_loc/utils.sh
 
 if [[ $# -lt 1 ]] ; then
-    output_path=$my_loc"/output"
+    output_path=$ROS_ANDROID_ROOT/output
 else
     output_path=$1
 fi

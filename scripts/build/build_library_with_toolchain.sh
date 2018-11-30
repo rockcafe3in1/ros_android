@@ -1,11 +1,14 @@
 #!/bin/bash
+# This script uses the following environment variables:
+# - ANDROID_NDK: Android NDK's directory.
+# - CMAKE_PREFIX_PATH: CMake's prefix path.
+# - PARALLEL_JOBS: how many threads to use to build the library.
+# - UTIL_DIR: Directory where basic utilities are located.
+# Parameters:
+# - current_lib_prefix: directory for the library to build.
 
 # Abort script on any failures
 set -e
-
-# my_loc="$(cd "$(dirname $0)" && pwd)"
-# source $my_loc/config.sh
-# source $my_loc/utils.sh
 
 if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: $0 library_name library_source_dir"
@@ -13,14 +16,14 @@ if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     exit 1
 fi
 
-current_lib_prefix=$2
+# Source required scripts
+source $UTIL_DIR/basic_utils.sh
 
+current_lib_prefix=$(cd $2 && pwd)
 pushd $current_lib_prefix
 
 # Create a stand alone version of the android toolchain
-echo
-echo -e '\e[34mBuilding '$1'.\e[39m'
-echo
+echo_title "Building $1."
 
 [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
 
@@ -32,7 +35,7 @@ export PATH=$PATH:$2/toolchain/bin
 # Set --host: The system where built programs and libraries will run.
 # (https://www.gnu.org/software/automake/manual/html_node/Cross_002dCompilation.html)
 build=`uname -m`-linux
-host=$(basename $2/toolchain/*-linux-android)
+host=$(basename $current_lib_prefix/toolchain/*-linux-android)
 
 # General options to pass to ./configure script
 configure_options="--prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static --build=${build} --host=${host}"
