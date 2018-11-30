@@ -132,7 +132,7 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/yaml-cpp-yaml-cpp-0.6.2 ] || run_cmd get_library yaml-cpp $prefix/libs
 [ -d $prefix/libs/flann ] || run_cmd get_library flann $prefix/libs
 [ -d $prefix/libs/pcl-pcl-1.8.1 ] || run_cmd get_library pcl $prefix/libs
-[ -d $prefix/libs/pcrecpp ] || run_cmd get_library pcrecpp $prefix/libs
+
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
 
@@ -174,9 +174,6 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch orocos_kdl - Build as static lib
     apply_patch $my_loc/patches/orocos_kdl.patch
-
-    # Patch pcrecpp - Add findpackage configs
-    apply_patch $my_loc/patches/pcrecpp.patch
 
     # Patch PCL - Disable optionals.
     apply_patch $my_loc/patches/pcl-1.8.1.patch
@@ -270,10 +267,6 @@ if [[ $skip -ne 1 ]] ; then
     # Patch depth_image_proc - Solved transitive linking problems
     apply_patch $my_loc/patches/depth_image_proc.patch
 
-    # Patch urdf - Don't use pkconfig for android
-    # TODO: PR created: https://github.com/ros/robot_model/pull/111
-    # apply_patch $my_loc/patches/urdf.patch
-
     # Patch global_planner - Add angles dependency
     # TODO: PR merged: https://github.com/ros-planning/navigation/pull/359
     # Wait for next release to remove (current 1.12.4)
@@ -345,7 +338,6 @@ echo
 [ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
 [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
-# [ -f $prefix/target/lib/libpcrecpp.a ] || run_cmd build_library pcrecpp $prefix/libs/pcrecpp
 
 
 echo
