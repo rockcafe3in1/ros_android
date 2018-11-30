@@ -286,10 +286,10 @@
     local-name: image_transport_plugins/image_transport_plugins
     uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/image_transport_plugins/1.9.5-0.tar.gz
     version: image_transport_plugins-release-release-kinetic-image_transport_plugins-1.9.5-0
-# - tar:
-#     local-name: image_transport_plugins/theora_image_transport
-#     uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/theora_image_transport/1.9.5-0.tar.gz
-#     version: image_transport_plugins-release-release-kinetic-theora_image_transport-1.9.5-0
+- tar:
+    local-name: image_transport_plugins/theora_image_transport
+    uri: https://github.com/ros-gbp/image_transport_plugins-release/archive/release/kinetic/theora_image_transport/1.9.5-0.tar.gz
+    version: image_transport_plugins-release-release-kinetic-theora_image_transport-1.9.5-0
 - tar:
     local-name: interactive_markers
     uri: https://github.com/ros-gbp/interactive_markers-release/archive/release/kinetic/interactive_markers/1.11.4-0.tar.gz

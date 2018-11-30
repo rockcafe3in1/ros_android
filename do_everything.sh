@@ -132,6 +132,9 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/yaml-cpp-yaml-cpp-0.6.2 ] || run_cmd get_library yaml-cpp $prefix/libs
 [ -d $prefix/libs/flann ] || run_cmd get_library flann $prefix/libs
 [ -d $prefix/libs/pcl-pcl-1.8.1 ] || run_cmd get_library pcl $prefix/libs
+[ -d $prefix/libs/libogg-1.3.3 ] || run_cmd get_library ogg $prefix/libs
+[ -d $prefix/libs/libvorbis-1.3.6 ] || run_cmd get_library vorbis $prefix/libs
+[ -d $prefix/libs/libtheora-1.1.1 ] || run_cmd get_library theora $prefix/libs
 
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
@@ -338,6 +341,9 @@ echo
 [ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
 [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
+[ -f $prefix/target/lib/libogg.a ] || run_cmd build_library_with_toolchain ogg $prefix/libs/libogg-1.3.3
+[ -f $prefix/target/lib/libvorbis.a ] || run_cmd build_library_with_toolchain vorbis $prefix/libs/libvorbis-1.3.6
+[ -f $prefix/target/lib/libtheora.a ] || run_cmd build_library_with_toolchain theora $prefix/libs/libtheora-1.1.1
 
 
 echo
