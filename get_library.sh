@@ -42,15 +42,9 @@ elif [ $1 == 'curl' ]; then
 elif [ $1 == 'eigen' ]; then
     URL=https://bitbucket.org/eigen/eigen/get/3.3.5.tar.gz
     COMP='gz'
-elif [ $1 == 'fcl' ]; then
-    URL=https://github.com/ros-gbp/fcl-release/archive/release/indigo/fcl/0.3.2-0.tar.gz
-    COMP='gz'
 elif [ $1 == 'flann' ]; then
     URL=https://github.com/chadrockey/flann_cmake.git
     COMP='git'
-elif [ $1 == 'libccd' ]; then
-    URL=https://github.com/danfis/libccd/archive/v2.0.tar.gz
-    COMP='gz'
 elif [ $1 == 'libiconv' ]; then
     URL=http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
     COMP='gz'
@@ -114,6 +108,4 @@ elif [ -v HASH ]; then
     git checkout $HASH
 elif [ $1 == 'eigen' ]; then
     mv $prefix/eigen-eigen-* $prefix/eigen-3.3.5
-elif [ $1 == 'fcl' ]; then
-    mv $prefix/fcl-release-release-indigo-fcl-0.3.2-0 $prefix/fcl-0.3.2
 fi

@@ -132,8 +132,6 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/yaml-cpp-yaml-cpp-0.6.2 ] || run_cmd get_library yaml-cpp $prefix/libs
 [ -d $prefix/libs/flann ] || run_cmd get_library flann $prefix/libs
 [ -d $prefix/libs/pcl-pcl-1.8.1 ] || run_cmd get_library pcl $prefix/libs
-[ -d $prefix/libs/libccd-2.0 ] || run_cmd get_library libccd $prefix/libs
-[ -d $prefix/libs/fcl-0.3.2 ] || run_cmd get_library fcl $prefix/libs
 [ -d $prefix/libs/pcrecpp ] || run_cmd get_library pcrecpp $prefix/libs
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
@@ -176,12 +174,6 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch orocos_kdl - Build as static lib
     apply_patch $my_loc/patches/orocos_kdl.patch
-
-    # Patch fcl - Add ccd library cmake variables
-    # TODO: The correct way to handle this would be to create .cmake files for ccd and do a findpackage(ccd)
-    # Also, this can go inside the catkin_ws but the headers don't get installed on the catkin_make and are
-    # needed by moveit_core during compilation
-    apply_patch $my_loc/patches/fcl.patch
 
     # Patch pcrecpp - Add findpackage configs
     apply_patch $my_loc/patches/pcrecpp.patch
@@ -353,8 +345,6 @@ echo
 [ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
 [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
-[ -f $prefix/target/lib/libccd.a ] || run_cmd build_library libccd $prefix/libs/libccd-2.0
-# [ -f $prefix/target/lib/libfcl.a ] || run_cmd build_library fcl $prefix/libs/fcl-0.3.2
 # [ -f $prefix/target/lib/libpcrecpp.a ] || run_cmd build_library pcrecpp $prefix/libs/pcrecpp
 
 
