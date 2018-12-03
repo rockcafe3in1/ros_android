@@ -99,7 +99,7 @@ fi
 
 if [ $1 == 'boost' ]; then
     cd $prefix/boost
-    bash -x ./build-android.sh $ANDROID_NDK --boost=1.68.0
+    bash -x ./build-android.sh $ANDROID_NDK --boost=1.68.0 --arch=$ANDROID_ABI
 elif [ -v HASH ]; then
     cd $prefix/$1
     git checkout $HASH
