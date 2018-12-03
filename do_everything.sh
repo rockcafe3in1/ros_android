@@ -243,6 +243,9 @@ if [[ $skip -ne 1 ]] ; then
     # Patch cv_bridge - fix transitive linking in cv_bridge-extras.cmake
     apply_patch $my_loc/patches/cv_bridge.patch
 
+    # Patch theora_image_transport - fix transitive linking
+    apply_patch $my_loc/patches/theora_image_transport.patch
+
     # Patch robot_pose_ekf - Add bfl library cmake variables, also, remove tests
     # TODO: The correct way to handle this would be to create .cmake files for bfl and do a findpackage(orocos-bfl)
     # apply_patch $my_loc/patches/robot_pose_ekf.patch
