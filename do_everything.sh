@@ -8,13 +8,6 @@ set -e
 # system.
 export PARALLEL_JOBS=$(nproc)
 
-if [[ -f /opt/ros/kinetic/setup.bash ]] ; then
-    source /opt/ros/kinetic/setup.bash
-else
-    echo "ROS environment not found, please install it"
-    exit 1
-fi
-
 my_loc="$(cd "$(dirname $0)" && pwd)"
 source $my_loc/config.sh
 source $my_loc/utils.sh
@@ -82,10 +75,6 @@ run_cmd() {
 
 if [ -z $ANDROID_NDK ] ; then
     die "ANDROID_NDK ENVIRONMENT NOT FOUND!"
-fi
-
-if [ -z $ROS_DISTRO ] ; then
-    die "HOST ROS ENVIRONMENT NOT FOUND! Did you source /opt/ros/kinetic/setup.bash"
 fi
 
 [ -d $standalone_toolchain_path ] || run_cmd setup_standalone_toolchain
