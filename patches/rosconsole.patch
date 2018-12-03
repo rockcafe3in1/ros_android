@@ -1,7 +1,5 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d2b34d2..c12d063 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
+--- catkin_ws/src/ros_comm/rosconsole/CMakeLists.txt
++++ catkin_ws/src/ros_comm/rosconsole/CMakeLists.txt
 @@ -13,6 +13,10 @@ find_package(Boost COMPONENTS regex system thread)
  set(ROSCONSOLE_BACKEND "" CACHE STRING "Type of rosconsole backend, one of 'log4cxx', 'glog', 'print'")
  set(rosconsole_backend_INCLUDE_DIRS)
@@ -13,11 +11,9 @@ index d2b34d2..c12d063 100644
  if(ROSCONSOLE_BACKEND STREQUAL "" OR ROSCONSOLE_BACKEND STREQUAL "log4cxx")
    find_package(Log4cxx QUIET)
    if(NOT LOG4CXX_LIBRARIES)
-diff --git a/src/rosconsole/impl/rosconsole_android.cpp b/src/rosconsole/impl/rosconsole_android.cpp
-new file mode 100644
-index 0000000..5478d28
+
 --- /dev/null
-+++ b/src/rosconsole/impl/rosconsole_android.cpp
++++ catkin_ws/src/ros_comm/rosconsole/src/rosconsole/impl/rosconsole_android.cpp
 @@ -0,0 +1,129 @@
 +#include "ros/console.h"
 +
