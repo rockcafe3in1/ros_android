@@ -18,15 +18,3 @@ echo -e '\e[34mBuilding '$1.'\e[39m'
 echo
 
 cmake_build $2
-
-if [ $1 == 'eigen' ]; then
-	cp -r $CMAKE_PREFIX_PATH/include/eigen3/* $CMAKE_PREFIX_PATH/include
-fi
-
-# TODO(ivanpauno): Check this later.
-# if [ $1 == 'opencv' ]; then
-#     echo "Copy opencv 3rdparty libraries to the lib folder."
-#     echo "These are needed to build the compressed image transport plugin."
-#     (cp $2/build/3rdparty/lib/* $2/../../target/lib/)
-# fi
-

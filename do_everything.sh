@@ -351,7 +351,7 @@ echo
 
 # Library path is incorrect for urdf.
 # TODO: Need to investigate the source of the issue
-sed -i 's/set(libraries "urdf;/set(libraries "/g' $CMAKE_PREFIX_PATH/share/urdf/cmake/urdfConfig.cmake
+#sed -i 's/set(libraries "urdf;/set(libraries "/g' $CMAKE_PREFIX_PATH/share/urdf/cmake/urdfConfig.cmake
 
 run_cmd create_android_mk $prefix/catkin_ws/src $prefix/roscpp_android_ndk
 
