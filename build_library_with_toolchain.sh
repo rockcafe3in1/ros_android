@@ -46,7 +46,6 @@ configure_options="--prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static 
 # Overwrite/extend for specific packages
 if [ $1 == 'poco' ]; then
     configure_options="--config=Android_static --no-samples --no-tests"
-    export ANDROID_ABI
 elif [ $1 == 'curl' ]; then
     configure_options="$configure_options --without-ssl --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random"
 elif [ $1 == 'libxml2' ]; then
