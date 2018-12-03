@@ -1,0 +1,150 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d2b34d2..c12d063 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -13,6 +13,10 @@ find_package(Boost COMPONENTS regex system thread)
+ set(ROSCONSOLE_BACKEND "" CACHE STRING "Type of rosconsole backend, one of 'log4cxx', 'glog', 'print'")
+ set(rosconsole_backend_INCLUDE_DIRS)
+ set(rosconsole_backend_LIBRARIES)
++if(ROSCONSOLE_BACKEND STREQUAL "" OR ANDROID)
++  list(APPEND rosconsole_backend_LIBRARIES rosconsole_android rosconsole_backend_interface)
++  set(ROSCONSOLE_BACKEND "android")
++endif()
+ if(ROSCONSOLE_BACKEND STREQUAL "" OR ROSCONSOLE_BACKEND STREQUAL "log4cxx")
+   find_package(Log4cxx QUIET)
+   if(NOT LOG4CXX_LIBRARIES)
+diff --git a/src/rosconsole/impl/rosconsole_android.cpp b/src/rosconsole/impl/rosconsole_android.cpp
+new file mode 100644
+index 0000000..5478d28
+--- /dev/null
++++ b/src/rosconsole/impl/rosconsole_android.cpp
+@@ -0,0 +1,129 @@
++#include "ros/console.h"
++
++#include <log.h>
++
++namespace ros
++{
++namespace console
++{
++namespace impl
++{
++
++std::vector<std::pair<std::string, levels::Level> > rosconsole_android_log_levels;
++LogAppender* rosconsole_android_appender = 0;
++
++void initialize() {}
++
++std::string getName(void* handle);
++
++void print(void* handle, ::ros::console::Level level, const char* str, const char* file, const char* function, int line)
++{
++  // pass log message to appender
++  if(rosconsole_android_appender)
++  {
++    rosconsole_android_appender->log(level, str, file, function, line);
++  }
++
++  android_LogPriority android_log_level;
++  if(level == ::ros::console::levels::Info)
++  {
++    android_log_level = ANDROID_LOG_INFO;
++  }
++  else if(level == ::ros::console::levels::Warn)
++  {
++    android_log_level = ANDROID_LOG_WARN;
++  }
++  else if(level == ::ros::console::levels::Error)
++  {
++    android_log_level = ANDROID_LOG_ERROR;
++  }
++  else if(level == ::ros::console::levels::Fatal)
++  {
++    android_log_level = ANDROID_LOG_FATAL;
++  }
++  else if (level == ::ros::console::levels::Debug)
++  {
++    android_log_level = ANDROID_LOG_DEBUG;
++  }
++  else
++  {
++    // ignore debug
++    return;
++  }
++
++  std::string name = getName(handle);
++
++  std::stringstream ss;
++  ss << name << ": in file:" << file << ":" << line;
++  __android_log_print(android_log_level, ss.str().c_str(), "%s", str);
++}
++
++bool isEnabledFor(void* handle, ::ros::console::Level level)
++{
++  size_t index = (size_t)handle;
++  if(index < rosconsole_android_log_levels.size())
++  {
++    return level >= rosconsole_android_log_levels[index].second;
++  }
++  return false;
++}
++
++void* getHandle(const std::string& name)
++{
++  size_t count = rosconsole_android_log_levels.size();
++  for(size_t index = 0; index < count; index++)
++  {
++    if(name == rosconsole_android_log_levels[index].first)
++    {
++      return (void*)index;
++    }
++    index++;
++  }
++  // add unknown names on demand with default level
++  rosconsole_android_log_levels.push_back(std::pair<std::string, levels::Level>(name, ::ros::console::levels::Info));
++  return (void*)(rosconsole_android_log_levels.size() - 1);
++}
++
++std::string getName(void* handle)
++{
++  size_t index = (size_t)handle;
++  if(index < rosconsole_android_log_levels.size())
++  {
++    return rosconsole_android_log_levels[index].first;
++  }
++  return "";
++}
++
++void register_appender(LogAppender* appender)
++{
++  rosconsole_android_appender = appender;
++}
++
++void shutdown()
++{}
++
++bool get_loggers(std::map<std::string, levels::Level>& loggers)
++{
++  for(std::vector<std::pair<std::string, levels::Level> >::const_iterator it = rosconsole_android_log_levels.begin(); it != rosconsole_android_log_levels.end(); it++)
++  {
++    loggers[it->first] = it->second;
++  }
++  return true;
++}
++
++bool set_logger_level(const std::string& name, levels::Level level)
++{
++  for(std::vector<std::pair<std::string, levels::Level> >::iterator it = rosconsole_android_log_levels.begin(); it != rosconsole_android_log_levels.end(); it++)
++  {
++    if(name == it->first)
++    {
++      it->second = level;
++      return true;
++    }
++  }
++  return false;
++}
++
++} // namespace impl
++} // namespace console
++} // namespace ros
