@@ -206,9 +206,6 @@ if [[ $skip -ne 1 ]] ; then
     # Patch xmlrpcpp - problems with Boost changes.
     apply_patch $my_loc/patches/xmlrpcpp.patch
 
-    # Remove
-    rm -fr $prefix/catkin_ws/src/geometry2/tf2_py
-
     # Patch roslib - weird issue with rospack.
     # TODO: Need to look further (only on catkin_make_isolated)
     # apply_patch /opt/roscpp_android/patches/roslib.patch
