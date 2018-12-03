@@ -1,23 +1,39 @@
 --- catkin_ws/src/ros_comm/rosconsole/CMakeLists.txt
 +++ catkin_ws/src/ros_comm/rosconsole/CMakeLists.txt
-@@ -13,6 +13,10 @@ find_package(Boost COMPONENTS regex system thread)
- set(ROSCONSOLE_BACKEND "" CACHE STRING "Type of rosconsole backend, one of 'log4cxx', 'glog', 'print'")
+@@ -10,9 +10,13 @@ find_package(catkin REQUIRED COMPONENTS cpp_common rostime rosunit)
+ find_package(Boost COMPONENTS regex system thread)
+ 
+ # select rosconsole backend
+-set(ROSCONSOLE_BACKEND "" CACHE STRING "Type of rosconsole backend, one of 'log4cxx', 'glog', 'print'")
++set(ROSCONSOLE_BACKEND "" CACHE STRING "Type of rosconsole backend, one of 'android', 'log4cxx', 'glog', 'print'")
  set(rosconsole_backend_INCLUDE_DIRS)
  set(rosconsole_backend_LIBRARIES)
 +if(ROSCONSOLE_BACKEND STREQUAL "" OR ANDROID)
-+  list(APPEND rosconsole_backend_LIBRARIES rosconsole_android rosconsole_backend_interface)
++  list(APPEND rosconsole_backend_LIBRARIES rosconsole_android rosconsole_backend_interface log)
 +  set(ROSCONSOLE_BACKEND "android")
 +endif()
  if(ROSCONSOLE_BACKEND STREQUAL "" OR ROSCONSOLE_BACKEND STREQUAL "log4cxx")
    find_package(Log4cxx QUIET)
    if(NOT LOG4CXX_LIBRARIES)
-
+@@ -85,6 +89,9 @@ elseif(ROSCONSOLE_BACKEND STREQUAL "glog")
+ elseif(ROSCONSOLE_BACKEND STREQUAL "print")
+   add_library(rosconsole_print src/rosconsole/impl/rosconsole_print.cpp)
+   target_link_libraries(rosconsole_print rosconsole_backend_interface)
++elseif(ROSCONSOLE_BACKEND STREQUAL "android")
++  add_library(rosconsole_android src/rosconsole/impl/rosconsole_android.cpp)
++  target_link_libraries(rosconsole_android rosconsole_backend_interface log)
+ else()
+   message(FATAL_ERROR "Unknown rosconsole backend '${ROSCONSOLE_BACKEND}'")
+ endif()
+diff --git a/src/rosconsole/impl/rosconsole_android.cpp b/src/rosconsole/impl/rosconsole_android.cpp
+new file mode 100644
+index 0000000..276a0d0
 --- /dev/null
 +++ catkin_ws/src/ros_comm/rosconsole/src/rosconsole/impl/rosconsole_android.cpp
 @@ -0,0 +1,129 @@
 +#include "ros/console.h"
 +
-+#include <log.h>
++#include <android/log.h>
 +
 +namespace ros
 +{
