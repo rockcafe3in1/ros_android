@@ -68,7 +68,7 @@ elif [ $1 == 'qhull' ]; then
     COMP='gz'
 elif [ $1 == 'theora' ]; then
     URL=http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
-    COMP='bz2'    
+    COMP='bz2'
 elif [ $1 == 'tinyxml' ]; then
     URL=https://github.com/chadrockey/tinyxml_cmake
     COMP='git'
