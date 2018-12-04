@@ -99,6 +99,7 @@ export CMAKE_PREFIX_PATH=$prefix/target
 #fi
 
 export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
+apply_patch $my_loc/patches/android.toolchain.cmake.patch -d $ANDROID_NDK/build/cmake
 
 # Now get boost with a specialized build
 [ -d $prefix/libs/boost ] || run_cmd get_library boost $prefix/libs
