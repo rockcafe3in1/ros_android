@@ -10,7 +10,7 @@
 +IF (NOT ANDROID)
 +	OPTION(BUILD_CPU_DEMOS "Build original Bullet CPU examples"        ON)
 +ELSE ()
-+        OPTION(BUILD_CPU_DEMOS "Don't build original Bullet CPU examples"  OFF)
++        OPTION(BUILD_CPU_DEMOS "Build original Bullet CPU examples"  OFF)
 +ENDIF()
  
  
