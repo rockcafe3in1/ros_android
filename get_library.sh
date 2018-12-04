@@ -46,15 +46,9 @@ elif [ $1 == 'curl' ]; then
 elif [ $1 == 'eigen' ]; then
     URL=https://bitbucket.org/eigen/eigen/get/3.3.5.tar.gz
     COMP='gz'
-elif [ $1 == 'fcl' ]; then
-    URL=https://github.com/ros-gbp/fcl-release/archive/release/indigo/fcl/0.3.2-0.tar.gz
-    COMP='gz'
 elif [ $1 == 'flann' ]; then
     URL=https://github.com/chadrockey/flann_cmake.git
     COMP='git'
-elif [ $1 == 'libccd' ]; then
-    URL=https://github.com/danfis/libccd/archive/v2.0.tar.gz
-    COMP='gz'
 elif [ $1 == 'libiconv' ]; then
     URL=http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
     COMP='gz'
@@ -64,12 +58,12 @@ elif [ $1 == 'libxml2' ]; then
 elif [ $1 == 'lz4' ]; then
     URL=https://github.com/Cyan4973/lz4/archive/r124.tar.gz
     COMP='gz'
+elif [ $1 == 'ogg' ]; then
+    URL=http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.gz
+    COMP='gz'
 elif [ $1 == 'pcl' ]; then
     URL=https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz
     COMP='gz'
-elif [ $1 == 'pcrecpp' ]; then
-    URL=https://github.com/brianb/pcre-7.8.git
-    COMP='git'
 elif [ $1 == 'poco' ]; then
     URL=http://pocoproject.org/releases/poco-1.8.0/poco-1.8.0.tar.gz
     COMP='gz'
@@ -82,6 +76,9 @@ elif [ $1 == 'sdl' ]; then
 elif [ $1 == 'sdl-image' ]; then
     URL=http://hg.libsdl.org/SDL_image/archive/d46c630f2cd6.tar.gz
     COMP='gz'
+elif [ $1 == 'theora' ]; then
+    URL=http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
+    COMP='bz2'
 elif [ $1 == 'tinyxml' ]; then
     URL=https://github.com/chadrockey/tinyxml_cmake
     COMP='git'
@@ -99,6 +96,9 @@ elif [ $1 == 'urdfdom' ]; then
 elif [ $1 == 'uuid' ]; then
     URL=https://github.com/chadrockey/uuid_cmake
     COMP='git'
+elif [ $1 == 'vorbis' ]; then
+    URL=http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.6.tar.gz
+    COMP='gz'
 elif [ $1 == 'yaml-cpp' ]; then
     URL=https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-0.6.2.tar.gz
     COMP='gz'
@@ -118,7 +118,7 @@ fi
 
 if [ $1 == 'boost' ]; then
     cd $prefix/boost
-    bash -x ./build-android.sh $ANDROID_NDK --boost=1.68.0
+    bash -x ./build-android.sh $ANDROID_NDK --boost=1.68.0 --arch=$ANDROID_ABI
 elif [ -v HASH ]; then
     cd $prefix/$1
     git checkout $HASH
@@ -126,6 +126,4 @@ elif [ $1 == 'sdl-image' ]; then
     mv $prefix/SDL_image* $prefix/SDL_image
 elif [ $1 == 'eigen' ]; then
     mv $prefix/eigen-eigen-* $prefix/eigen-3.3.5
-elif [ $1 == 'fcl' ]; then
-    mv $prefix/fcl-release-release-indigo-fcl-0.3.2-0 $prefix/fcl-0.3.2
 fi

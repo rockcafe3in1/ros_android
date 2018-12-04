@@ -12,9 +12,15 @@
  namespace
  {
  std::vector<std::string> catkinFindLib()
-@@ -107,10 +112,8 @@ ClassLoader<T>::ClassLoader(
+@@ -103,14 +108,14 @@ ClassLoader<T>::ClassLoader(
+ {
+   ROS_DEBUG_NAMED("pluginlib.ClassLoader", "Creating ClassLoader, base = %s, address = %p",
+     base_class.c_str(), this);
++#ifndef ANDROID
+   if (ros::package::getPath(package_).empty()) {
      throw pluginlib::ClassLoaderException("Unable to find package: " + package_);
    }
++#endif
  
 -  if (0 == plugin_xml_paths_.size()) {
 -    plugin_xml_paths_ = getPluginXmlPaths(package_, attrib_name_);
@@ -25,7 +31,7 @@
    ROS_DEBUG_NAMED("pluginlib.ClassLoader",
      "Finished constructring ClassLoader, base = %s, address = %p",
      base_class.c_str(), this);
-@@ -615,7 +618,7 @@ void ClassLoader<T>::loadLibraryForClass(const std::string & lookup_name)
+@@ -615,7 +620,7 @@ void ClassLoader<T>::loadLibraryForClass(const std::string & lookup_name)
      throw pluginlib::LibraryLoadException(getErrorStringForUnknownClass(lookup_name));
    }
  
@@ -33,4 +39,4 @@
 +  std::string library_path = it->second.library_name_;
    if ("" == library_path) {
      ROS_DEBUG_NAMED("pluginlib.ClassLoader", "No path could be found to the library containing %s.",
-       lookup_name.c_str());2
+       lookup_name.c_str());
