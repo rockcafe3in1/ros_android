@@ -121,6 +121,9 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/yaml-cpp-yaml-cpp-0.6.2 ] || run_cmd get_library yaml-cpp $prefix/libs
 [ -d $prefix/libs/flann ] || run_cmd get_library flann $prefix/libs
 [ -d $prefix/libs/pcl-pcl-1.8.1 ] || run_cmd get_library pcl $prefix/libs
+[ -d $prefix/libs/bullet ] || run_cmd get_library bullet $prefix/libs
+[ -d $prefix/libs/SDL-1.2.15 ] || run_cmd get_library sdl $prefix/libs
+[ -d $prefix/libs/SDL_image ] || run_cmd get_library sdl-image $prefix/libs
 [ -d $prefix/libs/libogg-1.3.3 ] || run_cmd get_library ogg $prefix/libs
 [ -d $prefix/libs/libvorbis-1.3.6 ] || run_cmd get_library vorbis $prefix/libs
 [ -d $prefix/libs/libtheora-1.1.1 ] || run_cmd get_library theora $prefix/libs
@@ -173,7 +176,13 @@ if [[ $skip -ne 1 ]] ; then
     # Patch uuid - Avoiding stdlib.h include
     apply_patch $my_loc/patches/uuid.patch
 
+    # Patch bullet - Avoid building examples
+    apply_patch $my_loc/patches/bullet.patch
+
     ## ROS patches
+
+    # Patch map_server - Fix find yaml
+    apply_patch $my_loc/patches/map_server.patch
 
     # Patch bondcpp - Fix transitive linking problems
     apply_patch $my_loc/patches/bondcpp.patch
@@ -187,7 +196,7 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch opencv - Fix installation path
     apply_patch $my_loc/patches/opencv.patch
-    
+
     # Patch actionlib - problems with Boost changes.
     apply_patch $my_loc/patches/actionlib.patch
 
@@ -330,10 +339,12 @@ echo
 [ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
 [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
+[ -f $prefix/target/lib/libBulletSoftBody.a ] || run_cmd build_library bullet $prefix/libs/bullet
+[ -f $prefix/target/lib/libSDL.a ] || run_cmd build_library_with_toolchain sdl $prefix/libs/SDL-1.2.15
+[ -f $prefix/target/lib/libSDL_image.a ] || run_cmd build_library_with_toolchain sdl-image $prefix/libs/SDL_image
 [ -f $prefix/target/lib/libogg.a ] || run_cmd build_library_with_toolchain ogg $prefix/libs/libogg-1.3.3
 [ -f $prefix/target/lib/libvorbis.a ] || run_cmd build_library_with_toolchain vorbis $prefix/libs/libvorbis-1.3.6
 [ -f $prefix/target/lib/libtheora.a ] || run_cmd build_library_with_toolchain theora $prefix/libs/libtheora-1.1.1
-
 
 echo
 echo -e '\e[34mCross-compiling ROS.\e[39m'

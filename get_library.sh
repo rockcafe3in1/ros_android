@@ -25,6 +25,10 @@ if [ $1 == 'assimp' ]; then
 elif [ $1 == 'boost' ]; then
     URL=https://github.com/moritz-wundke/Boost-for-Android.git
     COMP='git'
+elif [ $1 == 'bullet' ]; then
+    URL=https://github.com/bulletphysics/bullet3
+    COMP='git'
+    HASH='2.83.6'
 elif [ $1 == 'bzip2' ]; then
     URL=https://github.com/osrf/bzip2_cmake.git
     COMP='git'
@@ -65,6 +69,12 @@ elif [ $1 == 'poco' ]; then
     COMP='gz'
 elif [ $1 == 'qhull' ]; then
     URL=http://www.qhull.org/download/qhull-2015-src-7.2.0.tgz
+    COMP='gz'
+elif [ $1 == 'sdl' ]; then
+    URL=https://www.libsdl.org/release/SDL-1.2.15.tar.gz
+    COMP='gz'
+elif [ $1 == 'sdl-image' ]; then
+    URL=http://hg.libsdl.org/SDL_image/archive/d46c630f2cd6.tar.gz
     COMP='gz'
 elif [ $1 == 'theora' ]; then
     URL=http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
@@ -112,6 +122,8 @@ if [ $1 == 'boost' ]; then
 elif [ -v HASH ]; then
     cd $prefix/$1
     git checkout $HASH
+elif [ $1 == 'sdl-image' ]; then
+    mv $prefix/SDL_image* $prefix/SDL_image
 elif [ $1 == 'eigen' ]; then
     mv $prefix/eigen-eigen-* $prefix/eigen-3.3.5
 fi
