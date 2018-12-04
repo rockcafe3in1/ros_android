@@ -50,6 +50,23 @@ elif [ $1 == 'curl' ]; then
     configure_options="$configure_options --without-ssl --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random"
 elif [ $1 == 'libxml2' ]; then
     configure_options="$configure_options --without-python"
+elif [ $1 == 'vorbis' ]; then
+    # Specify OGG location
+    # TODO(ivanpauno): Check why --with-ogg=prefix isn't working.
+    export OGG_CFLAGS=-I${CMAKE_PREFIX_PATH}/include
+    export OGG_LIBS=-L${CMAKE_PREFIX_PATH}/lib
+    # Regenerate ./configure
+    ./autogen.sh
+elif [ $1 == 'theora' ]; then
+    # Update old config.sub and config.guess
+    cp /usr/share/automake*/config* .
+    # Disable building examples
+    configure_options="$configure_options --disable-examples"
+    # Specify OGG and vorbis location
+    export OGG_CFLAGS=-I${CMAKE_PREFIX_PATH}/include
+    export OGG_LIBS=-L${CMAKE_PREFIX_PATH}/lib
+    # Regenerate ./configure
+    ./autogen.sh
 fi
 
 # Configure and build
