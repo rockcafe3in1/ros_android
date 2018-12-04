@@ -1,0 +1,15 @@
+--- libs/yaml-cpp-yaml-cpp-0.6.2/CMakeLists.txt
++++ libs/yaml-cpp-yaml-cpp-0.6.2/CMakeLists.txt
+@@ -38,7 +38,11 @@ enable_testing()
+ ### Project options
+ ###
+ ## Project stuff
+-option(YAML_CPP_BUILD_TESTS "Enable testing" ON)
++if(NOT ANDROID)
++	option(YAML_CPP_BUILD_TESTS "Enable testing" ON)
++else()
++	option(YAML_CPP_BUILD_TESTS "Enable testing" OFF)
++endif()
+ option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
+ option(YAML_CPP_BUILD_CONTRIB "Enable contrib stuff in library" ON)
+ 

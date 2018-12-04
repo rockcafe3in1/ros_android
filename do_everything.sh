@@ -173,6 +173,9 @@ if [[ $skip -ne 1 ]] ; then
     # Patch uuid - Avoiding stdlib.h include
     apply_patch $my_loc/patches/uuid.patch
 
+    # Patch yaml - Avoid building tests
+    apply_patch $my_loc/patches/yaml.patch
+
     ## ROS patches
 
     # Patch bondcpp - Fix transitive linking problems
@@ -187,14 +190,14 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch opencv - Fix installation path
     apply_patch $my_loc/patches/opencv.patch
-    
+
     # Patch actionlib - problems with Boost changes.
     apply_patch $my_loc/patches/actionlib.patch
 
     # Patch rospack - problems with Boost changes
     # Also emptied some unnecessary functions to avoid problems related to including Python.
     apply_patch $my_loc/patches/rospack.patch
-    
+
     # Patch xmlrpcpp - problems with Boost changes.
     apply_patch $my_loc/patches/xmlrpcpp.patch
 
