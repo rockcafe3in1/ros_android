@@ -1,0 +1,208 @@
+--- catkin_ws/src/class_loader/CMakeLists.txt
++++ catkin_ws/src/class_loader/CMakeLists.txt
+@@ -12,13 +12,22 @@ find_package(console_bridge REQUIRED)
+ 
+ if(${catkin_FOUND})
+   find_package(catkin REQUIRED COMPONENTS cmake_modules)
+-  find_package(Poco REQUIRED COMPONENTS Foundation)
+-  catkin_package(
++  if(NOT ANDROID)
++    find_package(Poco REQUIRED COMPONENTS Foundation)
++    catkin_package(
+     INCLUDE_DIRS include
+     LIBRARIES ${PROJECT_NAME} ${Poco_LIBRARIES}
+     DEPENDS Boost Poco console_bridge
+     CFG_EXTRAS class_loader-extras.cmake
+-  )
++    )
++  else()
++    catkin_package(
++    INCLUDE_DIRS include
++    LIBRARIES ${PROJECT_NAME}
++    DEPENDS Boost console_bridge
++    CFG_EXTRAS class_loader-extras.cmake
++    )
++  endif()
+ else()
+   message("-- catkin not found")
+   set(Poco_DIR cmake)
+@@ -32,7 +41,13 @@ else()
+   set(CATKIN_PACKAGE_INCLUDE_DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}/${PROJECT_NAME})
+ endif()
+ 
+-include_directories(include ${console_bridge_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${Poco_INCLUDE_DIRS})
++set(class_loader_LIBRARIES ${Boost_LIBRARIES} ${console_bridge_LIBRARIES})
++set(class_loader_INCLUDES ${console_bridge_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
++if(NOT ANDROID)
++  list(APPEND class_loader_LIBRARIES ${Poco_LIBRARIES})
++  list(APPEND class_loader_INCLUDES ${Poco_INCLUDE_DIRS})
++endif()
++include_directories(include ${class_loader_INCLUDES})
+ 
+ set(${PROJECT_NAME}_SRCS
+   src/class_loader.cpp
+@@ -50,7 +65,7 @@ set(${PROJECT_NAME}_HDRS
+   include/class_loader/multi_library_class_loader.h
+ )
+ add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS} ${${PROJECT_NAME}_HDRS})
+-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${console_bridge_LIBRARIES} ${Poco_LIBRARIES})
++target_link_libraries(${PROJECT_NAME} ${class_loader_LIBRARIES})
+ 
+ install(TARGETS ${PROJECT_NAME}
+   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+
+--- catkin_ws/src/class_loader/include/class_loader/class_loader_core.hpp
++++ catkin_ws/src/class_loader/include/class_loader/class_loader_core.hpp
+@@ -40,7 +40,9 @@
+ #include <utility>
+ #include <vector>
+ 
+-#include "Poco/SharedLibrary.h"
++#ifndef ANDROID
++# include "Poco/SharedLibrary.h"
++#endif
+ 
+ #include "class_loader/exceptions.hpp"
+ #include "class_loader/meta_object.hpp"
+@@ -64,8 +66,12 @@ typedef std::string ClassName;
+ typedef std::string BaseClassName;
+ typedef std::map<ClassName, class_loader_private::AbstractMetaObjectBase *> FactoryMap;
+ typedef std::map<BaseClassName, FactoryMap> BaseToFactoryMapMap;
++#ifndef ANDROID
+ typedef std::pair<LibraryPath, Poco::SharedLibrary *> LibraryPair;
+ typedef std::vector<LibraryPair> LibraryVector;
++// #else
++// typedef std::vector<int> LibraryVector;
++#endif
+ typedef std::vector<AbstractMetaObjectBase *> MetaObjectVector;
+ 
+ // Debug
+@@ -85,7 +91,9 @@ BaseToFactoryMapMap & getGlobalPluginBaseToFactoryMapMap();
+  * @brief Gets a handle to a list of open libraries in the form of LibraryPairs which encode the library path+name and the handle to the underlying Poco::SharedLibrary
+  * @return A reference to the global vector that tracks loaded libraries
+  */
++#ifndef ANDROID
+ LibraryVector & getLoadedLibraryVector();
++#endif
+ 
+ /**
+  * @brief When a library is being loaded, in order for factories to know which library they are being associated with, they use this function to query which library is being loaded.
+
+--- catkin_ws/src/class_loader/src/class_loader.cpp
++++ catkin_ws/src/class_loader/src/class_loader.cpp
+@@ -43,7 +43,11 @@ bool ClassLoader::hasUnmanagedInstanceBeenCreated()
+ 
+ std::string systemLibrarySuffix()
+ {
++#ifndef ANDROID
+   return Poco::SharedLibrary::suffix();
++#else
++  return std::string("");
++#endif
+ }
+ 
+ ClassLoader::ClassLoader(const std::string & library_path, bool ondemand_load_unload)
+
+--- catkin_ws/src/class_loader/src/class_loader_core.cpp
++++ catkin_ws/src/class_loader/src/class_loader_core.cpp
+@@ -30,7 +30,9 @@
+ #include "class_loader/class_loader_core.hpp"
+ #include "class_loader/class_loader.hpp"
+ 
+-#include <Poco/SharedLibrary.h>
++#ifndef ANDROID
++# include <Poco/SharedLibrary.h>
++#endif
+ 
+ #include <cassert>
+ #include <string>
+@@ -87,12 +89,14 @@ MetaObjectVector & getMetaObjectGraveyard()
+   return instance;
+ }
+ 
++#ifndef ANDROID
+ LibraryVector & getLoadedLibraryVector()
+ /*****************************************************************************/
+ {
+   static LibraryVector instance;
+   return instance;
+ }
++#endif
+ 
+ std::string & getCurrentlyLoadingLibraryNameReference()
+ /*****************************************************************************/
+@@ -313,6 +317,7 @@ bool areThereAnyExistingMetaObjectsForLibrary(const std::string & library_path)
+ /*****************************************************************************/
+ /*****************************************************************************/
+ /*****************************************************************************/
++#ifndef ANDROID
+ LibraryVector::iterator findLoadedLibrary(const std::string & library_path)
+ /*****************************************************************************/
+ {
+@@ -325,10 +330,12 @@ LibraryVector::iterator findLoadedLibrary(const std::string & library_path)
+   }
+   return itr;
+ }
++#endif
+ 
+ bool isLibraryLoadedByAnybody(const std::string & library_path)
+ /*****************************************************************************/
+ {
++#ifndef ANDROID
+   boost::recursive_mutex::scoped_lock lock(getLoadedLibraryVectorMutex());
+ 
+   LibraryVector & open_libraries = getLoadedLibraryVector();
+@@ -340,6 +347,7 @@ bool isLibraryLoadedByAnybody(const std::string & library_path)
+   } else {
+     return false;
+   }
++#endif
+ }
+ 
+ bool isLibraryLoaded(const std::string & library_path, ClassLoader * loader)
+@@ -468,6 +476,7 @@ void purgeGraveyardOfMetaobjects(
+ void loadLibrary(const std::string & library_path, ClassLoader * loader)
+ /*****************************************************************************/
+ {
++#ifndef ANDROID
+   static boost::recursive_mutex loader_mutex;
+   CONSOLE_BRIDGE_logDebug(
+     "class_loader.class_loader_private: "
+@@ -544,11 +553,13 @@ void loadLibrary(const std::string & library_path, ClassLoader * loader)
+   LibraryVector & open_libraries = getLoadedLibraryVector();
+   // Note: Poco::SharedLibrary automatically calls load() when library passed to constructor
+   open_libraries.push_back(LibraryPair(library_path, library_handle));
++#endif // ANDROID
+ }
+ 
+ void unloadLibrary(const std::string & library_path, ClassLoader * loader)
+ /*****************************************************************************/
+ {
++#ifndef ANDROID
+   if (hasANonPurePluginLibraryBeenOpened()) {
+     CONSOLE_BRIDGE_logDebug(
+       "class_loader.class_loader_private: "
+@@ -601,6 +612,7 @@ void unloadLibrary(const std::string & library_path, ClassLoader * loader)
+     throw(class_loader::LibraryUnloadException(
+             "Attempt to unload library that class_loader is unaware of."));
+   }
++#endif
+ }
+ 
+ 
+@@ -612,6 +624,7 @@ void unloadLibrary(const std::string & library_path, ClassLoader * loader)
+ void printDebugInfoToScreen()
+ /*****************************************************************************/
+ {
++#ifndef ANDROID
+   printf("*******************************************************************************\n");
+   printf("*****               class_loader_private DEBUG INFORMATION                   *****\n");
+   printf("*******************************************************************************\n");
+@@ -646,6 +659,7 @@ void printDebugInfoToScreen()
+ 
+   printf("********************************** END DEBUG **********************************\n");
+   printf("*******************************************************************************\n\n");
++#endif
+ }
+ 
+ 

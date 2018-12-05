@@ -64,9 +64,6 @@ elif [ $1 == 'ogg' ]; then
 elif [ $1 == 'pcl' ]; then
     URL=https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz
     COMP='gz'
-elif [ $1 == 'poco' ]; then
-    URL=http://pocoproject.org/releases/poco-1.8.0/poco-1.8.0.tar.gz
-    COMP='gz'
 elif [ $1 == 'qhull' ]; then
     URL=http://www.qhull.org/download/qhull-2015-src-7.2.0.tgz
     COMP='gz'

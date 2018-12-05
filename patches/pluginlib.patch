@@ -1,3 +1,21 @@
+--- catkin_ws/src/pluginlib/CMakeLists.txt
++++ catkin_ws/src/pluginlib/CMakeLists.txt
+@@ -9,6 +9,7 @@ catkin_python_setup()
+ 
+ catkin_package(
+   INCLUDE_DIRS include
++LIBRARIES ${PROJECT_NAME}
+   CATKIN_DEPENDS class_loader rosconsole roslib
+   DEPENDS Boost TinyXML2
+ )
+@@ -53,3 +54,6 @@ if(CATKIN_ENABLE_TESTING)
+   endif()
+ 
+ endif()
++
++add_library(pluginlib STATIC src/pluginlib_helper.cpp)
++install(TARGETS pluginlib RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+
 --- catkin_ws/src/pluginlib/include/pluginlib/class_loader_imp.hpp
 +++ catkin_ws/src/pluginlib/include/pluginlib/class_loader_imp.hpp
 @@ -63,6 +63,11 @@ const std::string os_pathsep(";");  // NOLINT
@@ -12,31 +30,87 @@
  namespace
  {
  std::vector<std::string> catkinFindLib()
-@@ -103,14 +108,14 @@ ClassLoader<T>::ClassLoader(
+@@ -103,6 +108,8 @@ ClassLoader<T>::ClassLoader(
  {
    ROS_DEBUG_NAMED("pluginlib.ClassLoader", "Creating ClassLoader, base = %s, address = %p",
      base_class.c_str(), this);
++
 +#ifndef ANDROID
    if (ros::package::getPath(package_).empty()) {
      throw pluginlib::ClassLoaderException("Unable to find package: " + package_);
    }
-+#endif
- 
--  if (0 == plugin_xml_paths_.size()) {
--    plugin_xml_paths_ = getPluginXmlPaths(package_, attrib_name_);
--  }
--  classes_available_ = determineAvailableClasses(plugin_xml_paths_);
+@@ -111,6 +118,11 @@ ClassLoader<T>::ClassLoader(
+     plugin_xml_paths_ = getPluginXmlPaths(package_, attrib_name_);
+   }
+   classes_available_ = determineAvailableClasses(plugin_xml_paths_);
++#else
 +  // get static info of the already loaded plugin library
 +  classes_available_ = getStaticClassesAvailable();
++#endif
++
    ROS_DEBUG_NAMED("pluginlib.ClassLoader",
      "Finished constructring ClassLoader, base = %s, address = %p",
      base_class.c_str(), this);
-@@ -615,7 +620,7 @@ void ClassLoader<T>::loadLibraryForClass(const std::string & lookup_name)
+@@ -134,11 +146,13 @@ T * ClassLoader<T>::createClassInstance(const std::string & lookup_name, bool au
+     "In deprecated call createClassInstance(), lookup_name = %s, auto_load = %i.",
+     (lookup_name.c_str()), auto_load);
+ 
++#ifndef ANDROID
+   if (auto_load && !isClassLoaded(lookup_name)) {
+     ROS_DEBUG_NAMED("pluginlib.ClassLoader",
+       "Autoloading class library before attempting to create instance.");
+     loadLibraryForClass(lookup_name);
+   }
++#endif
+ 
+   try {
+     ROS_DEBUG_NAMED("pluginlib.ClassLoader",
+@@ -161,9 +175,11 @@ boost::shared_ptr<T> ClassLoader<T>::createInstance(const std::string & lookup_n
+   ROS_DEBUG_NAMED("pluginlib.ClassLoader", "Attempting to create managed instance for class %s.",
+     lookup_name.c_str());
+ 
++#ifndef ANDROID
+   if (!isClassLoaded(lookup_name)) {
+     loadLibraryForClass(lookup_name);
+   }
++#endif
+ 
+   try {
+     std::string class_type = getClassType(lookup_name);
+@@ -193,9 +209,11 @@ UniquePtr<T> ClassLoader<T>::createUniqueInstance(const std::string & lookup_nam
+     "Attempting to create managed (unique) instance for class %s.",
+     lookup_name.c_str());
+ 
++#ifndef ANDROID
+   if (!isClassLoaded(lookup_name)) {
+     loadLibraryForClass(lookup_name);
+   }
++#endif
+ 
+   try {
+     std::string class_type = getClassType(lookup_name);
+@@ -225,9 +243,11 @@ T * ClassLoader<T>::createUnmanagedInstance(const std::string & lookup_name)
+   ROS_DEBUG_NAMED("pluginlib.ClassLoader", "Attempting to create UNMANAGED instance for class %s.",
+     lookup_name.c_str());
+ 
++#ifndef ANDROID
+   if (!isClassLoaded(lookup_name)) {
+     loadLibraryForClass(lookup_name);
+   }
++#endif
+ 
+   T * instance = 0;
+   try {
+@@ -615,7 +635,12 @@ void ClassLoader<T>::loadLibraryForClass(const std::string & lookup_name)
      throw pluginlib::LibraryLoadException(getErrorStringForUnknownClass(lookup_name));
    }
  
--  std::string library_path = getClassLibraryPath(lookup_name);
++#ifndef ANDROID
+   std::string library_path = getClassLibraryPath(lookup_name);
++#else
 +  std::string library_path = it->second.library_name_;
++#endif
++
    if ("" == library_path) {
      ROS_DEBUG_NAMED("pluginlib.ClassLoader", "No path could be found to the library containing %s.",
        lookup_name.c_str());
