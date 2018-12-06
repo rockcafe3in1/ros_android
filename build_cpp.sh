@@ -73,7 +73,6 @@ done
 # Abort script on any failures
 set -e
 
-cmd_exists catkin_make || die 'catkin_make was not found'
 [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
 [ "$RBA_TOOLCHAIN" = "" ] && die 'could not find android.toolchain.cmake, you should set RBA_TOOLCHAIN variable.'
 
@@ -90,10 +89,6 @@ cd $prefix/catkin_ws
 echo
 echo -e '\e[34mRunning catkin build.\e[39m'
 echo
-
-# Use ROS_PARALLEL_JOBS=-j1 to compile with only one core (Useful to point errors in catkin_make)
-export ROS_PARALLEL_JOBS="-j$PARALLEL_JOBS -l$PARALLEL_JOBS"
-# export ROS_PARALLEL_JOBS="-j1"
 
 catkin config \
   --no-extend \

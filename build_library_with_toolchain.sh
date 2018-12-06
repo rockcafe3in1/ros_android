@@ -50,6 +50,18 @@ elif [ $1 == 'curl' ]; then
     configure_options="$configure_options --without-ssl --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random"
 elif [ $1 == 'libxml2' ]; then
     configure_options="$configure_options --without-python"
+elif [ $1 == 'sdl' ]; then
+    # Update old config.sub and config.guess
+    cp /usr/share/automake*/config* build-scripts/
+    # Update ./configure
+    ./autogen.sh
+elif [ $1 == 'sdl-image' ]; then
+    # Update old config.sub and config.guess
+    cp /usr/share/automake*/config* .
+    # Update ./configure
+    ./autogen.sh
+    # Export sdl-config file location
+    export SDL_CONFIG=$prefix/../../target/bin/sdl-config
 elif [ $1 == 'vorbis' ]; then
     # Specify OGG location
     # TODO(ivanpauno): Check why --with-ogg=prefix isn't working.

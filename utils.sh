@@ -59,9 +59,14 @@ cmake_build() {
 # Check if patch hasn't already applied and apply it
 apply_patch() {
     echo "Checking patch: $1"
-    if patch -p0 -N --dry-run --silent -d $prefix < $1;
+    patch=$1
+    shift
+    if [ "$#" -eq 0 ]; then
+      set -- -d $prefix
+    fi
+    if patch -p0 -N --dry-run --silent "$@" < $patch;
     then
-        patch -p0 -N -d $prefix < $1 || return $?
+        patch -p0 -N "$@" < $patch || return $?
     fi
     echo ''
 }
