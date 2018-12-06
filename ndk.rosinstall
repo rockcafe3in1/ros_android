@@ -94,30 +94,30 @@
     local-name: control_msgs
     uri: https://github.com/ros-gbp/control_msgs-release/archive/release/kinetic/control_msgs/1.4.0-0.tar.gz
     version: control_msgs-release-release-kinetic-control_msgs-1.4.0-0
-# - tar:
-#     local-name: diagnostics/diagnostic_aggregator
-#     uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostic_aggregator/1.9.3-0.tar.gz
-#     version: diagnostics-release-release-kinetic-diagnostic_aggregator-1.9.3-0
-# - tar:
-#     local-name: diagnostics/diagnostic_analysis
-#     uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostic_analysis/1.9.3-0.tar.gz
-#     version: diagnostics-release-release-kinetic-diagnostic_analysis-1.9.3-0
-# - tar:
-#     local-name: diagnostics/diagnostic_common_diagnostics
-#     uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostic_common_diagnostics/1.9.3-0.tar.gz
-#     version: diagnostics-release-release-kinetic-diagnostic_common_diagnostics-1.9.3-0
-# - tar:
-#     local-name: diagnostics/diagnostic_updater
-#     uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostic_updater/1.9.3-0.tar.gz
-#     version: diagnostics-release-release-kinetic-diagnostic_updater-1.9.3-0
-# - tar:
-#     local-name: diagnostics/diagnostics
-#     uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostics/1.9.3-0.tar.gz
-#     version: diagnostics-release-release-kinetic-diagnostics-1.9.3-0
-# - tar:
-#     local-name: diagnostics/self_test
-#     uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/self_test/1.9.3-0.tar.gz
-#     version: diagnostics-release-release-kinetic-self_test-1.9.3-0
+- tar:
+    local-name: diagnostics/diagnostic_aggregator
+    uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostic_aggregator/1.9.3-0.tar.gz
+    version: diagnostics-release-release-kinetic-diagnostic_aggregator-1.9.3-0
+- tar:
+    local-name: diagnostics/diagnostic_analysis
+    uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostic_analysis/1.9.3-0.tar.gz
+    version: diagnostics-release-release-kinetic-diagnostic_analysis-1.9.3-0
+- tar:
+    local-name: diagnostics/diagnostic_common_diagnostics
+    uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostic_common_diagnostics/1.9.3-0.tar.gz
+    version: diagnostics-release-release-kinetic-diagnostic_common_diagnostics-1.9.3-0
+- tar:
+    local-name: diagnostics/diagnostic_updater
+    uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostic_updater/1.9.3-0.tar.gz
+    version: diagnostics-release-release-kinetic-diagnostic_updater-1.9.3-0
+- tar:
+    local-name: diagnostics/diagnostics
+    uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/diagnostics/1.9.3-0.tar.gz
+    version: diagnostics-release-release-kinetic-diagnostics-1.9.3-0
+- tar:
+    local-name: diagnostics/self_test
+    uri: https://github.com/ros-gbp/diagnostics-release/archive/release/kinetic/self_test/1.9.3-0.tar.gz
+    version: diagnostics-release-release-kinetic-self_test-1.9.3-0
 - tar:
     local-name: dynamic_reconfigure
     uri: https://github.com/ros-gbp/dynamic_reconfigure-release/archive/release/kinetic/dynamic_reconfigure/1.5.50-0.tar.gz

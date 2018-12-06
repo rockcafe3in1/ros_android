@@ -177,6 +177,9 @@ if [[ $skip -ne 1 ]] ; then
     # Patch uuid - Avoiding stdlib.h include
     apply_patch $my_loc/patches/uuid.patch
 
+    # Patch yaml - Avoid building tests
+    apply_patch $my_loc/patches/yaml-cpp.patch
+
     # Patch bullet - Avoid building examples
     apply_patch $my_loc/patches/bullet.patch
 
@@ -207,7 +210,7 @@ if [[ $skip -ne 1 ]] ; then
     # Patch rospack - problems with Boost changes
     # Also emptied some unnecessary functions to avoid problems related to including Python.
     apply_patch $my_loc/patches/rospack.patch
-    
+
     # Patch xmlrpcpp - problems with Boost changes.
     apply_patch $my_loc/patches/xmlrpcpp.patch
 
