@@ -181,6 +181,9 @@ if [[ $skip -ne 1 ]] ; then
 
     ## ROS patches
 
+    # Patch catkin - Fix transitive linking of interface libraries for static builds
+    apply_patch $my_loc/patches/catkin.patch
+
     # Patch map_server - Fix find yaml
     apply_patch $my_loc/patches/map_server.patch
 

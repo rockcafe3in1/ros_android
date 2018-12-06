@@ -1,0 +1,88 @@
+--- catkin_ws/src/catkin/cmake/catkin_libraries.cmake
++++ catkin_ws/src/catkin/cmake/catkin_libraries.cmake
+@@ -127,19 +127,15 @@ endfunction()
+ function(catkin_replace_imported_library_targets VAR)
+   set(result "")
+   foreach(lib ${ARGN})
+-    if((NOT "${lib}" MATCHES "^(debug|optimized|general)$") AND TARGET ${lib})
++    if("${lib}" MATCHES "^(debug|optimized|general)$")
++      list(APPEND result "${lib}")
++    elseif(TARGET ${lib})
+       # sometimes cmake dependencies define imported targets, in which
+       # case the imported library information is not the target name, but
+       # the information embedded in cmake properties inside the imported library
+-      # For interface libraries, this is the INTERFACE_LINK_LIBRARIES property.
+-      # For regular imported libraries, this is IMPORTED_LOCATION(_$CONFIG).
+-      get_target_property(${lib}_type ${lib} TYPE)
++      # For imported libraries, this is IMPORTED_LOCATION(_$CONFIG).
+       get_target_property(${lib}_imported ${lib} IMPORTED)
+-      if(${${lib}_type} STREQUAL "INTERFACE_LIBRARY")
+-        get_target_property(${lib}_interface_link_libraries ${lib} INTERFACE_LINK_LIBRARIES)
+-        catkin_replace_imported_library_targets(${lib}_resolved_libs ${${lib}_interface_link_libraries})
+-        list(APPEND result ${${lib}_resolved_libs})
+-      elseif(${${lib}_imported})
++      if(${lib}_imported)
+         set(imported_libraries)  # empty list
+         get_target_property(${lib}_imported_location ${lib} IMPORTED_LOCATION)
+         if(${lib}_imported_location)
+@@ -153,17 +149,54 @@ function(catkin_replace_imported_library_targets VAR)
+             endif()
+           endforeach()
+         endif()
+-        foreach(imp_lib ${imported_libraries})
+-          list(APPEND result "${imp_lib}")
+-        endforeach()
++        list(APPEND result ${imported_libraries})
+       else()
+         # not an imported library target
+-        list(APPEND result "${lib}")
++        list(APPEND result ${lib})
+       endif()
+-    else()
+-      list(APPEND result "${lib}")
++
++      # Resolve transitive link dependencies as specified in the INTERFACE_LINK_LIBRARIES property.
++      get_target_property(${lib}_interface_link_libraries ${lib} INTERFACE_LINK_LIBRARIES)
++      get_target_property(${lib}_type ${lib} TYPE)
++      string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_UPPER)
++      if(${lib}_interface_link_libraries)
++        set(interface_link_libraries)  # empty list
++        foreach(ilib ${${lib}_interface_link_libraries})
++          if("${ilib}" MATCHES "^\\\$<LINK_ONLY:(.*)>$")
++            if(${lib}_type STREQUAL "STATIC_LIBRARY")
++              #debug_message(0 "Linking to LINK_ONLY interface library '${CMAKE_MATCH_1}' of target '${lib}' for static builds in project '${PROJECT_NAME}'.")
++              list(APPEND interface_link_libraries ${CMAKE_MATCH_1})
++            else()
++              #debug_message(10 "Ignoring LINK_ONLY interface library '${CMAKE_MATCH_1}' of target '${lib}' in project '${PROJECT_NAME}'.")
++            endif()
++          elseif("${ilib}" MATCHES "^\\\$<\\\$<CONFIG:(.+)>:(.*)>$")
++            if(CMAKE_MATCH_1 STREQUAL CMAKE_BUILD_TYPE_UPPER)
++              #debug_message(0 "Linking to ${CMAKE_MATCH_1}-mode only interface library '${CMAKE_MATCH_2}' of target '${lib}' for static builds in project '${PROJECT_NAME}'.")
++              list(APPEND interface_link_libraries ${CMAKE_MATCH_2})
++            endif()
++          elseif("${ilib}" MATCHES "^\\\$<\\\$<NOT:\\\$<CONFIG:(.+)>>:(.*)>$")
++            if(NOT CMAKE_MATCH_1 STREQUAL CMAKE_BUILD_TYPE_UPPER)
++              #debug_message(0 "Linking to non-${CMAKE_MATCH_1}-mode interface library '${CMAKE_MATCH_2}' of target '${lib}' for static builds in project '${PROJECT_NAME}'.")
++              list(APPEND interface_link_libraries ${CMAKE_MATCH_2})
++            endif()
++          elseif("${ilib}" MATCHES "^\\\$<.*>$")
++            message(WARNING "Ignoring interface link library with unknown generator expression '${CMAKE_MATCH_0}' of target '${lib}'.")
++          else()
++            list(APPEND interface_link_libraries ${ilib})
++          endif()
++        endforeach()
++
++        # Call recursively to further expand targets added through INTERFACE_LINK_LIBRARIES
++        if(interface_link_libraries)
++          catkin_replace_imported_library_targets(interface_link_libraries ${interface_link_libraries})
++          list(APPEND result ${interface_link_libraries})
++        endif()
++      endif()
++    else()  # system library or linker flags?
++      list(APPEND result ${lib})
+     endif()
+   endforeach()
++
+   #set(_argn ${ARGN})
+   #debug_message(10 "catkin_replace_imported_library_targets(${VAR} ${_argn}) ${result}")
+   set(${VAR} "${result}" PARENT_SCOPE)
