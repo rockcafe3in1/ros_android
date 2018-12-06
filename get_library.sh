@@ -56,7 +56,7 @@ elif [ $1 == 'libxml2' ]; then
     URL=ftp://xmlsoft.org/libxml2/libxml2-2.9.7.tar.gz
     COMP='gz'
 elif [ $1 == 'lz4' ]; then
-    URL=https://github.com/Cyan4973/lz4/archive/r124.tar.gz
+    URL=https://github.com/Cyan4973/lz4/archive/r131.tar.gz
     COMP='gz'
 elif [ $1 == 'ogg' ]; then
     URL=http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.gz

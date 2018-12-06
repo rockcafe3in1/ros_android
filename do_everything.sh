@@ -108,7 +108,7 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/tinyxml ] || run_cmd get_library tinyxml $prefix/libs
 [ -d $prefix/libs/tinyxml2 ] || run_cmd get_library tinyxml2 $prefix/libs
 [ -d $prefix/libs/console_bridge ] || run_cmd get_library console_bridge $prefix/libs
-[ -d $prefix/libs/lz4-r124 ] || run_cmd get_library lz4 $prefix/libs
+[ -d $prefix/libs/lz4-r131 ] || run_cmd get_library lz4 $prefix/libs
 [ -d $prefix/libs/curl-7.47.0 ] || run_cmd get_library curl $prefix/libs
 [ -d $prefix/libs/urdfdom/ ] || run_cmd get_library urdfdom $prefix/libs
 [ -d $prefix/libs/urdfdom_headers ] || run_cmd get_library urdfdom_headers $prefix/libs
@@ -329,7 +329,7 @@ echo
 [ -f $prefix/target/lib/libtinyxml.a ] || run_cmd build_library tinyxml $prefix/libs/tinyxml
 [ -f $prefix/target/lib/libtinyxml2.a ] || run_cmd build_library tinyxml2 $prefix/libs/tinyxml2
 [ -f $prefix/target/lib/libconsole_bridge.a ] || run_cmd build_library console_bridge $prefix/libs/console_bridge
-[ -f $prefix/target/lib/liblz4.a ] || run_cmd build_library lz4 $prefix/libs/lz4-r124/cmake_unofficial
+[ -f $prefix/target/lib/liblz4.a ] || run_cmd build_library lz4 $prefix/libs/lz4-r131/cmake_unofficial
 [ -f $prefix/target/lib/libcurl.a ] || run_cmd build_library_with_toolchain curl $prefix/libs/curl-7.47.0
 [ -f $prefix/target/include/urdf_model/model.h ] || run_cmd build_library urdfdom_headers $prefix/libs/urdfdom_headers
 [ -f $prefix/target/lib/liburdfdom_model.a ] || run_cmd build_library urdfdom $prefix/libs/urdfdom
