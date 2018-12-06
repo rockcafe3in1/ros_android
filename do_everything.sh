@@ -254,7 +254,7 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch robot_state_publisher - Add ARCHIVE DESTINATION
     # TODO: Create PR to add ARCHIVE DESTINATION
-    # apply_patch $my_loc/patches/robot_state_publisher.patch
+    apply_patch $my_loc/patches/robot_state_publisher.patch
 
     # Patch moveit_core - Add fcl library cmake variables
     # TODO: The correct way to handle this would be to create .cmake files for fcl and do a findpackage(fcl)
@@ -274,6 +274,9 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch depth_image_proc - Solved transitive linking problems
     apply_patch $my_loc/patches/depth_image_proc.patch
+
+    # Patch urdf - Fixed linking with pluginlib and dependencies in downstream packages
+    apply_patch $my_loc/patches/urdf.patch
 
     # Patch global_planner - Add angles dependency
     # TODO: PR merged: https://github.com/ros-planning/navigation/pull/359
@@ -375,10 +378,6 @@ run_cmd setup_ndk_project $prefix/roscpp_android_ndk $portable
 echo
 echo -e '\e[34mCreating Android.mk.\e[39m'
 echo
-
-# Library path is incorrect for urdf.
-# TODO: Need to investigate the source of the issue
-#sed -i 's/set(libraries "urdf;/set(libraries "/g' $CMAKE_PREFIX_PATH/share/urdf/cmake/urdfConfig.cmake
 
 run_cmd create_android_mk $prefix/catkin_ws/src $prefix/roscpp_android_ndk
 
