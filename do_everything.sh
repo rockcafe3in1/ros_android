@@ -174,7 +174,7 @@ if [[ $skip -ne 1 ]] ; then
     apply_patch $my_loc/patches/uuid.patch
 
     # Patch yaml - Avoid building tests
-    apply_patch $my_loc/patches/yaml.patch
+    apply_patch $my_loc/patches/yaml-cpp.patch
 
     ## ROS patches
 
