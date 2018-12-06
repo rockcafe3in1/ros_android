@@ -8,13 +8,6 @@ set -e
 # system.
 export PARALLEL_JOBS=$(nproc)
 
-if [[ -f /opt/ros/kinetic/setup.bash ]] ; then
-    source /opt/ros/kinetic/setup.bash
-else
-    echo "ROS environment not found, please install it"
-    exit 1
-fi
-
 my_loc="$(cd "$(dirname $0)" && pwd)"
 source $my_loc/config.sh
 source $my_loc/utils.sh
@@ -84,10 +77,6 @@ if [ -z $ANDROID_NDK ] ; then
     die "ANDROID_NDK ENVIRONMENT NOT FOUND!"
 fi
 
-if [ -z $ROS_DISTRO ] ; then
-    die "HOST ROS ENVIRONMENT NOT FOUND! Did you source /opt/ros/kinetic/setup.bash"
-fi
-
 [ -d $standalone_toolchain_path ] || run_cmd setup_standalone_toolchain
 
 echo
@@ -132,6 +121,12 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 [ -d $prefix/libs/yaml-cpp-yaml-cpp-0.6.2 ] || run_cmd get_library yaml-cpp $prefix/libs
 [ -d $prefix/libs/flann ] || run_cmd get_library flann $prefix/libs
 [ -d $prefix/libs/pcl-pcl-1.8.1 ] || run_cmd get_library pcl $prefix/libs
+[ -d $prefix/libs/bullet ] || run_cmd get_library bullet $prefix/libs
+[ -d $prefix/libs/SDL-1.2.15 ] || run_cmd get_library sdl $prefix/libs
+[ -d $prefix/libs/SDL_image ] || run_cmd get_library sdl-image $prefix/libs
+[ -d $prefix/libs/libogg-1.3.3 ] || run_cmd get_library ogg $prefix/libs
+[ -d $prefix/libs/libvorbis-1.3.6 ] || run_cmd get_library vorbis $prefix/libs
+[ -d $prefix/libs/libtheora-1.1.1 ] || run_cmd get_library theora $prefix/libs
 
 # get rospkg dependency for pluginlib support at build time
 [ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
@@ -181,10 +176,16 @@ if [[ $skip -ne 1 ]] ; then
     # Patch uuid - Avoiding stdlib.h include
     apply_patch $my_loc/patches/uuid.patch
 
+    # Patch bullet - Avoid building examples
+    apply_patch $my_loc/patches/bullet.patch
+
     ## ROS patches
 
     # Patch catkin - Fix transitive linking of interface libraries for static builds
     apply_patch $my_loc/patches/catkin.patch
+
+    # Patch map_server - Fix find yaml
+    apply_patch $my_loc/patches/map_server.patch
 
     # Patch bondcpp - Fix transitive linking problems
     apply_patch $my_loc/patches/bondcpp.patch
@@ -198,7 +199,7 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch opencv - Fix installation path
     apply_patch $my_loc/patches/opencv.patch
-    
+
     # Patch actionlib - problems with Boost changes.
     apply_patch $my_loc/patches/actionlib.patch
 
@@ -208,9 +209,6 @@ if [[ $skip -ne 1 ]] ; then
     
     # Patch xmlrpcpp - problems with Boost changes.
     apply_patch $my_loc/patches/xmlrpcpp.patch
-
-    # Remove
-    rm -fr $prefix/catkin_ws/src/geometry2/tf2_py
 
     # Patch roslib - weird issue with rospack.
     # TODO: Need to look further (only on catkin_make_isolated)
@@ -242,6 +240,9 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch cv_bridge - fix transitive linking in cv_bridge-extras.cmake
     apply_patch $my_loc/patches/cv_bridge.patch
+
+    # Patch theora_image_transport - fix transitive linking
+    apply_patch $my_loc/patches/theora_image_transport.patch
 
     # Patch robot_pose_ekf - Add bfl library cmake variables, also, remove tests
     # TODO: The correct way to handle this would be to create .cmake files for bfl and do a findpackage(orocos-bfl)
@@ -341,7 +342,12 @@ echo
 [ -f $prefix/target/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
 [ -f $prefix/target/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
 [ -f $prefix/target/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
-
+[ -f $prefix/target/lib/libBulletSoftBody.a ] || run_cmd build_library bullet $prefix/libs/bullet
+[ -f $prefix/target/lib/libSDL.a ] || run_cmd build_library_with_toolchain sdl $prefix/libs/SDL-1.2.15
+[ -f $prefix/target/lib/libSDL_image.a ] || run_cmd build_library_with_toolchain sdl-image $prefix/libs/SDL_image
+[ -f $prefix/target/lib/libogg.a ] || run_cmd build_library_with_toolchain ogg $prefix/libs/libogg-1.3.3
+[ -f $prefix/target/lib/libvorbis.a ] || run_cmd build_library_with_toolchain vorbis $prefix/libs/libvorbis-1.3.6
+[ -f $prefix/target/lib/libtheora.a ] || run_cmd build_library_with_toolchain theora $prefix/libs/libtheora-1.1.1
 
 echo
 echo -e '\e[34mCross-compiling ROS.\e[39m'
@@ -368,7 +374,7 @@ echo
 
 # Library path is incorrect for urdf.
 # TODO: Need to investigate the source of the issue
-sed -i 's/set(libraries "urdf;/set(libraries "/g' $CMAKE_PREFIX_PATH/share/urdf/cmake/urdfConfig.cmake
+#sed -i 's/set(libraries "urdf;/set(libraries "/g' $CMAKE_PREFIX_PATH/share/urdf/cmake/urdfConfig.cmake
 
 run_cmd create_android_mk $prefix/catkin_ws/src $prefix/roscpp_android_ndk
 

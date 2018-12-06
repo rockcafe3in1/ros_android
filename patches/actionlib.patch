@@ -5,7 +5,7 @@
      }
  
 -    done_condition_.timed_wait(lock, boost::posix_time::milliseconds(time_left.toSec() * 1000.0f));
-+    done_condition_.timed_wait(lock, boost::posix_time::milliseconds(uint32_t(time_left.toSec() * 1000.0f)));
++    done_condition_.timed_wait(lock, boost::posix_time::milliseconds(static_cast<uint32_t>(time_left.toSec() * 1000.0f)));
    }
  
    return cur_simple_state_ == SimpleGoalState::DONE;
@@ -28,7 +28,19 @@
  
      check_connection_condition_.timed_wait(lock,
 -      boost::posix_time::milliseconds(time_left.toSec() * 1000.0f));
-+      boost::posix_time::milliseconds(uint32_t(time_left.toSec() * 1000.0f)));
++      boost::posix_time::milliseconds(static_cast<uint32_t>(time_left.toSec() * 1000.0f)));
    }
  
    return isServerConnected();
+
+--- catkin_ws/src/actionlib/include/actionlib/server/simple_action_server_imp.h
++++ catkin_ws/src/actionlib/include/actionlib/server/simple_action_server_imp.h
+@@ -394,7 +394,7 @@ void SimpleActionServer<ActionSpec>::executeLoop()
+       }
+     } else {
+       execute_condition_.timed_wait(lock,
+-        boost::posix_time::milliseconds(loop_duration.toSec() * 1000.0f));
++        boost::posix_time::milliseconds(static_cast<uint32_t>((loop_duration.toSec() * 1000.0f))));
+     }
+   }
+ }

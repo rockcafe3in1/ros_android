@@ -1,0 +1,12 @@
+--- catkin_ws/src/image_transport_plugins/theora_image_transport/CMakeLists.txt
++++ catkin_ws/src/image_transport_plugins/theora_image_transport/CMakeLists.txt
+@@ -21,7 +21,8 @@ generate_dynamic_reconfigure_options(cfg/TheoraPublisher.cfg cfg/TheoraSubscribe
+ catkin_package(
+   INCLUDE_DIRS include
+   LIBRARIES ${PROJECT_NAME}
+-  CATKIN_DEPENDS message_runtime std_msgs
++  DEPENDS OpenCV PC_OGG PC_THEORA PC_THEORAENC PC_THEORADEC
++  CATKIN_DEPENDS cv_bridge dynamic_reconfigure image_transport message_runtime rosbag pluginlib std_msgs
+ )
+ 
+ include_directories(include
