@@ -185,6 +185,9 @@ if [[ $skip -ne 1 ]] ; then
 
     ## ROS patches
 
+    # Patch rosconsole - Add android backend
+    apply_patch $my_loc/patches/rosconsole.patch
+
     # Patch catkin - Fix transitive linking of interface libraries for static builds
     apply_patch $my_loc/patches/catkin.patch
 
