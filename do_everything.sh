@@ -274,8 +274,12 @@ if [[ $skip -ne 1 ]] ; then
 
     # Plugin specific patches
     if [ $use_pluginlib -ne 0 ]; then
+        # Patch class_loader for static loading
+        apply_patch $my_loc/patches/class_loader.patch
+
         # Patch pluginlib for static loading
         apply_patch $my_loc/patches/pluginlib.patch
+
         # apply_patch image_transport # to fix faulty export plugins
         apply_patch $my_loc/patches/image_transport.patch
     fi
