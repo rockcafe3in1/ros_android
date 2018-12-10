@@ -49,7 +49,7 @@ cmake_build() {
     mkdir -p build && cd build
     cmake .. -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
-        -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=$platform \
+        -DANDROID_ABI=${ANDROID_ABI} -DANDROID_PLATFORM=${ANDROID_PLATFORM} -DANDROID_STL=${ANDROID_STL} \
         -DPYTHON_EXECUTABLE=$python -DCMAKE_INSTALL_PREFIX=$target -DBUILD_SHARED_LIBS=0 -DPCL_SHARED_LIBS=FALSE \
         -DCMAKE_FIND_ROOT_PATH=$target \
         -DBUILD_TESTING=OFF
@@ -59,9 +59,14 @@ cmake_build() {
 # Check if patch hasn't already applied and apply it
 apply_patch() {
     echo "Checking patch: $1"
-    if patch -p0 -N --dry-run --silent -d $prefix < $1;
+    patch=$1
+    shift
+    if [ "$#" -eq 0 ]; then
+      set -- -d $prefix
+    fi
+    if patch -p0 -N --dry-run --silent "$@" < $patch;
     then
-        patch -p0 -N -d $prefix < $1 || return $?
+        patch -p0 -N "$@" < $patch || return $?
     fi
     echo ''
 }

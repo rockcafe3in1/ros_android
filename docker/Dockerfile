@@ -1,10 +1,10 @@
-FROM ros:kinetic-ros-base-xenial
+FROM ros:kinetic-ros-core-xenial
 MAINTAINER Julian Cerruti <jcerruti@ekumenlabs.com>
 MAINTAINER Gary Servin <gary@ekumenlabs.com>
 MAINTAINER Juan Ignacio Ubeira <jubeira@ekumenlabs.com>
 
 # Install basic tools
-RUN apt-get update && apt-get install -y wget git unzip tmux python-catkin-tools python-lxml
+RUN apt-get update && apt-get install -y wget git unzip tmux python-catkin-tools python-lxml automake autoconf
 
 # Install Android NDK
 WORKDIR /opt/android/sdk

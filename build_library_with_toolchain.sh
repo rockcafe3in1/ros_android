@@ -24,8 +24,14 @@ echo
 
 [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
 
+if [ "armeabi-v7a" = $ANDROID_ABI ]; then
+    arch="arm"
+elif [ "arm64-v8a" = $ANDROID_ABI ]; then
+    arch="arm64"
+fi
+
 if [ ! -d toolchain/ ]; then
-  $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --install-dir=./toolchain --arch=$arch
+  $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --install-dir=./toolchain --arch=$arch --platform=${ANDROID_PLATFORM} --stl=${ANDROID_STL}
 fi
 export PATH=$PATH:$2/toolchain/bin
 
@@ -40,11 +46,39 @@ configure_options="--prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static 
 # Overwrite/extend for specific packages
 if [ $1 == 'poco' ]; then
     configure_options="--config=Android_static --no-samples --no-tests"
-    export ANDROID_ABI=$abi
 elif [ $1 == 'curl' ]; then
     configure_options="$configure_options --without-ssl --disable-tftp --disable-sspi --disable-ipv6 --disable-ldaps --disable-ldap --disable-telnet --disable-pop3 --disable-ftp --disable-imap --disable-smtp --disable-pop3 --disable-rtsp --disable-ares --without-ca-bundle --disable-warnings --disable-manual --without-nss --without-random"
 elif [ $1 == 'libxml2' ]; then
     configure_options="$configure_options --without-python"
+elif [ $1 == 'sdl' ]; then
+    # Update old config.sub and config.guess
+    cp /usr/share/automake*/config* build-scripts/
+    # Update ./configure
+    ./autogen.sh
+elif [ $1 == 'sdl-image' ]; then
+    # Update old config.sub and config.guess
+    cp /usr/share/automake*/config* .
+    # Update ./configure
+    ./autogen.sh
+    # Export sdl-config file location
+    export SDL_CONFIG=$prefix/../../target/bin/sdl-config
+elif [ $1 == 'vorbis' ]; then
+    # Specify OGG location
+    # TODO(ivanpauno): Check why --with-ogg=prefix isn't working.
+    export OGG_CFLAGS=-I${CMAKE_PREFIX_PATH}/include
+    export OGG_LIBS=-L${CMAKE_PREFIX_PATH}/lib
+    # Regenerate ./configure
+    ./autogen.sh
+elif [ $1 == 'theora' ]; then
+    # Update old config.sub and config.guess
+    cp /usr/share/automake*/config* .
+    # Disable building examples
+    configure_options="$configure_options --disable-examples"
+    # Specify OGG and vorbis location
+    export OGG_CFLAGS=-I${CMAKE_PREFIX_PATH}/include
+    export OGG_LIBS=-L${CMAKE_PREFIX_PATH}/lib
+    # Regenerate ./configure
+    ./autogen.sh
 fi
 
 # Configure and build
@@ -55,7 +89,7 @@ make -j$PARALLEL_JOBS -l$PARALLEL_JOBS V=1
 if [ $1 == 'poco' ]; then
     mkdir -p $CMAKE_PREFIX_PATH/lib
     cd $CMAKE_PREFIX_PATH/lib
-    cp $prefix/lib/Android/$abi/lib*.a ./
+    cp $prefix/lib/Android/$ANDROID_ABI/lib*.a ./
     mkdir -p ../include && cd ../include
     cp -r $prefix/Foundation/include/Poco ./
 else

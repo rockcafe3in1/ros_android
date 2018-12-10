@@ -73,7 +73,6 @@ done
 # Abort script on any failures
 set -e
 
-cmd_exists catkin_make || die 'catkin_make was not found'
 [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
 [ "$RBA_TOOLCHAIN" = "" ] && die 'could not find android.toolchain.cmake, you should set RBA_TOOLCHAIN variable.'
 
@@ -91,10 +90,6 @@ echo
 echo -e '\e[34mRunning catkin build.\e[39m'
 echo
 
-# Use ROS_PARALLEL_JOBS=-j1 to compile with only one core (Useful to point errors in catkin_make)
-export ROS_PARALLEL_JOBS="-j$PARALLEL_JOBS -l$PARALLEL_JOBS"
-# export ROS_PARALLEL_JOBS="-j1"
-
 catkin config \
   --no-extend \
   --install-space $prefix/target \
@@ -103,7 +98,7 @@ catkin config \
   --cmake-args \
     -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
     -DUSE_CATKIN=ON -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
-    -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=$platform \
+    -DANDROID_ABI=${ANDROID_ABI} -DANDROID_PLATFORM=${ANDROID_PLATFORM} -DANDROID_STL=${ANDROID_STL} \
     -DPYTHON_EXECUTABLE=$python -DPYTHON_LIBRARY=$python_lib \
     -DPYTHON_INCLUDE_DIR=$python_inc -DPYTHON_INCLUDE_DIR2=$python2_inc \
     -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX=$CMAKE_PREFIX_PATH \
