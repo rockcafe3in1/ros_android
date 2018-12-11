@@ -31,3 +31,41 @@ index 0000000..be84634
 +set(HAVE_MM_MALLOC_EXITCODE "2" CACHE STRING "Result from TRY_RUN for HAVE_MM_MALLOC" FORCE)
 +set(HAVE_POSIX_MEMALIGN_EXITCODE "2" CACHE STRING "Result from TRY_RUN for HAVE_POSIX_MEMALIGN" FORCE)
 +
+--- libs/pcl-pcl-1.8.1/PCLConfig.cmake.in
++++ libs/pcl-pcl-1.8.1/PCLConfig.cmake.in
+@@ -853,8 +853,9 @@
+       set(PCL_${COMPONENT}_LIBRARY ${PCL_${COMPONENT}_LIBRARY_DEBUG})
+     endif(NOT PCL_${COMPONENT}_LIBRARY AND WIN32)
+ 
++    # Ignore missing headers
+     find_package_handle_standard_args(PCL_${COMPONENT} DEFAULT_MSG
+-      PCL_${COMPONENT}_LIBRARY PCL_${COMPONENT}_INCLUDE_DIR)
++      PCL_${COMPONENT}_LIBRARY)
+   else(_is_header_only EQUAL -1)
+     find_package_handle_standard_args(PCL_${COMPONENT} DEFAULT_MSG
+       PCL_${COMPONENT}_INCLUDE_DIR)  
+@@ -885,6 +886,7 @@
+         list(APPEND PCL_${COMPONENT}_INCLUDE_DIRS ${PCL_${INT_DEP}_INCLUDE_DIRS})
+         if(PCL_${INT_DEP}_LIBRARIES)
+           list(APPEND PCL_${COMPONENT}_LIBRARIES "${PCL_${INT_DEP}_LIBRARIES}")
++          list(APPEND PCL_LIBRARIES "${PCL_${INT_DEP}_LIBRARIES}")
+         endif(PCL_${INT_DEP}_LIBRARIES) 
+       endif(PCL_${INT_DEP}_FOUND)
+     endforeach(int_dep)
+--- libs/pcl-pcl-1.8.1/cmake/pcl_pclconfig.cmake
++++ libs/pcl-pcl-1.8.1/cmake/pcl_pclconfig.cmake
+@@ -61,6 +61,13 @@
+     endif(_status)
+ endforeach(_ss)
+ 
++# For static builds we need to link to the internal library 'pcl_io_ply' explicitly.
++# ==> We do so by adding io_ply to the list of available components and to pcl_io_int_dep.
++if(NOT PCL_SHARED_LIBS)
++  set(PCLCONFIG_AVAILABLE_COMPONENTS "${PCLCONFIG_AVAILABLE_COMPONENTS} io_ply")
++  set(PCLCONFIG_INTERNAL_DEPENDENCIES "${PCLCONFIG_INTERNAL_DEPENDENCIES}list(APPEND pcl_io_int_dep io_ply)\n")
++endif()
++
+ #Boost modules
+ set(PCLCONFIG_AVAILABLE_BOOST_MODULES "system filesystem thread date_time iostreams")
+ if(Boost_SERIALIZATION_FOUND)
+ 
