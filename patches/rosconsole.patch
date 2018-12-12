@@ -1,6 +1,6 @@
 --- catkin_ws/src/ros_comm/rosconsole/CMakeLists.txt
 +++ catkin_ws/src/ros_comm/rosconsole/CMakeLists.txt
-@@ -10,9 +10,10 @@ find_package(catkin REQUIRED COMPONENTS cpp_common rostime rosunit)
+@@ -10,9 +10,10 @@
  find_package(Boost COMPONENTS regex system thread)
  
  # select rosconsole backend
@@ -12,7 +12,7 @@
  if(ROSCONSOLE_BACKEND STREQUAL "" OR ROSCONSOLE_BACKEND STREQUAL "log4cxx")
    find_package(Log4cxx QUIET)
    if(NOT LOG4CXX_LIBRARIES)
-@@ -27,6 +28,12 @@ if(ROSCONSOLE_BACKEND STREQUAL "" OR ROSCONSOLE_BACKEND STREQUAL "log4cxx")
+@@ -27,9 +28,22 @@
      message(FATAL_ERROR "Couldn't find log4cxx library")
    endif()
  endif()
@@ -23,9 +23,21 @@
 +  endif()
 +endif()
  if(ROSCONSOLE_BACKEND STREQUAL "" OR ROSCONSOLE_BACKEND STREQUAL "glog")
-   find_package(PkgConfig)
-   pkg_check_modules(GLOG QUIET libglog)
-@@ -85,6 +92,9 @@ elseif(ROSCONSOLE_BACKEND STREQUAL "glog")
+-  find_package(PkgConfig)
+-  pkg_check_modules(GLOG QUIET libglog)
++  find_package(glog QUIET)
++  if(TARGET glog::glog)
++    set(GLOG_FOUND TRUE)
++    set(GLOG_LIBRARIES glog::glog)
++    get_target_property(GLOG_INCLUDE_DIRS glog::glog INTERFACE_INCLUDE_DIRECTORIES)
++  else()
++    find_package(PkgConfig)
++    pkg_check_modules(GLOG QUIET libglog)
++  endif()
+   if(GLOG_FOUND)
+     list(APPEND rosconsole_backend_INCLUDE_DIRS ${GLOG_INCLUDE_DIRS})
+     list(APPEND rosconsole_backend_LIBRARIES rosconsole_glog rosconsole_backend_interface ${GLOG_LIBRARIES})
+@@ -85,6 +99,9 @@
  elseif(ROSCONSOLE_BACKEND STREQUAL "print")
    add_library(rosconsole_print src/rosconsole/impl/rosconsole_print.cpp)
    target_link_libraries(rosconsole_print rosconsole_backend_interface)
