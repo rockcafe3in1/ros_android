@@ -1,4 +1,4 @@
-This is a hello ROS example app. It subscribes to `/chatter` topic, and when a message is received the following message is published in `/a_chatter`:
+This is a hello ROS example app. It subscribes to `/chatter` topic and when a message is received, the following message is published in `/a_chatter`:
 
     data: "hello world from android ndk __COUNTER_VALUE__"
 
@@ -7,12 +7,11 @@ USAGE
 
 1. IP addresses are harcoded, so you must edit the master URI and the cellphone ip address in the following file:
 
-    app/src/main/cpp/main.cpp
+        app/src/main/cpp/main.cpp
 
 2. Build the samples with do_everything script.
 
 3. Install the app in your cellphone using adb -d install as explained here:
-        
         <https://developer.android.com/studio/build/building-cmdline>
 
 4. Execute roscore in a terminal with ros sourced. Remember to export first your ip address:
