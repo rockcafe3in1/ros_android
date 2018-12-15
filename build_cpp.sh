@@ -45,7 +45,7 @@ do
         ;;
         -v|--verbose)
             if [ $2 -ne 0 ]; then
-                VERBOSE="--debug=v"
+                VERBOSE="--verbose --interleave-output --parallel 1"
             else
                 VERBOSE=""
             fi
@@ -107,7 +107,7 @@ catkin config \
     -DCMAKE_FIND_ROOT_PATH=$prefix -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
     -DBUILD_TESTING=OFF -DCATKIN_ENABLE_TESTING=OFF
 
-catkin build --force-cmake --summary -ip1
+catkin build --force-cmake --summary $VERBOSE
     #-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH \
     #-DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT:PATHNAME=$CMAKE_PREFIX_PATH/include/boost \
     #-DBOOST_INCLUDEDIR:PATH=$CMAKE_PREFIX_PATH/include/boost -DBOOST_LIBRARYDIR:PATH=$CMAKE_PREFIX_PATH/lib \
