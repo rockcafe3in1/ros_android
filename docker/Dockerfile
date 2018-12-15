@@ -43,3 +43,6 @@ ENV USE_CCACHE 1
 ENV NDK_CCACHE /usr/bin/ccache
 ENV CCACHE_DIR /opt/roscpp_output/ccache
 ENV PATH /usr/lib/ccache:$PATH
+
+# Clear entrypoint (do not source /opt/ros/kinetic)
+ENTRYPOINT []
