@@ -78,8 +78,8 @@ run_cmd() {
     $my_loc/$cmd $@ || die "$cmd $@ died with error code $?"
 }
 
-if [ -z $ANDROID_NDK ] ; then
-    die "ANDROID_NDK ENVIRONMENT NOT FOUND!"
+if [ -z $ANDROID_NDK_HOME ] ; then
+    die "ANDROID_NDK_HOME ENVIRONMENT NOT FOUND!"
 fi
 
 [ -d $standalone_toolchain_path ] || run_cmd setup_standalone_toolchain
@@ -103,8 +103,8 @@ export CMAKE_PREFIX_PATH=$prefix/target
 #    cat $my_loc/files/android.toolchain.cmake.addendum >> $prefix/android.toolchain.cmake
 #fi
 
-export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
-apply_patch $my_loc/patches/android.toolchain.cmake.patch -d $ANDROID_NDK/build/cmake
+export RBA_TOOLCHAIN=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake
+apply_patch $my_loc/patches/android.toolchain.cmake.patch -d $ANDROID_NDK_HOME/build/cmake
 
 # Now get boost with a specialized build
 [ -d $prefix/libs/boost ] || run_cmd get_library boost $prefix/libs

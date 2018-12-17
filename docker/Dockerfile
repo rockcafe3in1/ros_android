@@ -12,7 +12,7 @@ RUN wget https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.
 RUN unzip android-ndk-r18b-linux-x86_64.zip -d /opt/android/sdk
 
 # Set-up environment
-ENV ANDROID_NDK /opt/android/sdk/android-ndk-r18b
+ENV ANDROID_NDK_HOME /opt/android/sdk/android-ndk-r18b
 
 # Install g++ to avoid "CMAKE_CXX_COMPILER-NOTFOUND was not found." error
 RUN apt-get update && apt-get install -y g++ cmake make clang
