@@ -67,8 +67,8 @@ elif [ $1 == 'vorbis' ]; then
     # TODO(ivanpauno): Check why --with-ogg=prefix isn't working.
     export OGG_CFLAGS=-I${CMAKE_PREFIX_PATH}/include
     export OGG_LIBS=-L${CMAKE_PREFIX_PATH}/lib
-    # Regenerate ./configure
-    ./autogen.sh
+    # Regenerate and call ./configure
+    ./autogen.sh ${configure_options}
 elif [ $1 == 'theora' ]; then
     # Update old config.sub and config.guess
     cp /usr/share/automake*/config* .
@@ -77,8 +77,8 @@ elif [ $1 == 'theora' ]; then
     # Specify OGG and vorbis location
     export OGG_CFLAGS=-I${CMAKE_PREFIX_PATH}/include
     export OGG_LIBS=-L${CMAKE_PREFIX_PATH}/lib
-    # Regenerate ./configure
-    ./autogen.sh
+    # Regenerate and call ./configure
+    ./autogen.sh ${configure_options}
 fi
 
 # Configure and build
