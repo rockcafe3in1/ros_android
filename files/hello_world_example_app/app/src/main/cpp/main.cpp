@@ -41,11 +41,11 @@ void android_main(android_app *state) {
 
     int argc = 3;
 
-    //*********************** NOTE: HARDCODE rosmaster ip addresses in __master, and hardcode the ip address of the cellphone in __ip *************************
+    //*********************** NOTE: HARDCODE rosmaster ip addresses in __master, and hardcode the ip address of the android device in __ip *************************
     char* argv[] = {const_cast<char*>("nothing_important") , const_cast<char*>("__master:=http://10.34.0.120:11311"), const_cast<char*>("__ip:=10.34.0.121")};
     //*********************************************************************************************************************************************************
 
-    for(int i = 0; i < argc; i++){
+    for (int i = 0; i < argc; i++) {
         log(argv[i]);
     }
 
@@ -54,7 +54,7 @@ void android_main(android_app *state) {
     log("GOING TO NODEHANDLE");
     std::string master_uri = ros::master::getURI();
 
-    if(ros::master::check()){
+    if (ros::master::check()) {
         log("ROS MASTER IS UP!");
     } else {
         log("NO ROS MASTER.");
@@ -78,8 +78,7 @@ void android_main(android_app *state) {
         struct android_poll_source* source;
 
         // Poll android events, without locking
-        while (ALooper_pollAll(0, NULL, &events, (void**)&source) >= 0)
-        {
+        while (ALooper_pollAll(0, NULL, &events, (void**)&source) >= 0) {
             // Process this event
             if (source != NULL) {
                 source->process(state, source);
@@ -94,7 +93,7 @@ void android_main(android_app *state) {
 
         ros::spinOnce();
 
-        if(!ros::ok()){
+        if (!ros::ok()) {
             log("ROS ISN'T OK, BYE BYE");
             return;
         }

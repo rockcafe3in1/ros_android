@@ -5,7 +5,7 @@ This is a hello ROS example app. It subscribes to `/chatter` topic and when a me
 USAGE
 -------
 
-1. IP addresses are harcoded, so you must edit the master URI and the cellphone ip address in the following file:
+1. IP addresses are hardcoded, so you must edit the master URI and the android device ip address in the following file:
 
         app/src/main/cpp/main.cpp
 
@@ -29,7 +29,7 @@ USAGE
 If all is working well, you will receive multiple messages with an incresing counter value.
 The message you have sent is logged in android, you can check the result with logcat:
 
-    adb logcate
+    adb logcat
 
 The log will be like:
 
