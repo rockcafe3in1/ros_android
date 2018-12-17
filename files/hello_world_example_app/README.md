@@ -11,7 +11,7 @@ USAGE
 
 2. Build the samples with do_everything script.
 
-3. Install the app in your cellphone using adb -d install as explained here:
+3. Install the app in your android device using adb -d install as explained here:
         <https://developer.android.com/studio/build/building-cmdline>
 
 4. Execute roscore in a terminal with ros sourced. Remember to export first your ip address:
