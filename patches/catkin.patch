@@ -86,3 +86,15 @@
    #set(_argn ${ARGN})
    #debug_message(10 "catkin_replace_imported_library_targets(${VAR} ${_argn}) ${result}")
    set(${VAR} "${result}" PARENT_SCOPE)
+--- catkin_ws/src/catkin/cmake/templates/pkgConfig.cmake.in
++++ catkin_ws/src/catkin/cmake/templates/pkgConfig.cmake.in
+@@ -121,6 +121,9 @@ foreach(library ${libraries})
+   # keep build configuration keywords, target names and absolute libraries as-is
+   if("${library}" MATCHES "^(debug|optimized|general)$")
+     list(APPEND @PROJECT_NAME@_LIBRARIES ${library})
++  elseif("${library}" MATCHES "^-.*$")
++    # for flags, e.g. -fopenmp
++    list(APPEND @PROJECT_NAME@_LIBRARIES ${library})
+   elseif(TARGET ${library})
+     list(APPEND @PROJECT_NAME@_LIBRARIES ${library})
+   elseif(IS_ABSOLUTE ${library})
