@@ -44,7 +44,7 @@ do
             help=1
         fi
         shift
-    elif [[ -z prefix ]]
+    elif [[ ! -z prefix ]]; then
         if [ ! -d $1 ]; then
             mkdir -p $1
         fi
@@ -54,7 +54,7 @@ do
 done
 
 if [[ -z prefix ]]; then
-    help = 1
+    help=1
 fi
 
 if [[ $help -eq 1 ]] ; then
