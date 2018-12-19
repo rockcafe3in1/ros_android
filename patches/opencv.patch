@@ -101,4 +101,13 @@
 +            DESTINATION ${OPENCV_OTHER_INSTALL_PATH} COMPONENT libs)
    endif()
  endif()
+--- catkin_ws/src/opencv3/3rdparty/libtiff/CMakeLists.txt
++++ catkin_ws/src/opencv3/3rdparty/libtiff/CMakeLists.txt
+@@ -7,6 +7,7 @@
+ include(CheckCSourceCompiles)
+ include(CheckFunctionExists)
+ include(CheckIncludeFile)
++include(CheckTypeSize)
  
+ 
+ # Find libm, if available 

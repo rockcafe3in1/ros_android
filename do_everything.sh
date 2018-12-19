@@ -87,7 +87,6 @@ mkdir -p $prefix/libs
 
 # Start with catkin since we use it to build almost everything else
 [ -d $prefix/target ] || mkdir -p $prefix/target
-export CMAKE_PREFIX_PATH=$prefix/target
 
 # Get the android ndk build helper script
 # If file doesn't exist, then download and patch it
