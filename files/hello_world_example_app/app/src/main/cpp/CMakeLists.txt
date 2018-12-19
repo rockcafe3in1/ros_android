@@ -16,7 +16,7 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-find_package(catkin REQUIRED COMPONENTS roscpp std_msgs)
+find_package(catkin REQUIRED COMPONENTS roscpp std_msgs rosconsole)
 
 include_directories(${catkin_INCLUDE_DIRS})
 

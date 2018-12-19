@@ -17,15 +17,6 @@
 int loop_count_ = 0;
 ros::Publisher chatter_pub;
 
-void log(const char *msg, ...) {
-    va_list args;
-    va_start(args, msg);
-    __android_log_vprint(ANDROID_LOG_INFO, "ROSCPP_NDK_EXAMPLE", msg, args);
-    va_end(args);
-}
-
-#define LASTERR strerror(errno)
-
 void chatterCallback(const std_msgs::String::ConstPtr& msg){
     ROS_INFO("%s", msg->data.c_str());
     loop_count_++;
@@ -34,7 +25,7 @@ void chatterCallback(const std_msgs::String::ConstPtr& msg){
     ss << "hello world from android ndk " << loop_count_;
     msgo.data = ss.str();
     chatter_pub.publish(msgo);
-    log(msg->data.c_str());
+    ROS_INFO_STREAM(msg->data.c_str());
 }
 
 void android_main(android_app *state) {
@@ -46,24 +37,24 @@ void android_main(android_app *state) {
     //*********************************************************************************************************************************************************
 
     for (int i = 0; i < argc; i++) {
-        log(argv[i]);
+        ROS_INFO("%s",argv[i]);
     }
 
     ros::init(argc, &argv[0], "android_ndk_native_cpp");
 
-    log("GOING TO NODEHANDLE");
+    ROS_INFO("GOING TO NODEHANDLE");
     std::string master_uri = ros::master::getURI();
 
     if (ros::master::check()) {
-        log("ROS MASTER IS UP!");
+        ROS_INFO("ROS MASTER IS UP!");
     } else {
-        log("NO ROS MASTER.");
+        ROS_INFO("NO ROS MASTER.");
     }
-    log(master_uri.c_str());
+    ROS_INFO("%s", master_uri.c_str());
 
     ros::NodeHandle n;
 
-    log("GOING TO PUBLISHER");
+    ROS_INFO("GOING TO PUBLISHER");
 
     // Creating a publisher and a subscriber
     // When something is received in chatter topic, a message is published in a_chatter topic
@@ -86,7 +77,7 @@ void android_main(android_app *state) {
 
             // Check if we are exiting.
             if (state->destroyRequested != 0) {
-                log("APP DESTROYED BYE BYE");
+                ROS_INFO("APP DESTROYED BYE BYE");
                 return;
             }
         }
@@ -94,7 +85,7 @@ void android_main(android_app *state) {
         ros::spinOnce();
 
         if (!ros::ok()) {
-            log("ROS ISN'T OK, BYE BYE");
+            ROS_INFO("ROS ISN'T OK, BYE BYE");
             return;
         }
 
