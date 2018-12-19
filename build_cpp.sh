@@ -2,13 +2,13 @@
 
 # print a help screen
 function print_help {
-    echo "Usage: $0 [options] -p prefix_path"
+    echo "Usage: $0 [options] -p prefix_path [catkin build args...]"
     echo "Options:"
     echo "  -p --path <path> target path to build (required)"
     echo "  -b --build-type <cmake_build_type> build binaries with the corresponding cmake build flag"
     echo "                                     Release (default) / Debug / RelWithDebInfo"
-    echo "  -v --verbose <val> output more verbose error messages"
-    echo "                     0: normal (default) / 1: verbose"
+    echo "  -v --verbose [<val>] output more verbose error messages"
+    echo "                       0: normal (default) / 1: verbose"
     echo "  -h --help display this help screen."
     echo
     echo "Example:"
@@ -35,46 +35,48 @@ source $my_loc/utils.sh
 
 
 # process options
-while [[ $# > 1 ]]
+CATKIN_ARGS=()
+while [[ $# > 0 ]]
 do
     key="$1"
     case $key in
         -b|--build-type)
-            CMAKE_BUILD_TYPE=$2
+            CMAKE_BUILD_TYPE=${2?"Usage: $0 -b <CMAKE_BUILD_TYPE>"}
             shift # past argument
         ;;
         -v|--verbose)
-            if [ $2 -ne 0 ]; then
-                VERBOSE="--debug=v"
-            else
+            VERBOSE="--verbose --interleave-output --parallel-packages 1"
+            if [ "$2" = "0" ]; then
                 VERBOSE=""
+                shift # past argument
+            elif [ "$2" = "1" ]; then
+                shift # past argument
             fi
-            shift # past argument
         ;;
         -h|--help)
             print_help
             exit 0
-            shift # past argument
         ;;
         -p|--path)
-            TARGET_PATH=$2
+            TARGET_PATH=${2?"Usage: $0 -p <TARGET_PATH>"}
             shift # past argument
         ;;
         *)
-            # unknown option
-            echo "Unknown option!"
-            exit 1
+            CATKIN_ARGS+=($1)
         ;;
     esac
     shift # past argument or value
 done
 
-
 # Abort script on any failures
 set -e
 
-[ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
-[ "$RBA_TOOLCHAIN" = "" ] && die 'could not find android.toolchain.cmake, you should set RBA_TOOLCHAIN variable.'
+if [ "$TARGET_PATH" = "" ]; then
+  print_help
+  exit 1
+fi
+: ${RBA_TOOLCHAIN:=$ANDROID_NDK/build/cmake/android.toolchain.cmake}
+: ${CMAKE_PREFIX_PATH:=$TARGET_PATH}
 
 # get the prefix path
 prefix=$(cd $TARGET_PATH && pwd)
@@ -97,18 +99,17 @@ catkin config \
   --isolate-devel \
   --cmake-args \
     -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
-    -DUSE_CATKIN=ON -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
+    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+    -DCMAKE_FIND_ROOT_PATH=$prefix \
     -DANDROID_ABI=${ANDROID_ABI} -DANDROID_PLATFORM=${ANDROID_PLATFORM} -DANDROID_STL=${ANDROID_STL} \
     -DPYTHON_EXECUTABLE=$python -DPYTHON_LIBRARY=$python_lib \
     -DPYTHON_INCLUDE_DIR=$python_inc -DPYTHON_INCLUDE_DIR2=$python2_inc \
-    -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX=$CMAKE_PREFIX_PATH \
+    -DBUILD_SHARED_LIBS=0 \
     -DBoost_NO_BOOST_CMAKE=ON -DBOOST_ROOT=$CMAKE_PREFIX_PATH -DANDROID=TRUE \
     -DBOOST_INCLUDEDIR=$CMAKE_PREFIX_PATH/include/boost -DBOOST_LIBRARYDIR=$CMAKE_PREFIX_PATH/lib \
-    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-    -DCMAKE_FIND_ROOT_PATH=$prefix -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
     -DBUILD_TESTING=OFF -DCATKIN_ENABLE_TESTING=OFF
 
-catkin build
+catkin build --force-cmake --summary $VERBOSE "${CATKIN_ARGS[@]}"
     #-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH \
     #-DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT:PATHNAME=$CMAKE_PREFIX_PATH/include/boost \
     #-DBOOST_INCLUDEDIR:PATH=$CMAKE_PREFIX_PATH/include/boost -DBOOST_LIBRARYDIR:PATH=$CMAKE_PREFIX_PATH/lib \
