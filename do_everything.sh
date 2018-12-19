@@ -15,6 +15,7 @@ debugging=0
 skip=0
 portable=0
 help=0
+user_workspace=""
 
 # verbose is a bool flag indicating if we want more verbose output in
 # the build process. Useful for debugging build system or compiler errors.
@@ -25,23 +26,36 @@ if [[ $# -lt 1 ]] ; then
     help=1
 fi
 
-for var in "$@"
+while [[ $# -gt 0 ]]
 do
-    if [[ ${var} == "--help" ]] ||  [[ ${var} == "-h" ]] ; then
+    if [[ $1 == "--help" ]] ||  [[ $1 == "-h" ]] ; then
         help=1
-    fi
-    if [[ ${var} == "--skip" ]] ; then
+    elif [[ $1 == "--skip" ]] ; then
         skip=1
-    fi
-
-    if [[ ${var} == "--debug-symbols" ]] ; then
+    elif [[ $1 == "--debug-symbols" ]] ; then
         debugging=1
-    fi
-
-    if [[ ${var} == "--portable" ]] ; then
+    elif [[ $1 == "--portable" ]] ; then
         portable=1
+    elif [[ $1 == "--extends-workspace" ]] ; then
+        if [ -d $2 ]; then
+            user_workspace=$2
+        else
+            echo "--extends-workspace should be folowed by a directory"
+            help=1
+        fi
+        shift
+    elif [[ -z prefix ]]
+        if [ ! -d $1 ]; then
+            mkdir -p $1
+        fi
+        prefix=$(cd $1 && pwd)
     fi
+    shift
 done
+
+if [[ -z prefix ]]; then
+    help = 1
+fi
 
 if [[ $help -eq 1 ]] ; then
     echo "Usage: $0 prefix_path [-h | --help] [--skip] [--debug-symbols]"
@@ -60,12 +74,6 @@ if [[ $debugging -eq 1 ]]; then
 else
    echo "-- Building workspace without debugging symbols"
 fi
-
-if [ ! -d $1 ]; then
-    mkdir -p $1
-fi
-
-prefix=$(cd $1 && pwd)
 
 run_cmd() {
     cmd=$1.sh
@@ -308,7 +316,7 @@ if [ $use_pluginlib -ne 0 ]; then
     echo
 
     pluginlib_helper_file=pluginlib_helper.cpp
-    $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
+    $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src $user_workspace -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
     cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
     line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
     # temporally turn off error detection
