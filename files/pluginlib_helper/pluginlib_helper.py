@@ -12,7 +12,7 @@ if cmd_folder not in sys.path:
 
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument("-scanroot", nargs="?", default="", help="Root folder to start scanning for plugins.")
+  parser.add_argument("-scanroot", nargs="*", default="", help="Root folder to start scanning for plugins.")
   parser.add_argument("-cppout", nargs="?", default="", help="Name of the cpp output file that will contain the static plugin loader code.")
   parser.add_argument("-buildfile", nargs="?", default="", help="Name of the build file.")
   

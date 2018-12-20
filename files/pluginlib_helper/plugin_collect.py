@@ -38,7 +38,7 @@ def collect_plugins(root_scan_dir):
   root_scan_dir indicates the starting point for the scan
   returns the collected plugin classes
   """
-  rp = RosPack([root_scan_dir])
+  rp = RosPack(root_scan_dir)
 
   packages = rp.list()
   debug_print("Found packages:\n")
