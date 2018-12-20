@@ -59,15 +59,25 @@ cmake_build() {
 # Check if patch hasn't already applied and apply it
 apply_patch() {
     echo "Checking patch: $1"
-    set -e
     patch=$1
     shift
     if [ "$#" -eq 0 ]; then
-      set -- -d $prefix
+        set -- -d $prefix
     fi
-    if patch -p0 -N --dry-run --silent "$@" < $patch;
-    then
-        patch -p0 -N "$@" < $patch || return $?
+    if patch -p0 -N --dry-run --silent "$@" < $patch &> /tmp/last_patch_output; then
+        patch -p0 -N "$@" < $patch &> /tmp/last_patch_output
     fi
+
+    # Check if the patch was not properly applied and die if so.
+    result=`cat /tmp/last_patch_output`
+    if [[ $result =~ .*FAILED.* ]]; then
+        die "Patch failed. Error message: $result"
+    elif [[ $result =~ .*malformed.* ]]; then
+        die "Malformed patch. Error message: $result"
+    elif [[ $result =~ .*The\ text\ leading.* ]]; then
+        die "Wrong target file for patch. Error message: $result"
+    fi
+
+    echo "$result"
     echo ''
 }
