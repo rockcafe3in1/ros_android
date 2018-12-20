@@ -14,7 +14,7 @@ if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     exit 1
 fi
 
-[ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
+[ "$TARGET_DIR" = "" ] && die 'could not find target basedir. Please set $TARGET_DIR environment variable.'
 
 if [ ! -d $1 ]; then
     mkdir -p $1
@@ -23,13 +23,13 @@ fi
 cd $1
 
 if [[ $2 -eq 0 ]]; then
-  ln -fs $CMAKE_PREFIX_PATH/include ./
-  ln -fs $CMAKE_PREFIX_PATH/lib ./
-  ln -fs $CMAKE_PREFIX_PATH/share ./
+  ln -fs $TARGET_DIR/include ./
+  ln -fs $TARGET_DIR/lib ./
+  ln -fs $TARGET_DIR/share ./
 else
-  cp -r $CMAKE_PREFIX_PATH/include ./
-  cp -r $CMAKE_PREFIX_PATH/lib ./
-  cp -r $CMAKE_PREFIX_PATH/share ./
+  cp -r $TARGET_DIR/include ./
+  cp -r $TARGET_DIR/lib ./
+  cp -r $TARGET_DIR/share ./
 fi
 
 cp $my_loc/files/tfa/*.mk ./

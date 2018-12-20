@@ -39,10 +39,10 @@ download_zip() {
 cmake_build() {
     cmd_exists cmake || die 'cmake was not found'
 
-    [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
+    [ "$TARGET_DIR" = "" ] && die 'could not find target basedir. Please set $TARGET_DIR environment variable.'
     [ "$RBA_TOOLCHAIN" = "" ] && die 'could not find android.toolchain.cmake, you should set RBA_TOOLCHAIN variable.'
 
-    target=$CMAKE_PREFIX_PATH
+    target=$TARGET_DIR
     python=$(which python)
 
     cd $1
@@ -59,6 +59,7 @@ cmake_build() {
 # Check if patch hasn't already applied and apply it
 apply_patch() {
     echo "Checking patch: $1"
+    set -e
     patch=$1
     shift
     if [ "$#" -eq 0 ]; then

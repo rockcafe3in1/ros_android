@@ -58,7 +58,7 @@ do
             exit 0
         ;;
         -p|--path)
-            TARGET_PATH=${2?"Usage: $0 -p <TARGET_PATH>"}
+            PREFIX_PATH=${2?"Usage: $0 -p <PREFIX_PATH>"}
             shift # past argument
         ;;
         *)
@@ -71,15 +71,15 @@ done
 # Abort script on any failures
 set -e
 
-if [ "$TARGET_PATH" = "" ]; then
+if [ "$PREFIX_PATH" = "" ]; then
   print_help
   exit 1
 fi
 : ${RBA_TOOLCHAIN:=$ANDROID_NDK/build/cmake/android.toolchain.cmake}
-: ${CMAKE_PREFIX_PATH:=$TARGET_PATH}
 
 # get the prefix path
-prefix=$(cd $TARGET_PATH && pwd)
+prefix=$(cd $PREFIX_PATH && pwd)
+TARGET_PATH=$prefix/target
 
 python=$(which python)
 python_lib=/usr/lib/x86_64-linux-gnu/libpython2.7.so
@@ -94,7 +94,7 @@ echo
 
 catkin config \
   --no-extend \
-  --install-space $prefix/target \
+  --install-space $TARGET_PATH \
   --install \
   --isolate-devel \
   --cmake-args \
@@ -105,14 +105,14 @@ catkin config \
     -DPYTHON_EXECUTABLE=$python -DPYTHON_LIBRARY=$python_lib \
     -DPYTHON_INCLUDE_DIR=$python_inc -DPYTHON_INCLUDE_DIR2=$python2_inc \
     -DBUILD_SHARED_LIBS=0 \
-    -DBoost_NO_BOOST_CMAKE=ON -DBOOST_ROOT=$CMAKE_PREFIX_PATH -DANDROID=TRUE \
-    -DBOOST_INCLUDEDIR=$CMAKE_PREFIX_PATH/include/boost -DBOOST_LIBRARYDIR=$CMAKE_PREFIX_PATH/lib \
+    -DBoost_NO_BOOST_CMAKE=ON -DBOOST_ROOT=$TARGET_PATH -DANDROID=TRUE \
+    -DBOOST_INCLUDEDIR=$TARGET_PATH/include/boost -DBOOST_LIBRARYDIR=$TARGET_PATH/lib \
     -DBUILD_TESTING=OFF -DCATKIN_ENABLE_TESTING=OFF
 
 catkin build --force-cmake --summary $VERBOSE "${CATKIN_ARGS[@]}"
     #-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH \
-    #-DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT:PATHNAME=$CMAKE_PREFIX_PATH/include/boost \
-    #-DBOOST_INCLUDEDIR:PATH=$CMAKE_PREFIX_PATH/include/boost -DBOOST_LIBRARYDIR:PATH=$CMAKE_PREFIX_PATH/lib \
+    #-DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT:PATHNAME=$TARGET_PATH/include/boost \
+    #-DBOOST_INCLUDEDIR:PATH=$TARGET_PATH/include/boost -DBOOST_LIBRARYDIR:PATH=$TARGET_PATH/lib \
     #-DBoost_USE_STATIC_LIBS=ON -DBoost_NO_BOOST_CMAKE=ON
-   # -DBOOST_INCLUDEDIR:PATH=$CMAKE_PREFIX_PATH/include -DBOOST_LIBRARYDIR:PATH=$CMAKE_PREFIX_PATH/lib
-   # -DBOOST_ROOT:PATHNAME=$CMAKE_PREFIX_PATH/include
+   # -DBOOST_INCLUDEDIR:PATH=$TARGET_PATH/include -DBOOST_LIBRARYDIR:PATH=$TARGET_PATH/lib
+   # -DBOOST_ROOT:PATHNAME=$TARGET_PATH/include

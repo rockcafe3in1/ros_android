@@ -15,8 +15,8 @@ fi
 
 prefix=$(cd $1 && pwd)
 
-[ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
-cd $CMAKE_PREFIX_PATH
+[ "$TARGET_DIR" = "" ] && die 'could not find target basedir. Please set $TARGET_DIR environment variable.'
+cd $TARGET_DIR
 mkdir -p include && cd include
 cp -r $prefix/Eigen ./
 cp -r $prefix/unsupported ./
