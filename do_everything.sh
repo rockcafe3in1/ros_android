@@ -58,8 +58,9 @@ if [[ -z prefix ]]; then
 fi
 
 if [[ $help -eq 1 ]] ; then
-    echo "Usage: $0 prefix_path [-h | --help] [--skip] [--debug-symbols]"
+    echo "Usage: $0 prefix_path [-h | --help] [--skip] [--debug-symbols] [--extends-workspace path]"
     echo "  example: $0 /home/user/my_workspace"
+    echo " --extends-workspace path: Pluginlib will also search in this path for plugins."
     exit 1
 fi
 
