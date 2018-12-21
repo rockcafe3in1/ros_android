@@ -64,20 +64,11 @@ apply_patch() {
     if [ "$#" -eq 0 ]; then
         set -- -d $prefix
     fi
-    if patch -p0 -N --dry-run --silent "$@" < $patch &> /tmp/last_patch_output; then
-        patch -p0 -N "$@" < $patch &> /tmp/last_patch_output
-    fi
 
-    # Check if the patch was not properly applied and die if so.
-    result=`cat /tmp/last_patch_output`
-    if [[ $result =~ .*FAILED.* ]]; then
-        die "Patch failed. Error message: $result"
-    elif [[ $result =~ .*malformed.* ]]; then
-        die "Malformed patch. Error message: $result"
-    elif [[ $result =~ .*The\ text\ leading.* ]]; then
-        die "Wrong target file for patch. Error message: $result"
+    set -e
+    # If the reverse patch could not be applied, then the patch has to be applied.
+    if ! patch -p0 -N --dry-run --silent -R "$@" < $patch ; then
+        # The following call will abort the script on error.
+        patch -p0 -N "$@" < $patch
     fi
-
-    echo "$result"
-    echo ''
 }
