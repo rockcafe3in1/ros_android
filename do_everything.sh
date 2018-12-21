@@ -206,9 +206,6 @@ if [[ $skip -ne 1 ]] ; then
     # Patch opencv - Fix installation path
     apply_patch $my_loc/patches/opencv.patch
 
-    # Patch libtiff - Fix missing include
-    apply_patch $my_loc/patches/libtiff.patch
-
     # Patch actionlib - problems with Boost changes.
     apply_patch $my_loc/patches/actionlib.patch
 
