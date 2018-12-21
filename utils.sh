@@ -65,12 +65,10 @@ apply_patch() {
         set -- -d $prefix
     fi
 
-    set +e
-    patch -p0 -N --dry-run --silent -R "$@" < $patch
-    PATCH_RETURN=$?
-
     set -e
-    if [ $PATCH_RETURN -ne "0" ]; then
+    # If the reverse patch could not be applied, then the patch has to be applied.
+    if ! patch -p0 -N --dry-run --silent -R "$@" < $patch ; then
+        # The following call will abort the script on error.
         patch -p0 -N "$@" < $patch
     fi
 }
