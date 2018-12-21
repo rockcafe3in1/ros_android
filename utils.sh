@@ -39,10 +39,10 @@ download_zip() {
 cmake_build() {
     cmd_exists cmake || die 'cmake was not found'
 
-    [ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
+    [ "$TARGET_DIR" = "" ] && die 'could not find target basedir. Please set $TARGET_DIR environment variable.'
     [ "$RBA_TOOLCHAIN" = "" ] && die 'could not find android.toolchain.cmake, you should set RBA_TOOLCHAIN variable.'
 
-    target=$CMAKE_PREFIX_PATH
+    target=$TARGET_DIR
     python=$(which python)
 
     cd $1
@@ -62,11 +62,13 @@ apply_patch() {
     patch=$1
     shift
     if [ "$#" -eq 0 ]; then
-      set -- -d $prefix
+        set -- -d $prefix
     fi
-    if patch -p0 -N --dry-run --silent "$@" < $patch;
-    then
-        patch -p0 -N "$@" < $patch || return $?
+
+    set -e
+    # If the reverse patch could not be applied, then the patch has to be applied.
+    if ! patch -p0 -N --dry-run --silent -R "$@" < $patch ; then
+        # The following call will abort the script on error.
+        patch -p0 -N "$@" < $patch
     fi
-    echo ''
 }

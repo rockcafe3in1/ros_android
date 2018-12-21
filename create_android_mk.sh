@@ -13,23 +13,22 @@ if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     exit 1
 fi
 
-[ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
-
+[ "$TARGET_DIR" = "" ] && die 'could not find target basedir. Please set $TARGET_DIR environment variable.'
 prefix=$(cd $1 && pwd)
 
 # Get list of packages from catkin
 package_list=$(/opt/ros/kinetic/bin/catkin_topological_order --only-names $prefix | tr '\n' ';')
 
 # Call a CMAKE script to get the equivalent of $catkin_LIBRARIES for all of the above packages
-rm -rf $CMAKE_PREFIX_PATH/find_libs
-mkdir -p $CMAKE_PREFIX_PATH/find_libs
-cp $my_loc/files/FindLibrariesCMakeLists.txt $CMAKE_PREFIX_PATH/find_libs/CMakeLists.txt
-cd $CMAKE_PREFIX_PATH/find_libs
-cmake ../find_libs -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH;$ANDROID_NDK/platforms/android-14/arch-arm/usr/lib" \
+rm -rf $TARGET_DIR/find_libs
+mkdir -p $TARGET_DIR/find_libs
+cp $my_loc/files/FindLibrariesCMakeLists.txt $TARGET_DIR/find_libs/CMakeLists.txt
+cd $TARGET_DIR/find_libs
+cmake ../find_libs -DTARGET_DIR="$TARGET_DIR;$ANDROID_NDK/platforms/android-14/arch-arm/usr/lib" \
              -DALL_PACKAGES="$package_list"
 
 # Read the output file to get the paths of all of the libraries
-full_library_list=$(cat $CMAKE_PREFIX_PATH/find_libs/libraries.txt)
+full_library_list=$(cat $TARGET_DIR/find_libs/libraries.txt)
 
 # Parse this libraries (separated by ;), skip all libraries that start with the second argument paths (separated by ;)
 lib_output=$($my_loc/parse_libs.py $full_library_list $ANDROID_NDK/platforms/android-14/arch-arm/usr/lib)

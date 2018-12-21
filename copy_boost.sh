@@ -19,16 +19,16 @@ echo
 echo -e '\e[34mCopying boost.\e[39m'
 echo
 
-[ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
-mkdir -p $CMAKE_PREFIX_PATH/lib
+[ "$TARGET_DIR" = "" ] && die 'could not find target basedir. Please set $TARGET_DIR environment variable.'
+mkdir -p $TARGET_DIR/lib
 cd $prefix/build/out/arm64-v8a/lib/
 for i in *.a # Rename and move libraries (remove the gcc type, so on)
 do
     #mv "$i" "`echo $i | sed 's/000//'`"
     #cp lib/lib*.a ./
-    cp "$i" $CMAKE_PREFIX_PATH/lib/"`echo $i | sed 's/ *\-.*//'`.a"
+    cp "$i" $TARGET_DIR/lib/"`echo $i | sed 's/ *\-.*//'`.a"
 done
 
 cd ../include
-mkdir -p $CMAKE_PREFIX_PATH/include
-cp -R boost-1_68/boost $CMAKE_PREFIX_PATH/include/
+mkdir -p $TARGET_DIR/include
+cp -R boost-1_68/boost $TARGET_DIR/include/
