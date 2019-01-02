@@ -17,9 +17,6 @@ cmd_exists git || die 'git was not found'
 
 prefix=$(cd $1 && pwd)
 
-[ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
-
-#cd $CMAKE_PREFIX_PATH
 cd $prefix
 mkdir -p catkin_ws/src && cd catkin_ws
 

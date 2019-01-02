@@ -22,7 +22,7 @@ echo
 echo -e '\e[34mBuilding '$1'.\e[39m'
 echo
 
-[ "$CMAKE_PREFIX_PATH" = "" ] && die 'could not find target basedir. Have you run build_catkin.sh and sourced setup.bash?'
+[ "$TARGET_DIR" = "" ] && die 'could not find target basedir. Please set $TARGET_DIR environment variable.'
 
 if [ "armeabi-v7a" = $ANDROID_ABI ]; then
     arch="arm"
@@ -41,7 +41,7 @@ build=`uname -m`-linux
 host=$(basename $2/toolchain/*-linux-android)
 
 # General options to pass to ./configure script
-configure_options="--prefix=$CMAKE_PREFIX_PATH --disable-shared --enable-static --build=${build} --host=${host}"
+configure_options="--prefix=$TARGET_DIR --disable-shared --enable-static --build=${build} --host=${host}"
 
 # Overwrite/extend for specific packages
 if [ $1 == 'poco' ]; then
@@ -65,20 +65,20 @@ elif [ $1 == 'sdl-image' ]; then
 elif [ $1 == 'vorbis' ]; then
     # Specify OGG location
     # TODO(ivanpauno): Check why --with-ogg=prefix isn't working.
-    export OGG_CFLAGS=-I${CMAKE_PREFIX_PATH}/include
-    export OGG_LIBS=-L${CMAKE_PREFIX_PATH}/lib
-    # Regenerate ./configure
-    ./autogen.sh
+    export OGG_CFLAGS=-I${TARGET_DIR}/include
+    export OGG_LIBS=-L${TARGET_DIR}/lib
+    # Regenerate and call ./configure
+    ./autogen.sh ${configure_options}
 elif [ $1 == 'theora' ]; then
     # Update old config.sub and config.guess
     cp /usr/share/automake*/config* .
     # Disable building examples
     configure_options="$configure_options --disable-examples"
     # Specify OGG and vorbis location
-    export OGG_CFLAGS=-I${CMAKE_PREFIX_PATH}/include
-    export OGG_LIBS=-L${CMAKE_PREFIX_PATH}/lib
-    # Regenerate ./configure
-    ./autogen.sh
+    export OGG_CFLAGS=-I${TARGET_DIR}/include
+    export OGG_LIBS=-L${TARGET_DIR}/lib
+    # Regenerate and call ./configure
+    ./autogen.sh ${configure_options}
 fi
 
 # Configure and build
@@ -87,8 +87,8 @@ make -j$PARALLEL_JOBS -l$PARALLEL_JOBS V=1
 
 # Install
 if [ $1 == 'poco' ]; then
-    mkdir -p $CMAKE_PREFIX_PATH/lib
-    cd $CMAKE_PREFIX_PATH/lib
+    mkdir -p $TARGET_DIR/lib
+    cd $TARGET_DIR/lib
     cp $prefix/lib/Android/$ANDROID_ABI/lib*.a ./
     mkdir -p ../include && cd ../include
     cp -r $prefix/Foundation/include/Poco ./
