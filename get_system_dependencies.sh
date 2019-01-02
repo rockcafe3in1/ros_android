@@ -36,7 +36,7 @@ fi
 
 # Boost
 pushd $lib_prefix/boost
-[ -d build/out ] || bash -x ./build-android.sh $ANDROID_NDK --boost=1.68.0 --arch=$ANDROID_ABI
+[ -d build/out ] || bash -x ./build-android.sh $ANDROID_NDK_HOME --boost=1.68.0 --arch=$ANDROID_ABI
 popd
 
 # Rospkg

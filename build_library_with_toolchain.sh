@@ -31,7 +31,7 @@ elif [ "arm64-v8a" = $ANDROID_ABI ]; then
 fi
 
 if [ ! -d toolchain/ ]; then
-  $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --install-dir=./toolchain --arch=$arch --platform=${ANDROID_PLATFORM} --stl=${ANDROID_STL}
+  $ANDROID_NDK_HOME/build/tools/make-standalone-toolchain.sh --install-dir=./toolchain --arch=$arch --platform=${ANDROID_PLATFORM} --stl=${ANDROID_STL}
 fi
 export PATH=$PATH:$2/toolchain/bin
 

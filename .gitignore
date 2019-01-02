@@ -1,2 +1,7 @@
 output
 *.pyc
+**/.gradle/*
+**/build/*
+**/.externalNativeBuild/*
+files/pluginlib_helper/pluginlib_helper.cpp
+

@@ -1,5 +1,5 @@
-These scripts will (hopefully) help you build static libraries
-for tf2 for android and setup a sample application.
+These scripts will help you build static libraries
+for ROS kinetic for android and setup a sample application.
 
 You will need android SDK installed and the 'android' program
 location in the $PATH.
@@ -7,37 +7,22 @@ location in the $PATH.
 INSTALL
 -------
 
-Source ROS (for python tools):
-
-    source /opt/ros/kinetic/setup.bash
+Build docker image and run it:
+    
+    docker/build.sh
+    docker/run.sh
 
 The `do_everything.sh` script will call all the other scripts
 sequentially, you just have to give it a prefix path:
 
     ./do_everything.sh /path/to/workspace
 
-YOU WILL PROBABLY HAVE TO RUN THIS MULTIPLE TIMES DUE TO PTHREAD LINKING.
+BUILD SAMPLES
+-------
 
-You can also run each script individually, most of them have
-a minimalistic help string to give you an idea of their parameters.
+If you also want to build the samples, use:
 
-When finished, the script will give you a few lines of what it did.
-If everything went fine, you will be able to do the following:
+    ./do_everything.sh /path/to/workspace --samples
 
-    cd /path/to/workspace/sample_app
-    ant debug
-
-This will build the app. If you want to install it, run the following:
-
-    ant debug install
-
-This will install the app onto a virtual android device running in the
-emulator.
-
-To follow what the app does, you will need to read the log. The sdk has
-a tool called `adb` located in `$SDK/platform-tools/`, you can follow the
-log by running:
-
-    $SDK/platform-tools/adb logcat
-
-Good luck!
+You can find the resulting apks inside `/path/to/workspace/target/apks/name_of_the_sample_app/apk_file`.
+Specific instructions about how to use the samples are located inside: `files/name_of_the_sample_app/README.md`

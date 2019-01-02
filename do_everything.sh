@@ -15,6 +15,7 @@ debugging=0
 skip=0
 portable=0
 help=0
+samples=0
 user_workspace=""
 
 # verbose is a bool flag indicating if we want more verbose output in
@@ -44,12 +45,15 @@ do
             help=1
         fi
         shift
+    elif [[ ${var} == "--samples" ]] ; then
+        samples=1
     elif [[ ! -z prefix ]]; then
         if [ ! -d $1 ]; then
             mkdir -p $1
         fi
         prefix=$(cd $1 && pwd)
     fi
+
     shift
 done
 
@@ -82,8 +86,8 @@ run_cmd() {
     $my_loc/$cmd $@ || die "$cmd $@ died with error code $?"
 }
 
-if [ -z $ANDROID_NDK ] ; then
-    die "ANDROID_NDK ENVIRONMENT NOT FOUND!"
+if [ -z $ANDROID_NDK_HOME ] ; then
+    die "ANDROID_NDK_HOME ENVIRONMENT NOT FOUND!"
 fi
 
 [ -d $standalone_toolchain_path ] || run_cmd setup_standalone_toolchain
@@ -106,8 +110,8 @@ export TARGET_DIR=$prefix/target
 #    cat $my_loc/files/android.toolchain.cmake.addendum >> $prefix/android.toolchain.cmake
 #fi
 
-export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
-apply_patch $my_loc/patches/android.toolchain.cmake.patch -d $ANDROID_NDK/build/cmake
+export RBA_TOOLCHAIN=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake
+apply_patch $my_loc/patches/android.toolchain.cmake.patch -d $ANDROID_NDK_HOME/build/cmake
 
 # Get all library dependencies.
 run_cmd get_system_dependencies $my_loc/system_deps.rosinstall $prefix/libs $my_loc/files
@@ -352,100 +356,25 @@ else
     run_cmd build_catkin_workspace -p $prefix -b Release -v $verbose
 fi
 
-echo
-echo -e '\e[34mSetting up ndk project.\e[39m'
-echo
+if [[ $samples -eq 1 ]];then
+    echo
+    echo -e '\e[34mBuilding sample apps.\e[39m'
+    echo
 
-run_cmd setup_ndk_project $prefix/roscpp_android_ndk $portable
+    build_sample() {
+        cd $2
 
-echo
-echo -e '\e[34mCreating Android.mk.\e[39m'
-echo
+        echo "Building $1"
 
-run_cmd create_android_mk $prefix/catkin_ws/src $prefix/roscpp_android_ndk
+        # TODO(ivanpauno): Add release apk option
+        ./gradlew assembleDebug
 
-if [[ $debugging -eq 1 ]];then
-    sed -i "s/#LOCAL_EXPORT_CFLAGS/LOCAL_EXPORT_CFLAGS/g" $prefix/roscpp_android_ndk/Android.mk
+        mkdir -p $prefix/target/apks/$1
+
+        echo "Copying generated apks inside $prefix/target/apks/$1"
+        find . -type f -name "*.apk" -exec cp {} $prefix/target/apks/$1 \;
+        cd $my_loc
+    }
+
+    [ -d $prefix/target/apks/hello_world ] || build_sample hello_world $my_loc/files/hello_world_example_app
 fi
-
-# copy Android makfile to use in building the apps with roscpp_android_ndk
-cp $my_loc/files/Android.mk.move_base $prefix/roscpp_android_ndk/Android.mk
-
-echo
-echo -e '\e[34mCreating sample app.\e[39m'
-echo
-
-( cd $prefix && run_cmd sample_app sample_app $prefix/roscpp_android_ndk )
-
-echo
-echo -e '\e[34mBuilding apk.\e[39m'
-echo
-
-(cd $prefix/sample_app && ant debug)
-
-echo
-echo -e '\e[34mCreating move_base sample app.\e[39m'
-echo
-
-( cd $prefix && run_cmd sample_app move_base_app $prefix/roscpp_android_ndk )
-
-echo
-echo -e '\e[34mBuilding move_base apk.\e[39m'
-echo
-
-(cd $prefix/move_base_app && ant debug)
-
-echo
-echo -e '\e[34mCreating pluginlib sample app.\e[39m'
-echo
-
-( cd $prefix && run_cmd sample_app pluginlib_sample_app $prefix/roscpp_android_ndk )
-
-echo
-echo -e '\e[34mBuilding apk.\e[39m'
-echo
-
-(cd $prefix/pluginlib_sample_app && ant debug)
-
-echo
-echo -e '\e[34mCreating nodelet sample app.\e[39m'
-echo
-
-( cd $prefix && run_cmd sample_app nodelet_sample_app $prefix/roscpp_android_ndk )
-
-echo
-echo -e '\e[34mBuilding apk.\e[39m'
-echo
-
-(cd $prefix/nodelet_sample_app && ant debug)
-
-echo
-echo -e '\e[34mCreating image transport sample app.\e[39m'
-echo
-
-# Copy specific Android makefile to build the image_transport_sample_app
-# This makefile includes the missing opencv 3rd party libraries.
-( cp $my_loc/files/Android.mk.image_transport $prefix/roscpp_android_ndk/Android.mk)
-
-( cd $prefix && run_cmd sample_app image_transport_sample_app $prefix/roscpp_android_ndk )
-
-echo
-echo -e '\e[34mBuilding apk.\e[39m'
-echo
-
-(cd $prefix/image_transport_sample_app && ant debug)
-
-
-echo
-echo 'done.'
-echo 'summary of what just happened:'
-echo '  target/      was used to build static libraries for ros software'
-echo '    include/   contains headers'
-echo '    lib/       contains static libraries'
-echo '  roscpp_android_ndk/     is a NDK sub-project that can be imported into an NDK app'
-echo '  sample_app/  is an example of such an app, a native activity'
-echo '  sample_app/bin/sample_app-debug.apk  is the built apk, it implements a subscriber and a publisher'
-echo '  move_base_sample_app/  is an example app that implements the move_base node'
-echo '  move_base_app/bin/move_base_app-debug.apk  is the built apk for the move_base example'
-echo '  pluginlib_sample_app/  is an example of an application using pluginlib'
-echo '  pluginlib_sample_app/bin/pluginlib_sample_app-debug.apk  is the built apk'
