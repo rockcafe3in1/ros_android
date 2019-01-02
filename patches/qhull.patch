@@ -1,5 +1,5 @@
---- libs/qhull-2012.1/CMakeLists.txt	2014-12-19 18:26:42.612712590 -0300
-+++ libs/qhull-2012.1/CMakeLists.txt	2014-12-19 18:44:18.124752493 -0300
+--- libs/qhull/CMakeLists.txt	2014-12-19 18:26:42.612712590 -0300
++++ libs/qhull/CMakeLists.txt	2014-12-19 18:44:18.124752493 -0300
 @@ -241,7 +241,7 @@
  
  set(

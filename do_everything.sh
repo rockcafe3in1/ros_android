@@ -109,36 +109,8 @@ export TARGET_DIR=$prefix/target
 export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 apply_patch $my_loc/patches/android.toolchain.cmake.patch -d $ANDROID_NDK/build/cmake
 
-# Now get boost with a specialized build
-[ -d $prefix/libs/boost ] || run_cmd get_library boost $prefix/libs
-[ -d $prefix/libs/bzip2 ] || run_cmd get_library bzip2 $prefix/libs
-[ -d $prefix/libs/uuid ] || run_cmd get_library uuid $prefix/libs
-[ -d $prefix/libs/poco-1.8.0 ] || run_cmd get_library poco $prefix/libs
-[ -d $prefix/libs/tinyxml ] || run_cmd get_library tinyxml $prefix/libs
-[ -d $prefix/libs/tinyxml2 ] || run_cmd get_library tinyxml2 $prefix/libs
-[ -d $prefix/libs/console_bridge ] || run_cmd get_library console_bridge $prefix/libs
-[ -d $prefix/libs/lz4-r131 ] || run_cmd get_library lz4 $prefix/libs
-[ -d $prefix/libs/curl-7.47.0 ] || run_cmd get_library curl $prefix/libs
-[ -d $prefix/libs/urdfdom/ ] || run_cmd get_library urdfdom $prefix/libs
-[ -d $prefix/libs/urdfdom_headers ] || run_cmd get_library urdfdom_headers $prefix/libs
-[ -d $prefix/libs/libiconv-1.15 ] || run_cmd get_library libiconv $prefix/libs
-[ -d $prefix/libs/libxml2-2.9.7 ] || run_cmd get_library libxml2 $prefix/libs
-[ -d $prefix/libs/collada_dom ] || run_cmd get_library collada_dom $prefix/libs
-[ -d $prefix/libs/eigen-3.3.5 ] || run_cmd get_library eigen $prefix/libs
-[ -d $prefix/libs/assimp-3.1.1 ] || run_cmd get_library assimp $prefix/libs
-[ -d $prefix/libs/qhull-2015.2 ] || run_cmd get_library qhull $prefix/libs
-[ -d $prefix/libs/yaml-cpp-yaml-cpp-0.6.2 ] || run_cmd get_library yaml-cpp $prefix/libs
-[ -d $prefix/libs/flann ] || run_cmd get_library flann $prefix/libs
-[ -d $prefix/libs/pcl-pcl-1.8.1 ] || run_cmd get_library pcl $prefix/libs
-[ -d $prefix/libs/bullet ] || run_cmd get_library bullet $prefix/libs
-[ -d $prefix/libs/SDL-1.2.15 ] || run_cmd get_library sdl $prefix/libs
-[ -d $prefix/libs/SDL_image ] || run_cmd get_library sdl-image $prefix/libs
-[ -d $prefix/libs/libogg-1.3.3 ] || run_cmd get_library ogg $prefix/libs
-[ -d $prefix/libs/libvorbis-1.3.6 ] || run_cmd get_library vorbis $prefix/libs
-[ -d $prefix/libs/libtheora-1.1.1 ] || run_cmd get_library theora $prefix/libs
-
-# get rospkg dependency for pluginlib support at build time
-[ -d $my_loc/files/rospkg ] || run_cmd get_library rospkg $my_loc/files
+# Get all library dependencies.
+run_cmd get_library $my_loc/system_deps.rosinstall $prefix/libs $my_loc/files
 
 echo
 echo -e '\e[34mGetting ROS packages\e[39m'
@@ -343,29 +315,29 @@ echo
 [ -f $TARGET_DIR/lib/libbz2.a ] || run_cmd build_library bzip2 $prefix/libs/bzip2
 [ -f $TARGET_DIR/lib/libuuid.a ] || run_cmd build_library uuid $prefix/libs/uuid
 [ -f $TARGET_DIR/lib/libboost_system.a ] || run_cmd copy_boost $prefix/libs/boost
-[ -f $TARGET_DIR/lib/libPocoFoundation.a ] || run_cmd build_library_with_toolchain poco $prefix/libs/poco-1.8.0
+[ -f $TARGET_DIR/lib/libPocoFoundation.a ] || run_cmd build_library_with_toolchain poco $prefix/libs/poco
 [ -f $TARGET_DIR/lib/libtinyxml.a ] || run_cmd build_library tinyxml $prefix/libs/tinyxml
 [ -f $TARGET_DIR/lib/libtinyxml2.a ] || run_cmd build_library tinyxml2 $prefix/libs/tinyxml2
 [ -f $TARGET_DIR/lib/libconsole_bridge.a ] || run_cmd build_library console_bridge $prefix/libs/console_bridge
-[ -f $TARGET_DIR/lib/liblz4.a ] || run_cmd build_library lz4 $prefix/libs/lz4-r131/cmake_unofficial
-[ -f $TARGET_DIR/lib/libcurl.a ] || run_cmd build_library_with_toolchain curl $prefix/libs/curl-7.47.0
+[ -f $TARGET_DIR/lib/liblz4.a ] || run_cmd build_library lz4 $prefix/libs/lz4/cmake_unofficial
+[ -f $TARGET_DIR/lib/libcurl.a ] || run_cmd build_library_with_toolchain curl $prefix/libs/curl
 [ -f $TARGET_DIR/include/urdf_model/model.h ] || run_cmd build_library urdfdom_headers $prefix/libs/urdfdom_headers
 [ -f $TARGET_DIR/lib/liburdfdom_model.a ] || run_cmd build_library urdfdom $prefix/libs/urdfdom
-[ -f $TARGET_DIR/lib/libiconv.a ] || run_cmd build_library_with_toolchain libiconv $prefix/libs/libiconv-1.15
-[ -f $TARGET_DIR/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $prefix/libs/libxml2-2.9.7
+[ -f $TARGET_DIR/lib/libiconv.a ] || run_cmd build_library_with_toolchain libiconv $prefix/libs/libiconv
+[ -f $TARGET_DIR/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $prefix/libs/libxml2
 [ -f $TARGET_DIR/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library collada_dom $prefix/libs/collada_dom
-[ -f $TARGET_DIR/lib/libassimp.a ] || run_cmd build_library assimp $prefix/libs/assimp-3.1.1
-[ -f $TARGET_DIR/include/eigen3/signature_of_eigen3_matrix_library ] || run_cmd build_library eigen $prefix/libs/eigen-3.3.5
-[ -f $TARGET_DIR/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull-2015.2
-[ -f $TARGET_DIR/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp-yaml-cpp-0.6.2
+[ -f $TARGET_DIR/lib/libassimp.a ] || run_cmd build_library assimp $prefix/libs/assimp
+[ -f $TARGET_DIR/include/eigen3/signature_of_eigen3_matrix_library ] || run_cmd build_library eigen $prefix/libs/eigen
+[ -f $TARGET_DIR/lib/libqhullstatic.a ] || run_cmd build_library qhull $prefix/libs/qhull
+[ -f $TARGET_DIR/lib/libyaml-cpp.a ] || run_cmd build_library yaml-cpp $prefix/libs/yaml-cpp
 [ -f $TARGET_DIR/lib/libflann_cpp_s.a ] || run_cmd build_library flann $prefix/libs/flann
-[ -f $TARGET_DIR/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl-pcl-1.8.1
+[ -f $TARGET_DIR/lib/libpcl_common.a ] || run_cmd build_library pcl $prefix/libs/pcl
 [ -f $TARGET_DIR/lib/libBulletSoftBody.a ] || run_cmd build_library bullet $prefix/libs/bullet
-[ -f $TARGET_DIR/lib/libSDL.a ] || run_cmd build_library_with_toolchain sdl $prefix/libs/SDL-1.2.15
-[ -f $TARGET_DIR/lib/libSDL_image.a ] || run_cmd build_library_with_toolchain sdl-image $prefix/libs/SDL_image
-[ -f $TARGET_DIR/lib/libogg.a ] || run_cmd build_library_with_toolchain ogg $prefix/libs/libogg-1.3.3
-[ -f $TARGET_DIR/lib/libvorbis.a ] || run_cmd build_library_with_toolchain vorbis $prefix/libs/libvorbis-1.3.6
-[ -f $TARGET_DIR/lib/libtheora.a ] || run_cmd build_library_with_toolchain theora $prefix/libs/libtheora-1.1.1
+[ -f $TARGET_DIR/lib/libSDL.a ] || run_cmd build_library_with_toolchain sdl $prefix/libs/sdl
+[ -f $TARGET_DIR/lib/libSDL_image.a ] || run_cmd build_library_with_toolchain sdl-image $prefix/libs/sdl-image
+[ -f $TARGET_DIR/lib/libogg.a ] || run_cmd build_library_with_toolchain ogg $prefix/libs/ogg
+[ -f $TARGET_DIR/lib/libvorbis.a ] || run_cmd build_library_with_toolchain vorbis $prefix/libs/vorbis
+[ -f $TARGET_DIR/lib/libtheora.a ] || run_cmd build_library_with_toolchain theora $prefix/libs/theora
 
 echo
 echo -e '\e[34mCross-compiling ROS.\e[39m'
