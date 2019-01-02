@@ -110,14 +110,14 @@ export RBA_TOOLCHAIN=$ANDROID_NDK/build/cmake/android.toolchain.cmake
 apply_patch $my_loc/patches/android.toolchain.cmake.patch -d $ANDROID_NDK/build/cmake
 
 # Get all library dependencies.
-run_cmd get_library $my_loc/system_deps.rosinstall $prefix/libs $my_loc/files
+run_cmd get_system_dependencies $my_loc/system_deps.rosinstall $prefix/libs $my_loc/files
 
 echo
 echo -e '\e[34mGetting ROS packages\e[39m'
 echo
 
 if [[ $skip -ne 1 ]] ; then
-    run_cmd get_ros_stuff $prefix
+    run_cmd get_catkin_packages $prefix
 
     echo
     echo -e '\e[34mApplying patches.\e[39m'
@@ -346,10 +346,10 @@ echo
 
 if [[ $debugging -eq 1 ]];then
     echo "Build type = DEBUG"
-    run_cmd build_cpp -p $prefix -b Debug -v $verbose
+    run_cmd build_catkin_workspace -p $prefix -b Debug -v $verbose
 else
     echo "Build type = RELEASE"
-    run_cmd build_cpp -p $prefix -b Release -v $verbose
+    run_cmd build_catkin_workspace -p $prefix -b Release -v $verbose
 fi
 
 echo
