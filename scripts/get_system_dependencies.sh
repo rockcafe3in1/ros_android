@@ -1,10 +1,14 @@
 #!/bin/bash
+# Gets system dependencies in a target directory.
+# See help for required positional arguments.
+
+# Required environment variables:
+# - SCRIPT_DIR: where utility scripts are located.
 
 # Abort script on any failures
 set -e
 
-my_loc="$(cd "$(dirname $0)" && pwd)"
-source $my_loc/utils.sh
+source $SCRIPT_DIR/utils.sh
 
 if [ $# != 3 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: $0 system_deps_rosinstall library_prefix_path files_prefix_path"
@@ -16,6 +20,8 @@ fi
 echo
 echo -e '\e[34mGetting system libraries.\e[39m'
 echo
+
+cmd_exists wstool || die 'wstool was not found'
 
 rosinstall_file=$1
 lib_prefix=$(cd $2 && pwd)

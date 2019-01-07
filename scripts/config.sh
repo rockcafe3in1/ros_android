@@ -1,8 +1,10 @@
 # Configures environment variables required for other scripts to work properly.
+# Always source this file before using the scripts with the output directory as parameter.
+# See help for required positional arguments.
 
 if [ $# != 1 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: source $0 prefix_path"
-    echo "  example: source $0 tinyxml /home/user/ros_android/output"
+    echo "  example: source $0 /home/user/ros_android/output"
     exit 1
 fi
 

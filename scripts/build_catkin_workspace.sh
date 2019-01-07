@@ -1,10 +1,14 @@
 #!/bin/bash
+# Builds catkin workspace with ROS packages and catkinized dependencies.
+# See help for required arguments. 
+#
 # Required environment variables:
 # - SCRIPT_DIR: where utility scripts are located.
+# - $OUTPUT_DIR: default output directory if path argument is not set.
 
 # print a help screen
 function print_help {
-    echo "Usage: $0 [options] -p prefix_path [catkin build args...]"
+    echo "Usage: $0 [options] -p OUTPUT_PREFIX [catkin build args...]"
     echo "Options:"
     echo "  -p --path <path> target path to build (required)"
     echo "  -b --build-type <cmake_build_type> build binaries with the corresponding cmake build flag"
@@ -56,7 +60,7 @@ do
             exit 0
         ;;
         -p|--path)
-            PREFIX_PATH=${2?"Usage: $0 -p <PREFIX_PATH>"}
+            OUTPUT_PREFIX=${2?"Usage: $0 -p <OUTPUT_PREFIX>"}
             shift # past argument
         ;;
         *)
@@ -69,14 +73,18 @@ done
 # Abort script on any failures
 set -e
 
-if [ "$PREFIX_PATH" = "" ]; then
-  print_help
-  exit 1
+if [ "$OUTPUT_PREFIX" = "" ]; then
+  if ["$OUTPUT_DIR" = ""]; then
+    print_help
+    exit 1
+  else
+    OUTPUT_PREFIX=$OUTPUT_DIR
+  fi
 fi
 : ${RBA_TOOLCHAIN:=$ANDROID_NDK/build/cmake/android.toolchain.cmake}
 
 # get the prefix path
-prefix=$(cd $PREFIX_PATH && pwd)
+prefix=$(cd $OUTPUT_PREFIX && pwd)
 TARGET_PATH=$prefix/target
 
 python=$(which python)

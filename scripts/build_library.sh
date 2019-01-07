@@ -1,5 +1,6 @@
 #!/bin/bash
 # Builds a target library using cmake.
+# See help for required positional arguments.
 # 
 # Required environment variables:
 # - SCRIPT_DIR: where utility scripts are located.
@@ -10,7 +11,7 @@ set -e
 source $SCRIPT_DIR/utils.sh
 
 if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
-    echo "Usage: $0 libary library_source_dir"
+    echo "Usage: $0 library library_source_dir"
     echo "  example: $0 tinyxml /home/user/ros_android/output/libs/tinyxml"
     exit 1
 fi

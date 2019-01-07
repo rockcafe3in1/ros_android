@@ -1,8 +1,10 @@
 #!/bin/bash
-# Copies boost compiled libraries .
-# 
+# Copies boost compiled libraries to the target installation directory.
+# See help for required positional arguments.
+#
 # Required environment variables:
 # - SCRIPT_DIR: where utility scripts are located.
+# - $TARGET_DIR: where to copy boost files.
 
 # Abort script on any failures
 set -e

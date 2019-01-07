@@ -1,5 +1,6 @@
 #!/bin/bash
 # Builds a target library using a standalone toolchain.
+# See help for required positional arguments.
 # 
 # Required environment variables:
 # - SCRIPT_DIR: where utility scripts are located.

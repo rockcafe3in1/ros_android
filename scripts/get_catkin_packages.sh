@@ -1,5 +1,6 @@
 #!/bin/bash
 # Gets ROS packages and creates a catkin workspace.
+# See help for required positional arguments.
 # 
 # Required environment variables:
 # - SCRIPT_DIR: where utility scripts are located.
@@ -15,6 +16,7 @@ if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
 fi
 
 cmd_exists git || die 'git was not found'
+cmd_exists wstool || die 'wstool was not found'
 
 rosinstall_file=$1
 prefix=$(cd $2 && pwd)
