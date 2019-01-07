@@ -1,4 +1,6 @@
 #!/bin/bash
+# Required environment variables:
+# - SCRIPT_DIR: where utility scripts are located.
 
 # print a help screen
 function print_help {
@@ -12,7 +14,7 @@ function print_help {
     echo "  -h --help display this help screen."
     echo
     echo "Example:"
-    echo "    $0 -p /home/user/my_workspace"
+    echo "    $0 -p /home/user/ros_android/output"
     echo
 }
 
@@ -26,12 +28,8 @@ fi
 CMAKE_BUILD_TYPE=Release
 VERBOSE=""
 
-# get the base folder
-my_loc="$(cd "$(dirname $0)" && pwd)"
-
 # source utilities to our environment
-source $my_loc/config.sh
-source $my_loc/utils.sh
+source $SCRIPT_DIR/utils.sh
 
 
 # process options

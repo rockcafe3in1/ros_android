@@ -1,30 +1,32 @@
 #!/bin/bash
-
+# Gets ROS packages and creates a catkin workspace.
+# 
+# Required environment variables:
+# - SCRIPT_DIR: where utility scripts are located.
 # Abort script on any failures
 set -e
 
-my_loc="$(cd "$(dirname $0)" && pwd)"
-source $my_loc/config.sh
-source $my_loc/utils.sh
+source $SCRIPT_DIR/utils.sh
 
-if [ $# != 1 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
-    echo "Usage: $0 prefix_path"
-    echo "  example: $0 /home/user/my_workspace"
+if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
+    echo "Usage: $0 rosinstall_file prefix_path"
+    echo "  example: $0 /home/user/ros_android/ros.rosinstall /home/user/ros_android/output"
     exit 1
 fi
 
 cmd_exists git || die 'git was not found'
 
-prefix=$(cd $1 && pwd)
+rosinstall_file=$1
+prefix=$(cd $2 && pwd)
 
 cd $prefix
 mkdir -p catkin_ws/src && cd catkin_ws
 
 if [ -f src/.rosinstall ]; then
   cd src/
-  wstool merge $my_loc/ros.rosinstall --merge-replace
+  wstool merge $rosinstall_file --merge-replace
   wstool update
   cd ..
 else
-  wstool init -j$PARALLEL_JOBS src $my_loc/ros.rosinstall
+  wstool init -j$PARALLEL_JOBS src $rosinstall_file
 fi

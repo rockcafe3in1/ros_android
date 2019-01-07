@@ -1,15 +1,17 @@
 #!/bin/bash
+# Copies boost compiled libraries .
+# 
+# Required environment variables:
+# - SCRIPT_DIR: where utility scripts are located.
 
 # Abort script on any failures
 set -e
 
-my_loc="$(cd "$(dirname $0)" && pwd)"
-source $my_loc/config.sh
-source $my_loc/utils.sh
+source $SCRIPT_DIR/utils.sh
 
 if [ $# != 1 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
-    echo "Usage: $0 prefix_path"
-    echo "  example: $0 /home/user/my_workspace"
+    echo "Usage: $0 boost_prefix_path"
+    echo "  example: $0 /home/user/ros_android/output/libs/boost"
     exit 1
 fi
 

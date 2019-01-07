@@ -4,7 +4,6 @@
 set -e
 
 my_loc="$(cd "$(dirname $0)" && pwd)"
-source $my_loc/config.sh
 source $my_loc/utils.sh
 
 if [ $# != 3 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then

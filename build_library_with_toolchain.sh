@@ -1,15 +1,17 @@
 #!/bin/bash
+# Builds a target library using a standalone toolchain.
+# 
+# Required environment variables:
+# - SCRIPT_DIR: where utility scripts are located.
 
 # Abort script on any failures
 set -e
 
-my_loc="$(cd "$(dirname $0)" && pwd)"
-source $my_loc/config.sh
-source $my_loc/utils.sh
+source $SCRIPT_DIR/utils.sh
 
 if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: $0 library_name library_source_dir"
-    echo "  example: $0 /home/user/my_workspace/libxml2-2.9.1"
+    echo "  example: $0 libxml2 /home/user/ros_android/output/libs/libxml2-2.9.1"
     exit 1
 fi
 
