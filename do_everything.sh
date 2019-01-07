@@ -382,10 +382,10 @@ echo
 
 if [[ $debugging -eq 1 ]];then
     echo "Build type = DEBUG"
-    run_cmd build_cpp -p $prefix/catkin_ws -r $TARGET_DIR -b Debug -v $verbose
+    run_cmd build_cpp -w $prefix/catkin_ws -p $prefix -b Debug -v $verbose
 else
     echo "Build type = RELEASE"
-    run_cmd build_cpp -p $prefix/catkin_ws -r $TARGET_DIR -b Release -v $verbose
+    run_cmd build_cpp -w $prefix/catkin_ws -p $prefix -b Release -v $verbose
 fi
 
 if [[ $samples -eq 1 && "$user_workspace" != "" ]];then
@@ -394,8 +394,8 @@ if [[ $samples -eq 1 && "$user_workspace" != "" ]];then
     echo
 
     if [[ $debugging -eq 1 ]];then
-        run_cmd build_cpp -p $user_workspace -r $TARGET_DIR -b Debug -v $verbose
+        run_cmd build_cpp -w $user_workspace -p $prefix -b Debug -v $verbose
     else
-        run_cmd build_cpp -p $user_workspace -r $TARGET_DIR -b Release -v $verbose
+        run_cmd build_cpp -w $user_workspace -p $prefix -b Release -v $verbose
     fi
 fi

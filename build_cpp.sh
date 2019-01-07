@@ -4,8 +4,8 @@
 function print_help {
     echo "Usage: $0 [options] -p prefix_path [catkin build args...]"
     echo "Options:"
-    echo "  -p --path <path> target path to build (required)"
-    echo "  -r --rootpath <path> sysroot path. This build is installed there. (required)"
+    echo "  -p --prefix <path> output directory (required)"
+    echo "  -w --workspace <path> catkin workspace to be built. (required)"
     echo "  -b --build-type <cmake_build_type> build binaries with the corresponding cmake build flag"
     echo "                                     Release (default) / Debug / RelWithDebInfo"
     echo "  -v --verbose [<val>] output more verbose error messages"
@@ -58,12 +58,12 @@ do
             print_help
             exit 0
         ;;
-        -p|--path)
+        -p|--prefix)
             PREFIX_PATH=${2?"Usage: $0 -p <PREFIX_PATH>"}
             shift # past argument
         ;;
-        -r|--rootpath)
-            ROOT_PATH=${2?"Usage: $0 -r <ROOT_PATH>"}
+        -w|--workspace)
+            WORKSPACE=${2?"Usage: $0 -r <WORKSPACE>"}
             shift # past argument
         ;;
         *)
@@ -81,7 +81,7 @@ if [ "$PREFIX_PATH" = "" ]; then
   exit 1
 fi
 
-if [ "$ROOT_PATH" = "" ]; then
+if [ "$WORKSPACE" = "" ]; then
   print_help
   exit 1
 fi
@@ -90,17 +90,14 @@ fi
 
 # get the prefix path
 prefix=$(cd $PREFIX_PATH && pwd)
-TARGET_PATH=$(cd $ROOT_PATH && pwd)
-
-echo "$prefix"
-echo "$TARGET_PATH"
+TARGET_PATH=$prefix/target
 
 python=$(which python)
 python_lib=/usr/lib/x86_64-linux-gnu/libpython2.7.so
 python_inc=/usr/include/python2.7
 python2_inc=/usr/include/x86_64-linux-gnu/python2.7
 
-cd $prefix
+cd $WORKSPACE
 
 echo
 echo -e '\e[34mRunning catkin build.\e[39m'
@@ -114,7 +111,7 @@ catkin config \
   --cmake-args \
     -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-    -DCMAKE_FIND_ROOT_PATH=$(cd $TARGET_PATH/.. && pwd) \
+    -DCMAKE_FIND_ROOT_PATH=$prefix \
     -DANDROID_ABI=${ANDROID_ABI} -DANDROID_PLATFORM=${ANDROID_PLATFORM} -DANDROID_STL=${ANDROID_STL} \
     -DPYTHON_EXECUTABLE=$python -DPYTHON_LIBRARY=$python_lib \
     -DPYTHON_INCLUDE_DIR=$python_inc -DPYTHON_INCLUDE_DIR2=$python2_inc \

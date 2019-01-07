@@ -729,3 +729,7 @@
 #     local-name: xacro
 #     uri: https://github.com/ros-gbp/xacro-release/archive/release/kinetic/xacro/1.11.3-0.tar.gz
 #     version: xacro-release-release-kinetic-xacro-1.11.3-0
+- git:
+    local-name: rosjava/rosjava_build_tools
+    uri: https://github.com/rosjava/rosjava_build_tools
+    version: kinetic
