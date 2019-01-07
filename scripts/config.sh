@@ -30,4 +30,4 @@ export PARALLEL_JOBS=$(nproc)
 export OUTPUT_DIR=$1
 export TARGET_DIR=$OUTPUT_DIR/target
 export LIBS_DIR=$OUTPUT_DIR/libs
-export SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
+export SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

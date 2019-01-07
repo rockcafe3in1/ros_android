@@ -61,8 +61,8 @@ if [[ $help -eq 1 ]] ; then
     exit 1
 fi
 
-source $my_loc/config.sh $prefix
-source $my_loc/utils.sh
+source $my_loc/scripts/config.sh $prefix
+source $SCRIPT_DIR/utils.sh
 
 if [[ $skip -eq 1 ]]; then
    echo "-- Skiping projects update"
@@ -79,7 +79,7 @@ fi
 run_cmd() {
     cmd=$1.sh
     shift
-    $my_loc/$cmd $@ || die "$cmd $@ died with error code $?"
+    $SCRIPT_DIR/$cmd $@ || die "$cmd $@ died with error code $?"
 }
 
 if [ -z $ANDROID_NDK_HOME ] ; then

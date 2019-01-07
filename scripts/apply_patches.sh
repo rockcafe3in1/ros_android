@@ -12,14 +12,14 @@ set -e
 
 source $SCRIPT_DIR/utils.sh
 
-if [ $# < 1 ] || [ $# > 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
+if [ $# -lt 1 ] || [ $# -gt 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
     echo "Usage: $0 patch_prefix [output_prefix] # Will use OUTPUT_DIR environment variable as default"
     echo "  example: $0 /home/user/ros_android/patches [/home/user/ros_android/output]"
     exit 1
 fi
 
 patch_prefix=$1
-output_prefix={$2:-$OUTPUT_DIR}
+output_prefix=${2:-"$OUTPUT_DIR"}
 
 [ "$output_prefix" = "" ] && die 'Output prefix not set. Please set OUTPUT_DIR environment variable.'
 
