@@ -45,8 +45,10 @@ do
             help=1
         fi
         shift
-    elif [[ ${var} == "--samples" ]] ; then
+    elif [[ $1 == "--samples" ]] ; then
         samples=1
+    elif [[ $1 == "--verbose" ]] ; then
+        verbose=1
     elif [[ ! -z prefix ]]; then
         if [ ! -d $1 ]; then
             mkdir -p $1
@@ -65,6 +67,8 @@ if [[ $help -eq 1 ]] ; then
     echo "Usage: $0 prefix_path [-h | --help] [--skip] [--debug-symbols] [--extends-workspace path]"
     echo "  example: $0 /home/user/my_workspace"
     echo " --extends-workspace path: Pluginlib will also search in this path for plugins."
+    echo " --samples: Path specified by --extends-workspace will be built as a catkin_ws."
+    echo " --verbose: Indicates more verbose output. Useful for debugging."
     exit 1
 fi
 
@@ -378,31 +382,20 @@ echo
 
 if [[ $debugging -eq 1 ]];then
     echo "Build type = DEBUG"
-    run_cmd build_cpp -p $prefix -b Debug -v $verbose
+    run_cmd build_cpp -p $prefix/catkin_ws -r $TARGET_DIR -b Debug -v $verbose
 else
     echo "Build type = RELEASE"
-    run_cmd build_cpp -p $prefix -b Release -v $verbose
+    run_cmd build_cpp -p $prefix/catkin_ws -r $TARGET_DIR -b Release -v $verbose
 fi
 
-if [[ $samples -eq 1 ]];then
+if [[ $samples -eq 1 && "$user_workspace" != "" ]];then
     echo
     echo -e '\e[34mBuilding sample apps.\e[39m'
     echo
 
-    build_sample() {
-        cd $2
-
-        echo "Building $1"
-
-        # TODO(ivanpauno): Add release apk option
-        ./gradlew assembleDebug
-
-        mkdir -p $prefix/target/apks/$1
-
-        echo "Copying generated apks inside $prefix/target/apks/$1"
-        find . -type f -name "*.apk" -exec cp {} $prefix/target/apks/$1 \;
-        cd $my_loc
-    }
-
-    [ -d $prefix/target/apks/hello_world ] || build_sample hello_world $my_loc/files/hello_world_example_app
+    if [[ $debugging -eq 1 ]];then
+        run_cmd build_cpp -p $user_workspace -r $TARGET_DIR -b Debug -v $verbose
+    else
+        run_cmd build_cpp -p $user_workspace -r $TARGET_DIR -b Release -v $verbose
+    fi
 fi
