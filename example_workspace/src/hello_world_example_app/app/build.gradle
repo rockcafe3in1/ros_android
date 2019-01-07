@@ -10,8 +10,9 @@ android {
         externalNativeBuild {
             cmake {
                 arguments   '-DANDROID_STL=c++_shared',
-                            '-DCMAKE_INSTALL_PREFIX=' + System.getenv('CMAKE_PREFIX_PATH'),
-                            '-DCMAKE_FIND_ROOT_PATH=' + System.getenv('CMAKE_PREFIX_PATH'),
+                            '-DCMAKE_INSTALL_PREFIX=' + System.getenv('TARGET_DIR'),
+                            '-DCMAKE_FIND_ROOT_PATH=' + System.getenv('TARGET_DIR'),
+                            '-DCMAKE_PREFIX_PATH=' + System.getenv('TARGET_DIR'),
                             '-DBUILD_TESTING=OFF',
                             '-DCATKIN_ENABLE_TESTING=OFF'
             }
