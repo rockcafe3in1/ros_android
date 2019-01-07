@@ -1,6 +1,6 @@
 --- catkin_ws/src/ros_comm/rosconsole/CMakeLists.txt
 +++ catkin_ws/src/ros_comm/rosconsole/CMakeLists.txt
-@@ -10,9 +10,10 @@
+@@ -10,9 +10,10 @@ find_package(catkin REQUIRED COMPONENTS cpp_common rostime rosunit)
  find_package(Boost COMPONENTS regex system thread)
  
  # select rosconsole backend
@@ -12,7 +12,7 @@
  if(ROSCONSOLE_BACKEND STREQUAL "" OR ROSCONSOLE_BACKEND STREQUAL "log4cxx")
    find_package(Log4cxx QUIET)
    if(NOT LOG4CXX_LIBRARIES)
-@@ -27,9 +28,22 @@
+@@ -27,9 +28,22 @@ if(ROSCONSOLE_BACKEND STREQUAL "" OR ROSCONSOLE_BACKEND STREQUAL "log4cxx")
      message(FATAL_ERROR "Couldn't find log4cxx library")
    endif()
  endif()
@@ -37,7 +37,7 @@
    if(GLOG_FOUND)
      list(APPEND rosconsole_backend_INCLUDE_DIRS ${GLOG_INCLUDE_DIRS})
      list(APPEND rosconsole_backend_LIBRARIES rosconsole_glog rosconsole_backend_interface ${GLOG_LIBRARIES})
-@@ -85,6 +99,9 @@
+@@ -85,6 +99,9 @@ elseif(ROSCONSOLE_BACKEND STREQUAL "glog")
  elseif(ROSCONSOLE_BACKEND STREQUAL "print")
    add_library(rosconsole_print src/rosconsole/impl/rosconsole_print.cpp)
    target_link_libraries(rosconsole_print rosconsole_backend_interface)
@@ -50,7 +50,7 @@
 
 --- /dev/null
 +++ catkin_ws/src/ros_comm/rosconsole/src/rosconsole/impl/rosconsole_android.cpp
-@@ -0,0 +1,128 @@
+@@ -0,0 +1,125 @@
 +#include "ros/console.h"
 +
 +#include <android/log.h>
@@ -78,37 +78,34 @@
 +  }
 +
 +  android_LogPriority android_log_level;
-+  if(level == ::ros::console::levels::Info)
-+  {
-+    android_log_level = ANDROID_LOG_INFO;
-+  }
-+  else if(level == ::ros::console::levels::Warn)
-+  {
-+    android_log_level = ANDROID_LOG_WARN;
-+  }
-+  else if(level == ::ros::console::levels::Error)
-+  {
-+    android_log_level = ANDROID_LOG_ERROR;
-+  }
-+  else if(level == ::ros::console::levels::Fatal)
-+  {
-+    android_log_level = ANDROID_LOG_FATAL;
-+  }
-+  else if (level == ::ros::console::levels::Debug)
-+  {
-+    android_log_level = ANDROID_LOG_DEBUG;
-+  }
-+  else
-+  {
-+    // ignore debug
-+    return;
++
++  switch (level) {
++    case ::ros::console::levels::Info:
++      android_log_level = ANDROID_LOG_INFO;
++      break;
++    case ::ros::console::levels::Warn:
++      android_log_level = ANDROID_LOG_WARN;
++      break;
++    case ::ros::console::levels::Error:
++      android_log_level = ANDROID_LOG_ERROR;
++      break;
++    case ::ros::console::levels::Fatal:
++      android_log_level = ANDROID_LOG_FATAL;
++      break;
++    case ::ros::console::levels::Debug:
++      android_log_level = ANDROID_LOG_DEBUG;
++      break;
++    default:
++      return;
 +  }
 +
 +  std::string name = getName(handle);
 +
 +  std::stringstream ss;
-+  ss << name << ": in file:" << file << ":" << line;
-+  __android_log_print(android_log_level, ss.str().c_str(), "%s", str);
++  ss << ": " << str;
++  // Note(ivanpauno): If file and line number are wanted, replace with
++  // ss << ", in file \'" << file << "\', line \'" << line << "\': " << str;
++  __android_log_print(android_log_level, name.c_str(), "%s", ss.str().c_str());
 +}
 +
 +bool isEnabledFor(void* handle, ::ros::console::Level level)
