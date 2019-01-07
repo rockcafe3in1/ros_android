@@ -1,5 +1,5 @@
---- libs/pcl-pcl-1.8.1/CMakeLists.txt
-+++ libs/pcl-pcl-1.8.1/CMakeLists.txt
+--- libs/pcl/CMakeLists.txt
++++ libs/pcl/CMakeLists.txt
 @@ -1,6 +1,8 @@
  ### ---[ PCL global CMake
  cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
@@ -13,7 +13,7 @@ diff --git a/android_pcl_config_minimal.cmake b/android_pcl_config_minimal.cmake
 new file mode 100644
 index 0000000..be84634
 --- /dev/null
-+++ libs/pcl-pcl-1.8.1/android_pcl_config_minimal.cmake
++++ libs/pcl/android_pcl_config_minimal.cmake
 @@ -0,0 +1,15 @@
 +set(WITH_FZAPI FALSE CACHE BOOL "fzapi: disabled (forced)" FORCE)
 +set(WITH_LIBUSB FALSE CACHE BOOL "libusb: disabled (forced)" FORCE)
@@ -31,8 +31,8 @@ index 0000000..be84634
 +set(HAVE_MM_MALLOC_EXITCODE "2" CACHE STRING "Result from TRY_RUN for HAVE_MM_MALLOC" FORCE)
 +set(HAVE_POSIX_MEMALIGN_EXITCODE "2" CACHE STRING "Result from TRY_RUN for HAVE_POSIX_MEMALIGN" FORCE)
 +
---- libs/pcl-pcl-1.8.1/PCLConfig.cmake.in
-+++ libs/pcl-pcl-1.8.1/PCLConfig.cmake.in
+--- libs/pcl/PCLConfig.cmake.in
++++ libs/pcl/PCLConfig.cmake.in
 @@ -853,8 +853,9 @@
        set(PCL_${COMPONENT}_LIBRARY ${PCL_${COMPONENT}_LIBRARY_DEBUG})
      endif(NOT PCL_${COMPONENT}_LIBRARY AND WIN32)
@@ -52,8 +52,8 @@ index 0000000..be84634
          endif(PCL_${INT_DEP}_LIBRARIES) 
        endif(PCL_${INT_DEP}_FOUND)
      endforeach(int_dep)
---- libs/pcl-pcl-1.8.1/cmake/pcl_pclconfig.cmake
-+++ libs/pcl-pcl-1.8.1/cmake/pcl_pclconfig.cmake
+--- libs/pcl/cmake/pcl_pclconfig.cmake
++++ libs/pcl/cmake/pcl_pclconfig.cmake
 @@ -61,6 +61,13 @@
      endif(_status)
  endforeach(_ss)
