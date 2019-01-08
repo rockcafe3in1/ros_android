@@ -3,7 +3,7 @@
 set -e
 
 my_loc="$(cd "$(dirname $0)" && pwd)"
-source $SCRIPT_DIR/utils.sh
+source scripts/utils.sh
 
 $my_loc/docker/build.sh
-$my_loc/docker/run.sh $my_loc/install.sh $my_loc/output
+$my_loc/docker/run.sh /opt/ros_android/install.sh /opt/ros_android/output
