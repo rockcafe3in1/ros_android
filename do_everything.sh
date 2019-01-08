@@ -297,6 +297,9 @@ if [[ $skip -ne 1 ]] ; then
     # Patch urdf - Fixed linking with pluginlib and dependencies in downstream packages
     apply_patch $my_loc/patches/urdf.patch
 
+    # Patch move_base - Solved transitive linking problems
+    apply_patch $my_loc/patches/move_base.patch
+
     # Patch global_planner - Add angles dependency
     # TODO: PR merged: https://github.com/ros-planning/navigation/pull/359
     # Wait for next release to remove (current 1.12.4)
