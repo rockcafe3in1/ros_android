@@ -41,10 +41,27 @@ add_library(${PROJECT_NAME} SHARED
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${ANDROID_NDK}/sources/android/native_app_glue)
 
+# This is to be sure that the symbols of this libraries aren't dropped
+# Also, put them in catkin find_package, in order to solve transitive dependencies without problems.
+SET (WHOLE_ARCHIVE_LIBRARIES
+     -Wl,--whole-archive
+     $ENV{TARGET_DIR}/lib/liblayers.a
+     $ENV{TARGET_DIR}/lib/libdwa_local_planner.a
+     $ENV{TARGET_DIR}/lib/libclear_costmap_recovery.a
+     $ENV{TARGET_DIR}/lib/librotate_recovery.a
+     $ENV{TARGET_DIR}/lib/libglobal_planner.a
+     $ENV{TARGET_DIR}/lib/libnavfn.a
+     $ENV{TARGET_DIR}/lib/libtrajectory_planner_ros.a
+     $ENV{TARGET_DIR}/lib/libcarrot_planner.a
+     $ENV{TARGET_DIR}/lib/libmove_slow_and_clear.a
+     -Wl,--no-whole-archive
+)
+
 # add lib dependencies
 target_link_libraries(${PROJECT_NAME}
     android
     native_app_glue
-    ${catkin_LIBRARIES}
     log
+    ${WHOLE_ARCHIVE_LIBRARIES}
+    ${catkin_LIBRARIES}
 )
