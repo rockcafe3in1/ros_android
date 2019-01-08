@@ -15,8 +15,9 @@
 #
 
 cmake_minimum_required(VERSION 3.4.1)
+project(nodelet_example)
 
-find_package(catkin REQUIRED COMPONENTS roscpp std_msgs rosconsole)
+find_package(catkin REQUIRED COMPONENTS roscpp std_msgs rosconsole nodelet_tutorial_math)
 
 include_directories(${catkin_INCLUDE_DIRS})
 
@@ -33,10 +34,21 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Werror")
 set(CMAKE_SHARED_LINKER_FLAGS
     "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate")
 
-add_library(native-activity SHARED main.cpp)
+add_library(native-activity SHARED 
+    src/main/cpp/ifaddrs.c
+    src/main/cpp/test_nodelet.cpp
+)
 
 target_include_directories(native-activity PRIVATE
     ${ANDROID_NDK}/sources/android/native_app_glue)
+
+# This is to be sure that the symbols of this libraries aren't dropped
+# Also, put them in catkin find_package, in order to solve transitive dependencies without problems.
+SET (WHOLE_ARCHIVE_LIBRARIES
+     -Wl,--whole-archive
+     $ENV{TARGET_DIR}/lib/libnodelet_math.a
+     -Wl,--no-whole-archive
+)
 
 # add lib dependencies
 target_link_libraries(native-activity
@@ -44,4 +56,5 @@ target_link_libraries(native-activity
     native_app_glue
     ${catkin_LIBRARIES}
     log
+    ${WHOLE_ARCHIVE_LIBRARIES}
 )

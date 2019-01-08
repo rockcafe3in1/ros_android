@@ -733,3 +733,7 @@
     local-name: rosjava/rosjava_build_tools
     uri: https://github.com/rosjava/rosjava_build_tools
     version: kinetic
+- tar:
+    local-name: common_tutorials/nodelet_tutorial_math
+    uri: https://github.com/ros-gbp/common_tutorials-release/archive/release/indigo/nodelet_tutorial_math/0.1.8-0.tar.gz
+    version: common_tutorials-release-release-indigo-nodelet_tutorial_math-0.1.8-0

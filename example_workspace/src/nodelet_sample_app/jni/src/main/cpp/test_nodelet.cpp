@@ -9,10 +9,10 @@
  **/
 
 #ifndef ROS_MASTER_URI
-#error ROS_MASTER_URI MUST be set in files/nodelet_sample_app/jni/Android.mk.in
+#define ROS_MASTER_URI "__master:=http://10.34.0.120:11311"
 #endif
 #ifndef ROS_ANDROID_IP
-#error ROS_ANDROID_IP MUST be set in files/nodelet_sample_app/jni/Android.mk.in
+#define ROS_ANDROID_IP "__ip:=10.34.0.121"
 #endif
 
 #include "ros/ros.h"
@@ -28,44 +28,44 @@
 
 #define  LOG_TAG    "NODELET_TEST"
 
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, ##__VA_ARGS__)
+#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, ##__VA_ARGS__)
 
 bool getHostIp(const char *interface, char *ipaddr);
 
-int main()
+void android_main(android_app *state)
 {    
     bool res;
     std::map<std::string, std::string> remappings;
     std::vector<std::string> nodelet_argv;
     char strbuf[128];
     char ipAddr[20];
-    char *argv[] = {"cmd", ROS_MASTER_URI, ROS_ANDROID_IP};
+    const char *argv[] = {"cmd", ROS_MASTER_URI, ROS_ANDROID_IP};
     int argc = 3;
     
     // Dynamically obtain the IP of the host we are running in.
     if (!getHostIp("wlan0", ipAddr))
     {
         LOGD("Failed to get IP address for this interface!");
-        return 1;
+        return;
     }
     sprintf(strbuf, "__ip:=%s", ipAddr);
     argv[2] = strbuf;
 
     LOGD("Starting program...");
     
-    ros::init(argc, argv, "simple_nodelet_loader");
+    ros::init(argc, const_cast<char**>(&argv[0]), "simple_nodelet_loader");
 
     std::string master_uri = ros::master::getURI();
 
     if (ros::master::check())
     {
         LOGD("ROS master is up at %s", master_uri.c_str());
-        LOGD("Local address is %s", ipAddr, ipAddr);
+        LOGD("Local address is %s", ipAddr);
     } else
     {
         LOGD("Failed to find ROS master!");
-        return 1;
+        return;
     }    
     
     ros::NodeHandle nh;
@@ -80,27 +80,44 @@ int main()
     if (!res)
     {
         LOGD("Problem loading nodelet!");
-        return 1;
+        return;
     }
 
     ros::Rate loop_rate(10);
     
     LOGD("Starting ROS main loop...");
     
-    while (ros::ok())
-    {
+    while(1) {
+        int events;
+        struct android_poll_source* source;
+
+        // Poll android events, without locking
+        while (ALooper_pollAll(0, NULL, &events, (void**)&source) >= 0) {
+            // Process this event
+            if (source != NULL) {
+                source->process(state, source);
+            }
+
+            // Check if we are exiting.
+            if (state->destroyRequested != 0) {
+                ROS_INFO("APP DESTROYED BYE BYE");
+                return;
+            }
+        }
+
         ros::spinOnce();
+
+        if (!ros::ok()) {
+            ROS_INFO("ROS ISN'T OK, BYE BYE");
+            return;
+        }
+
         loop_rate.sleep();
     }
 
     LOGD("Program ending...");
     
-    return 0;
-}
-
-void android_main(struct android_app* state) {
-  app_dummy(); // needed so the Android glue does not get stripped off
-  main();
+    return;
 }
 
 // Get the current host IP address on the specified interface.
