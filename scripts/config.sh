@@ -17,10 +17,6 @@ export ANDROID_PLATFORM=android-24
 #CMAKE_BUILD_TYPE=Debug
 export CMAKE_BUILD_TYPE=Release
 
-# Enable this if you need to use pluginlib in Android.
-# The plugins will be statically linked
-export USE_PLUGINLIB=1
-
 # Define the number of simultaneous jobs to trigger for the different
 # tasks that allow it. Use the number of available processors in the
 # system.

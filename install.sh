@@ -96,8 +96,7 @@ mkdir -p $LIBS_DIR
 
 [ -d $TARGET_DIR ] || mkdir -p $TARGET_DIR
 
-export RBA_TOOLCHAIN=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake
-apply_patch $my_loc/patches/android.toolchain.cmake.patch -d $ANDROID_NDK_HOME/build/cmake
+export RBA_TOOLCHAIN=$my_loc/android.toolchain.cmake
 
 # Get all library dependencies.
 run_cmd get_system_dependencies $my_loc/system_deps.rosinstall $LIBS_DIR $my_loc/files
@@ -109,34 +108,32 @@ echo
 if [[ $skip -ne 1 ]] ; then
     run_cmd get_catkin_packages $my_loc/ros.rosinstall $prefix
 
-    run_cmd apply_patches $my_loc/patches/source_patches
+    run_cmd apply_patches $my_loc/patches $prefix
 fi
 
 # Before build
 # Search packages that depend on pluginlib and generate plugin loader.
-if [ $USE_PLUGINLIB -ne 0 ]; then
-    echo
-    echo -e '\e[34mBuilding pluginlib support...\e[39m'
-    echo
+echo
+echo -e '\e[34mBuilding pluginlib support...\e[39m'
+echo
 
-    pluginlib_helper_file=pluginlib_helper.cpp
-    $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src $user_workspace -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
-    cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
-    line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
-    # temporally turn off error detection
-    set +e
-    grep "$line" $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-    # if line is not already added, then add it to the pluginlib cmake
-    if [ $? -ne 0 ]; then
-        # backup the file
-        cp $prefix/catkin_ws/src/pluginlib/CMakeLists.txt $prefix/catkin_ws/src/pluginlib/CMakeLists.txt.bak
-        sed -i '/INCLUDE_DIRS include/a LIBRARIES ${PROJECT_NAME}' $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-        echo -e "\n"$line >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-        echo 'install(TARGETS pluginlib RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})' >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
-    fi
-    # turn error detection back on
-    set -e
+pluginlib_helper_file=pluginlib_helper.cpp
+$my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src $user_workspace -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
+cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
+line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
+# temporally turn off error detection
+set +e
+grep "$line" $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+# if line is not already added, then add it to the pluginlib cmake
+if [ $? -ne 0 ]; then
+    # backup the file
+    cp $prefix/catkin_ws/src/pluginlib/CMakeLists.txt $prefix/catkin_ws/src/pluginlib/CMakeLists.txt.bak
+    sed -i '/INCLUDE_DIRS include/a LIBRARIES ${PROJECT_NAME}' $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+    echo -e "\n"$line >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
+    echo 'install(TARGETS pluginlib RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})' >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
 fi
+# turn error detection back on
+set -e
 
 echo
 echo -e '\e[34mBuilding library dependencies.\e[39m'
