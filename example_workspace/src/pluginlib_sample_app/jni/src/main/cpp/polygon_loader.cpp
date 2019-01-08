@@ -49,15 +49,7 @@
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
-int main();
-
 void android_main(struct android_app* state) {
-  app_dummy(); // needed so the Android glue does not get stripped off
-  main();
-}
-
-int main()
-{
   LOGD("Starting app.");
   pluginlib::ClassLoader<polygon_base::RegularPolygon> poly_loader("pluginlib_tutorials", "polygon_base::RegularPolygon");
 
@@ -89,5 +81,24 @@ int main()
     LOGD("The plugin failed to load for some reason. Error: %s", ex.what());
   }
 
-  return 0;
+  while(1) {
+    int events;
+    struct android_poll_source* source;
+
+    // Poll android events, without locking
+    while (ALooper_pollAll(0, NULL, &events, (void**)&source) >= 0) {
+        // Process this event
+        if (source != NULL) {
+            source->process(state, source);
+        }
+
+        // Check if we are exiting.
+        if (state->destroyRequested != 0) {
+            LOGD("APP DESTROYED BYE BYE");
+            return;
+        }
+    }
+  }
+
+  return;
 }
