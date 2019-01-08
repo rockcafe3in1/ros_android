@@ -38,6 +38,6 @@ on Android without modifications (e.g. `pluginlib`).
 The following steps should serve as a guide when adding new packages or dependencies:
 
 - Add the package to `ros.rosinstall` or `system_deps.rosinstall`; use existing packages as an example.
-- Add a patch if necessary to `patches/source_patches` directory.
+- Add a patch if necessary to `patches` directory.
 - If it's a system dependency, add a build rule to `install.sh`. According to the library, it may be necessary to use `build_library` script or adding a special rule to `build_library_with_toolchain`.
 - That's it! Test your build and watch out build errors. Using `verbose` flags when building should help finding hints about the problems that may arise.
