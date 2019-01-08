@@ -101,8 +101,7 @@ mkdir -p $prefix/libs
 export TARGET_DIR=$prefix/target
 [ -d $TARGET_DIR ] || mkdir -p $TARGET_DIR
 
-export RBA_TOOLCHAIN=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake
-apply_patch $my_loc/patches/android.toolchain.cmake.patch -d $ANDROID_NDK_HOME/build/cmake
+export RBA_TOOLCHAIN=$my_loc/android.toolchain.cmake
 
 # Get all library dependencies.
 run_cmd get_system_dependencies $my_loc/system_deps.rosinstall $prefix/libs $my_loc/files
@@ -114,7 +113,7 @@ echo
 if [[ $skip -ne 1 ]] ; then
     run_cmd get_catkin_packages $prefix
 
-    run_cmd apply_patches $my_loc/patches/source_patches $prefix
+    run_cmd apply_patches $my_loc/patches $prefix
 fi
 
 # Before build
