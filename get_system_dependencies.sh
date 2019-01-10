@@ -40,4 +40,4 @@ pushd $lib_prefix/boost
 popd
 
 # Rospkg
-cp -r $lib_prefix/rospkg $files_prefix
+cp -rn $lib_prefix/rospkg $files_prefix
