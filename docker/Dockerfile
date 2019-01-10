@@ -23,14 +23,8 @@ RUN apt-get update && apt-get install -y openjdk-8-jdk
 RUN wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
 RUN unzip sdk-tools-linux-4333796.zip -d /opt/android/sdk
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2" "platform-tools" "platforms;android-26" --sdk_root=/opt/android/sdk
-ENV PATH /opt/android/sdk/tools:/opt/android/sdk/platform-tools:$PATH
-
-# Install CMake 3.6
-WORKDIR /opt
-RUN wget https://cmake.org/files/v3.6/cmake-3.6.3-Linux-x86_64.sh && chmod +x cmake-3.6.3-Linux-x86_64.sh
-RUN yes | sh '/opt/cmake-3.6.3-Linux-x86_64.sh'
-RUN ln -s /opt/cmake-3.6.3-Linux-x86_64/bin/* -t /usr/local/bin
+RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2" "platform-tools" "platforms;android-26" "cmake;3.6.4111459" --sdk_root=/opt/android/sdk
+ENV PATH /opt/android/sdk/tools:/opt/android/sdk/platform-tools:/opt/android/sdk/cmake/3.6.4111459/bin:$PATH
 
 # Install Python libraries
 RUN apt-get install python-lxml -y
