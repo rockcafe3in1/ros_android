@@ -40,3 +40,7 @@ ENV PATH /usr/lib/ccache:$PATH
 
 # Clear entrypoint (do not source /opt/ros/kinetic)
 ENTRYPOINT []
+
+VOLUME /opt/ros_android
+WORKDIR /opt/ros_android
+CMD ['bash']
