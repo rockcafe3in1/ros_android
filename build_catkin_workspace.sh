@@ -75,7 +75,7 @@ if [ "$PREFIX_PATH" = "" ]; then
   print_help
   exit 1
 fi
-: ${RBA_TOOLCHAIN:=$ANDROID_NDK/build/cmake/android.toolchain.cmake}
+: ${RBA_TOOLCHAIN:=$my_loc/android.toolchain.cmake}
 
 # get the prefix path
 prefix=$(cd $PREFIX_PATH && pwd)
