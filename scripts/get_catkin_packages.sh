@@ -4,6 +4,7 @@
 # 
 # Required environment variables:
 # - SCRIPT_DIR: where utility scripts are located.
+
 # Abort script on any failures
 set -e
 

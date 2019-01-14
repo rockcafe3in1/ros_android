@@ -4,7 +4,7 @@
 #
 # Required environment variables:
 # - SCRIPT_DIR: where utility scripts are located.
-# - $TARGET_DIR: where to copy boost files.
+# - TARGET_DIR: where to copy boost files.
 
 # Abort script on any failures
 set -e

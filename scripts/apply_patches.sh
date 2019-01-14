@@ -5,7 +5,7 @@
 #
 # Required environment variables:
 # - SCRIPT_DIR: where utility scripts are located.
-# - $OUTPUT_DIR: default output directory if positional argument is not set.
+# - OUTPUT_DIR: default output directory if positional argument is not set.
 
 # Abort script on any failures
 set -e
