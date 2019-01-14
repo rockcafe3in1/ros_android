@@ -81,7 +81,7 @@ if [ "$OUTPUT_PREFIX" = "" ]; then
     OUTPUT_PREFIX=$OUTPUT_DIR
   fi
 fi
-: ${RBA_TOOLCHAIN:=$ANDROID_NDK/build/cmake/android.toolchain.cmake}
+: ${RBA_TOOLCHAIN:=$my_loc/android.toolchain.cmake}
 
 # get the prefix path
 prefix=$(cd $OUTPUT_PREFIX && pwd)
