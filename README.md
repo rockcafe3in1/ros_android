@@ -1,12 +1,16 @@
 # ROS for Android
 
 These scripts will help you build static libraries
-for ROS kinetic for android and setup a sample application.
+for ROS kinetic for android and setup sample applications.
 
-You will need android SDK installed and the 'android' program
-location in the $PATH.
+## Quick installation with Docker
 
-## Installation
+Simply run `dockerized_install.sh` script. It will setup a Docker image, download packages and system dependencies, and cross compile everything using Catkin.
+The result workspace with the code and the compiled libraries will be placed in `/path/to/ros_android/output`.
+
+You can use the sample applications as a guide to build an Android app on top of the cross compiled libraries using Catkin, Gradle and CMake.
+
+## Installation - under the hood
 
 Build docker image and run it:
     
@@ -18,7 +22,7 @@ sequentially, you just have to give it a prefix path:
 
     ./install.sh /path/to/workspace
 
-## Building app samples
+### Building app samples
 
 If you also want to build the samples, use:
 

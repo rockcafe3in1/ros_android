@@ -38,7 +38,7 @@ do
             help=1
         fi
         shift
-    elif [[ ${var} == "--samples" ]] ; then
+    elif [[ $1 == "--samples" ]] ; then
         samples=1
     elif [[ ! -z prefix ]]; then
         if [ ! -d $1 ]; then
