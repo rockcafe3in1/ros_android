@@ -3,8 +3,9 @@
 # See help for required arguments. 
 #
 # Required environment variables:
+# - BASE_DIR: where android.toolchain.cmake is located.
 # - SCRIPT_DIR: where utility scripts are located.
-# - $OUTPUT_DIR: default output directory if path argument is not set.
+# - OUTPUT_DIR: default output directory if path argument is not set.
 
 # print a help screen
 function print_help {
@@ -81,7 +82,7 @@ if [ "$OUTPUT_PREFIX" = "" ]; then
     OUTPUT_PREFIX=$OUTPUT_DIR
   fi
 fi
-: ${RBA_TOOLCHAIN:=$my_loc/android.toolchain.cmake}
+: ${RBA_TOOLCHAIN:=$BASE_DIR/android.toolchain.cmake}
 
 # get the prefix path
 prefix=$(cd $OUTPUT_PREFIX && pwd)
