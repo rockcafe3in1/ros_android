@@ -1,0 +1,18 @@
+--- catkin_ws/src/geometry2/tf2_py/CMakeLists.txt
++++ catkin_ws/src/geometry2/tf2_py/CMakeLists.txt
+@@ -1,6 +1,7 @@
+ cmake_minimum_required(VERSION 2.8.3)
+ project(tf2_py)
+ 
++if(NOT ANDROID)
+ ## Find catkin macros and libraries
+ ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
+ ## is used, also find other catkin packages
+@@ -155,3 +156,7 @@ install(FILES ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_PYTHON_DESTINATION}/_tf2.s
+ 
+ ## Add folders to be run by python nosetests
+ # catkin_add_nosetests(test)
++
++else()
++install(FILES package.xml DESTINATION share/tf2_py) # Dummy install
++endif()
