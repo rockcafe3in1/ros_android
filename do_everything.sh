@@ -137,6 +137,9 @@ if [ $? -ne 0 ]; then
     echo -e "\n"$line >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
     echo 'install(TARGETS pluginlib RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})' >> $prefix/catkin_ws/src/pluginlib/CMakeLists.txt
 fi
+# Ignore packages that are just needed to build pluginlib support, but are just python packages with C bindings that won't build.
+touch $prefix/catkin_ws/src/geometry2/tf2_py/CATKIN_IGNORE
+touch $prefix/catkin_ws/src/orocos_kinematics_dynamics/python_orocos_kdl/CATKIN_IGNORE
 # turn error detection back on
 set -e
 
