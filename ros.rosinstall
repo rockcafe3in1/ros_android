@@ -198,7 +198,7 @@
 - tar:
     local-name: geometry2/tf2
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2/0.5.18-0.tar.gz
-    version: geometry2-release-release-kinetic-tf2-0.5.18-0
+    version: geometry2-release-release-kinetic-tf2
 - tar:
     local-name: geometry2/tf2_eigen
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_eigen/0.5.18-0.tar.gz
