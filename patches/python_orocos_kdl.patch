@@ -1,0 +1,27 @@
+--- catkin_ws/src/orocos_kinematics_dynamics/python_orocos_kdl/CMakeLists.txt
++++ catkin_ws/src/orocos_kinematics_dynamics/python_orocos_kdl/CMakeLists.txt
+@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 2.4.6)
+ 
+ project(python_orocos_kdl)
+ 
++# Skip package if building for Android
++if(ANDROID)
++  find_package(catkin REQUIRED)
++  catkin_package()
++  return()
++endif()
++
+ find_package(orocos_kdl)
+ include_directories(${orocos_kdl_INCLUDE_DIRS})
+ link_directories(${orocos_kdl_LIBRARY_DIRS})
+
+--- catkin_ws/src/orocos_kinematics_dynamics/python_orocos_kdl/package.xml
++++ catkin_ws/src/orocos_kinematics_dynamics/python_orocos_kdl/package.xml
+@@ -10,6 +10,7 @@
+   <license>LGPL</license>
+ 
+   <buildtool_depend>cmake</buildtool_depend>
++  <buildtool_depend>catkin</buildtool_depend>
+ 
+   <build_depend>orocos_kdl</build_depend>
+   <build_depend>python-sip</build_depend>

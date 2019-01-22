@@ -22,11 +22,10 @@
     local-name: bond_core/bondcpp
     uri: https://github.com/ros-gbp/bond_core-release/archive/release/kinetic/bondcpp/1.8.3-0.tar.gz
     version: bond_core-release-release-kinetic-bondcpp-1.8.3-0
-# Python based package, not needed
-# - tar:
-#     local-name: bond_core/bondpy
-#     uri: https://github.com/ros-gbp/bond_core-release/archive/release/kinetic/bondpy/1.8.3-0.tar.gz
-#     version: bond_core-release-release-kinetic-bondpy-1.8.3-0
+- tar:
+    local-name: bond_core/bondpy
+    uri: https://github.com/ros-gbp/bond_core-release/archive/release/kinetic/bondpy/1.8.3-0.tar.gz
+    version: bond_core-release-release-kinetic-bondpy-1.8.3-0
 - tar:
     local-name: bond_core/smclib
     uri: https://github.com/ros-gbp/bond_core-release/archive/release/kinetic/smclib/1.8.3-0.tar.gz
@@ -199,7 +198,7 @@
 - tar:
     local-name: geometry2/tf2
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2/0.5.18-0.tar.gz
-    version: geometry2-release-release-kinetic-tf2-0.5.18-0
+    version: geometry2-release-release-kinetic-tf2
 - tar:
     local-name: geometry2/tf2_eigen
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_eigen/0.5.18-0.tar.gz
@@ -216,11 +215,10 @@
     local-name: geometry2/tf2_msgs
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_msgs/0.5.18-0.tar.gz
     version: geometry2-release-release-kinetic-tf2_msgs-0.5.18-0
-# Python based package, not needed
-# - tar:
-#     local-name: geometry2/tf2_py
-#     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_py/0.5.18-0.tar.gz
-#     version: geometry2-release-release-kinetic-tf2_py-0.5.18-0
+- tar:
+    local-name: geometry2/tf2_py
+    uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_py/0.5.18-0.tar.gz
+    version: geometry2-release-release-kinetic-tf2_py-0.5.18-0
 - tar:
     local-name: geometry2/tf2_ros
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/kinetic/tf2_ros/0.5.18-0.tar.gz
@@ -450,11 +448,10 @@
     local-name: orocos_kinematics_dynamics/orocos_kdl
     uri: https://github.com/smits/orocos-kdl-release/archive/release/kinetic/orocos_kdl/1.3.1-0.tar.gz
     version: orocos-kdl-release-release-kinetic-orocos_kdl-1.3.1-0
-# Python based package, not needed
-# - tar:
-#     local-name: orocos_kinematics_dynamics/python_orocos_kdl
-#     uri: https://github.com/smits/orocos-kdl-release/archive/release/kinetic/python_orocos_kdl/1.3.1-0.tar.gz
-#     version: orocos-kdl-release-release-kinetic-python_orocos_kdl-1.3.1-0
+- tar:
+    local-name: orocos_kinematics_dynamics/python_orocos_kdl
+    uri: https://github.com/smits/orocos-kdl-release/archive/release/kinetic/python_orocos_kdl/1.3.1-0.tar.gz
+    version: orocos-kdl-release-release-kinetic-python_orocos_kdl-1.3.1-0
 - tar:
     local-name: pcl_conversions
     uri: https://github.com/ros-gbp/pcl_conversions-release/archive/release/kinetic/pcl_conversions/0.2.1-0.tar.gz
@@ -475,11 +472,10 @@
     local-name: pluginlib
     uri: https://github.com/ros-gbp/pluginlib-release/archive/release/kinetic/pluginlib/1.11.3-0.tar.gz
     version: pluginlib-release-release-kinetic-pluginlib-1.11.3-0
-# Python based package, not needed
-# - tar:
-#     local-name: python_qt_binding
-#     uri: https://github.com/ros-gbp/python_qt_binding-release/archive/release/kinetic/python_qt_binding/0.3.4-0.tar.gz
-#     version: python_qt_binding-release-release-kinetic-python_qt_binding-0.3.4-0
+- tar:
+    local-name: python_qt_binding
+    uri: https://github.com/ros-gbp/python_qt_binding-release/archive/release/kinetic/python_qt_binding/0.3.4-0.tar.gz
+    version: python_qt_binding-release-release-kinetic-python_qt_binding-0.3.4-0
 - tar:
     local-name: random_numbers
     uri: https://github.com/ros-gbp/random_numbers-release/archive/release/kinetic/random_numbers/0.3.1-0.tar.gz
@@ -506,26 +502,23 @@
 #     local-name: ros/ros
 #     uri: https://github.com/ros-gbp/ros-release/archive/release/kinetic/ros/1.14.4-0.tar.gz
 #     version: ros-release-release-kinetic-ros-1.14.4-0
-# Only bash scripts, not needed.
-# - tar:
-#     local-name: ros/rosbash
-#     uri: https://github.com/ros-gbp/ros-release/archive/release/kinetic/rosbash/1.14.4-0.tar.gz
-#     version: ros-release-release-kinetic-rosbash-1.14.4-0
+- tar:
+    local-name: ros/rosbash
+    uri: https://github.com/ros-gbp/ros-release/archive/release/kinetic/rosbash/1.14.4-0.tar.gz
+    version: ros-release-release-kinetic-rosbash-1.14.4-0
 # Scripts only, not needed.
 # - tar:
 #     local-name: ros/rosboost_cfg
 #     uri: https://github.com/ros-gbp/ros-release/archive/release/kinetic/rosboost_cfg/1.14.4-0.tar.gz
 #     version: ros-release-release-kinetic-rosboost_cfg-1.14.4-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros/rosbuild
-#     uri: https://github.com/ros-gbp/ros-release/archive/release/kinetic/rosbuild/1.14.4-0.tar.gz
-#     version: ros-release-release-kinetic-rosbuild-1.14.4-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros/rosclean
-#     uri: https://github.com/ros-gbp/ros-release/archive/release/kinetic/rosclean/1.14.4-0.tar.gz
-#     version: ros-release-release-kinetic-rosclean-1.14.4-0
+- tar:
+    local-name: ros/rosbuild
+    uri: https://github.com/ros-gbp/ros-release/archive/release/kinetic/rosbuild/1.14.4-0.tar.gz
+    version: ros-release-release-kinetic-rosbuild-1.14.4-0
+- tar:
+    local-name: ros/rosclean
+    uri: https://github.com/ros-gbp/ros-release/archive/release/kinetic/rosclean/1.14.4-0.tar.gz
+    version: ros-release-release-kinetic-rosclean-1.14.4-0
 # Scripts only, not needed.
 # - tar:
 #     local-name: ros/roscreate
@@ -574,70 +567,58 @@
     local-name: ros_comm/roscpp
     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/roscpp/1.12.14-0.tar.gz
     version: ros_comm-release-release-kinetic-roscpp-1.12.14-0
-# Scripts only, needed by tf2_ros.
 - tar:
     local-name: ros_comm/rosgraph
     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosgraph/1.12.14-0.tar.gz
     version: ros_comm-release-release-kinetic-rosgraph-1.12.14-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros_comm/roslaunch
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/roslaunch/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-roslaunch-1.12.14-0
+- tar:
+    local-name: ros_comm/roslaunch
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/roslaunch/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-roslaunch-1.12.14-0
 - tar:
     local-name: ros_comm/roslz4
     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/roslz4/1.12.14-0.tar.gz
     version: ros_comm-release-release-kinetic-roslz4-1.12.14-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros_comm/rosmaster
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosmaster/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-rosmaster-1.12.14-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros_comm/rosmsg
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosmsg/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-rosmsg-1.12.14-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros_comm/rosnode
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosnode/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-rosnode-1.12.14-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros_comm/rosout
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosout/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-rosout-1.12.14-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros_comm/rosparam
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosparam/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-rosparam-1.12.14-0
-# Python package, but needed by diagnostics.
+- tar:
+    local-name: ros_comm/rosmaster
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosmaster/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-rosmaster-1.12.14-0
+- tar:
+    local-name: ros_comm/rosmsg
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosmsg/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-rosmsg-1.12.14-0
+- tar:
+    local-name: ros_comm/rosnode
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosnode/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-rosnode-1.12.14-0
+- tar:
+    local-name: ros_comm/rosout
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosout/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-rosout-1.12.14-0
+- tar:
+    local-name: ros_comm/rosparam
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosparam/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-rosparam-1.12.14-0
 - tar:
     local-name: ros_comm/rospy
     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rospy/1.12.14-0.tar.gz
     version: ros_comm-release-release-kinetic-rospy-1.12.14-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros_comm/rosservice
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosservice/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-rosservice-1.12.14-0
-# Scripts only, but needed by self_test.
+- tar:
+    local-name: ros_comm/rosservice
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rosservice/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-rosservice-1.12.14-0
 - tar:
     local-name: ros_comm/rostest
     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rostest/1.12.14-0.tar.gz
     version: ros_comm-release-release-kinetic-rostest-1.12.14-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros_comm/rostopic
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rostopic/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-rostopic-1.12.14-0
-# Scripts only, not needed.
-# - tar:
-#     local-name: ros_comm/roswtf
-#     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/roswtf/1.12.14-0.tar.gz
-#     version: ros_comm-release-release-kinetic-roswtf-1.12.14-0
+- tar:
+    local-name: ros_comm/rostopic
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/rostopic/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-rostopic-1.12.14-0
+- tar:
+    local-name: ros_comm/roswtf
+    uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/roswtf/1.12.14-0.tar.gz
+    version: ros_comm-release-release-kinetic-roswtf-1.12.14-0
 - tar:
     local-name: ros_comm/topic_tools
     uri: https://github.com/ros-gbp/ros_comm-release/archive/release/kinetic/topic_tools/1.12.14-0.tar.gz
@@ -690,12 +671,11 @@
     local-name: roslint
     uri: https://github.com/ros-gbp/roslint-release/archive/release/kinetic/roslint/0.11.0-0.tar.gz
     version: roslint-release-release-kinetic-roslint-0.11.0-0
-# Scripts only, not needed.
+# Roslisp is a client library for writing ROS nodes in idiomatic Common Lisp. -> not needed
 # - tar:
 #     local-name: roslisp
 #     uri: https://github.com/ros-gbp/roslisp-release/archive/release/kinetic/roslisp/1.9.21-0.tar.gz
 #     version: roslisp-release-release-kinetic-roslisp-1.9.21-0
-# Needed by roslib.
 - tar:
     local-name: rospack
     uri: https://github.com/ros-gbp/rospack-release/archive/release/kinetic/rospack/2.4.4-0.tar.gz
@@ -724,8 +704,7 @@
     local-name: vision_opencv/vision_opencv
     uri: https://github.com/ros-gbp/vision_opencv-release/archive/release/kinetic/vision_opencv/1.12.8-0.tar.gz
     version: vision_opencv-release-release-kinetic-vision_opencv-1.12.8-0
-# Python based package, not needed.
-# - tar:
-#     local-name: xacro
-#     uri: https://github.com/ros-gbp/xacro-release/archive/release/kinetic/xacro/1.11.3-0.tar.gz
-#     version: xacro-release-release-kinetic-xacro-1.11.3-0
+- tar:
+    local-name: xacro
+    uri: https://github.com/ros-gbp/xacro-release/archive/release/kinetic/xacro/1.11.3-0.tar.gz
+    version: xacro-release-release-kinetic-xacro-1.11.3-0
