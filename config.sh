@@ -6,7 +6,3 @@ export ANDROID_PLATFORM=android-24
 # Enable this value for debug build
 #CMAKE_BUILD_TYPE=Debug
 CMAKE_BUILD_TYPE=Release
-
-# Enable this if you need to use pluginlib in Android.
-# The plugins will be statically linked
-use_pluginlib=1

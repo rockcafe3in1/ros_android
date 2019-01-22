@@ -22,9 +22,9 @@ mkdir -p catkin_ws/src && cd catkin_ws
 
 if [ -f src/.rosinstall ]; then
   cd src/
-  wstool merge $my_loc/ndk.rosinstall --merge-replace
+  wstool merge $my_loc/ros.rosinstall --merge-replace
   wstool update
   cd ..
 else
-  wstool init -j$PARALLEL_JOBS src $my_loc/ndk.rosinstall
+  wstool init -j$PARALLEL_JOBS src $my_loc/ros.rosinstall
 fi

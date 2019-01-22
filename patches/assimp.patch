@@ -1,7 +1,7 @@
-diff --git libs/assimp-3.1.1/CMakeLists.txt libs/assimp-3.1.1/CMakeLists.txt
+diff --git libs/assimp/CMakeLists.txt libs/assimp/CMakeLists.txt
 index d332428..1af59dc 100644
---- libs/assimp-3.1.1/CMakeLists.txt
-+++ libs/assimp-3.1.1/CMakeLists.txt
+--- libs/assimp/CMakeLists.txt
++++ libs/assimp/CMakeLists.txt
 @@ -76,7 +76,7 @@ SET( ASSIMP_INCLUDE_INSTALL_DIR "include" CACHE PATH
  	"Path the header files are installed to." )
  SET( ASSIMP_BIN_INSTALL_DIR "bin" CACHE PATH
@@ -11,10 +11,10 @@ index d332428..1af59dc 100644
      "Build a static (.a) version of the library" )
  
  SET(ASSIMP_DEBUG_POSTFIX "d" CACHE STRING "Debug Postfitx for lib, samples and tools")
-diff --git libs/assimp-3.1.1/code/BlenderDNA.cpp libs/assimp-3.1.1/code/BlenderDNA.cpp
+diff --git libs/assimp/code/BlenderDNA.cpp libs/assimp/code/BlenderDNA.cpp
 index 16e639e..fdd49eb 100644
---- libs/assimp-3.1.1/code/BlenderDNA.cpp
-+++ libs/assimp-3.1.1/code/BlenderDNA.cpp
+--- libs/assimp/code/BlenderDNA.cpp
++++ libs/assimp/code/BlenderDNA.cpp
 @@ -56,10 +56,10 @@ using namespace Assimp::Formatter;
  #define for_each BOOST_FOREACH
  bool match4(StreamReaderAny& stream, const char* string) {

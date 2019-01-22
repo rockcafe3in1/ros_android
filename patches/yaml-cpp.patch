@@ -1,5 +1,5 @@
---- libs/yaml-cpp-yaml-cpp-0.6.2/CMakeLists.txt
-+++ libs/yaml-cpp-yaml-cpp-0.6.2/CMakeLists.txt
+--- libs/yaml-cpp/CMakeLists.txt
++++ libs/yaml-cpp/CMakeLists.txt
 @@ -38,7 +38,11 @@ enable_testing()
  ### Project options
  ###

@@ -1,0 +1,16 @@
+--- catkin_ws/src/geometry2/tf2_py/CMakeLists.txt
++++ catkin_ws/src/geometry2/tf2_py/CMakeLists.txt
+@@ -1,6 +1,13 @@
+ cmake_minimum_required(VERSION 2.8.3)
+ project(tf2_py)
+ 
++# Skip package if building for Android
++if(ANDROID)
++  find_package(catkin REQUIRED)
++  catkin_package()
++  return()
++endif()
++
+ ## Find catkin macros and libraries
+ ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
+ ## is used, also find other catkin packages
