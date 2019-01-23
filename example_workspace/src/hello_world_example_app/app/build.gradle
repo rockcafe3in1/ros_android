@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId = 'com.example.hello_ros'
+        applicationId = 'com.ros.example.hello_ros'
         minSdkVersion 24
         targetSdkVersion 24
         externalNativeBuild {
@@ -32,7 +32,7 @@ android {
     }
     externalNativeBuild {
         cmake {
-            path 'src/main/cpp/CMakeLists.txt'
+            path 'CMakeLists.txt'
         }
     }
 }
