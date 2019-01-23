@@ -1,0 +1,12 @@
+--- catkin_ws/src/image_pipeline/image_proc/CMakeLists.txt
++++ catkin_ws/src/image_pipeline/image_proc/CMakeLists.txt
+@@ -15,7 +15,7 @@ endif()
+ generate_dynamic_reconfigure_options(cfg/CropDecimate.cfg cfg/Debayer.cfg cfg/Rectify.cfg cfg/Resize.cfg)
+ 
+ catkin_package(
+-  CATKIN_DEPENDS image_geometry roscpp sensor_msgs
++  CATKIN_DEPENDS cv_bridge dynamic_reconfigure image_geometry image_transport nodelet nodelet_topic_tools roscpp sensor_msgs
+   DEPENDS OpenCV
+   INCLUDE_DIRS include
+   LIBRARIES ${PROJECT_NAME}
+
