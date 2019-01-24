@@ -10,7 +10,7 @@ set -e
 
 source $SCRIPT_DIR/utils.sh
 
-if [ $# != 2 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
+if [ $# != 2 ] || [ "$1" == '-h' ] || [ "$1" == '--help' ]; then
     echo "Usage: $0 rosinstall_file prefix_path"
     echo "  example: $0 /home/user/ros_android/ros.rosinstall /home/user/ros_android/output"
     exit 1
@@ -19,7 +19,7 @@ fi
 cmd_exists git || die 'git was not found'
 cmd_exists wstool || die 'wstool was not found'
 
-rosinstall_file=$1
+rosinstall_file="$1"
 prefix=$(cd $2 && pwd)
 
 cd $prefix

@@ -2,7 +2,7 @@
 # Always source this file before using the scripts with the output directory as parameter.
 # See help for required positional arguments.
 
-if [ $# != 1 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
+if [ $# != 1 ] || [ "$1" == '-h' ] || [ "$1" == '--help' ]; then
     echo "Usage: source $0 prefix_path"
     echo "  example: source $0 /home/user/ros_android/output"
     exit 1
@@ -23,7 +23,7 @@ export CMAKE_BUILD_TYPE=Release
 export PARALLEL_JOBS=$(nproc)
 
 # Export common paths
-export OUTPUT_DIR=$1
+export OUTPUT_DIR="$1"
 export TARGET_DIR=$OUTPUT_DIR/target
 export LIBS_DIR=$OUTPUT_DIR/libs
 export SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

@@ -9,7 +9,7 @@
 
 # print a help screen
 function print_help {
-    echo "Usage: $0 [options] -p OUTPUT_PREFIX [catkin build args...]"
+    echo "Usage: $0 [options] -p OUTPUT_DIR [catkin build args...]"
     echo "Options:"
     echo "  -p --path <path> target path to build (required)"
     echo "  -b --build-type <cmake_build_type> build binaries with the corresponding cmake build flag"
@@ -61,11 +61,11 @@ do
             exit 0
         ;;
         -p|--path)
-            OUTPUT_PREFIX=${2?"Usage: $0 -p <OUTPUT_PREFIX>"}
+            OUTPUT_DIR=${2?"Usage: $0 -p <OUTPUT_DIR>"}
             shift # past argument
         ;;
         *)
-            CATKIN_ARGS+=($1)
+            CATKIN_ARGS+=("$1")
         ;;
     esac
     shift # past argument or value
@@ -74,18 +74,14 @@ done
 # Abort script on any failures
 set -e
 
-if [ "$OUTPUT_PREFIX" = "" ]; then
-  if ["$OUTPUT_DIR" = ""]; then
-    print_help
-    exit 1
-  else
-    OUTPUT_PREFIX=$OUTPUT_DIR
-  fi
+if [ -z "$OUTPUT_DIR" ]; then
+  print_help
+  exit 1
 fi
 : ${RBA_TOOLCHAIN:=$BASE_DIR/android.toolchain.cmake}
 
 # get the prefix path
-prefix=$(cd $OUTPUT_PREFIX && pwd)
+prefix=$(cd $OUTPUT_DIR && pwd)
 TARGET_PATH=$prefix/target
 
 python=$(which python)

@@ -1,11 +1,11 @@
 # Basic utilities.
 
 cmd_exists() {
-    command -v $1 > /dev/null 2>&1
+    command -v "$1" > /dev/null 2>&1
 }
 
 die() {
-    echo $1
+    echo "$1"
     exit 1
 }
 
@@ -18,7 +18,7 @@ cmake_build() {
     target=$TARGET_DIR
     python=$(which python)
 
-    cd $1
+    cd "$1"
     mkdir -p build && cd build
     cmake .. -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
@@ -32,7 +32,7 @@ cmake_build() {
 # Check if patch hasn't already applied and apply it
 apply_patch() {
     echo "Checking patch: $1"
-    patch=$1
+    patch="$1"
     shift
     if [ "$#" -eq 0 ]; then
         set -- -d $prefix

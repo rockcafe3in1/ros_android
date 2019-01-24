@@ -22,15 +22,15 @@ fi
 
 while [[ $# -gt 0 ]]
 do
-    if [[ $1 == "--help" ]] ||  [[ $1 == "-h" ]] ; then
+    if [[ "$1" == "--help" ]] ||  [[ "$1" == "-h" ]] ; then
         help=1
-    elif [[ $1 == "--skip" ]] ; then
+    elif [[ "$1" == "--skip" ]] ; then
         skip=1
-    elif [[ $1 == "--debug-symbols" ]] ; then
+    elif [[ "$1" == "--debug-symbols" ]] ; then
         debugging=1
-    elif [[ $1 == "--portable" ]] ; then
+    elif [[ "$1" == "--portable" ]] ; then
         portable=1
-    elif [[ $1 == "--extends-workspace" ]] ; then
+    elif [[ "$1" == "--extends-workspace" ]] ; then
         if [ -d $2 ]; then
             user_workspace=$2
         else
@@ -38,13 +38,13 @@ do
             help=1
         fi
         shift
-    elif [[ $1 == "--samples" ]] ; then
+    elif [[ "$1" == "--samples" ]] ; then
         samples=1
     elif [[ ! -z prefix ]]; then
-        if [ ! -d $1 ]; then
-            mkdir -p $1
+        if [ ! -d "$1" ]; then
+            mkdir -p "$1"
         fi
-        prefix=$(cd $1 && pwd)
+        prefix=$(cd "$1" && pwd)
     fi
 
     shift
@@ -77,7 +77,7 @@ else
 fi
 
 run_cmd() {
-    cmd=$1.sh
+    cmd="$1".sh
     shift
     $SCRIPT_DIR/$cmd $@ || die "$cmd $@ died with error code $?"
 }
@@ -186,17 +186,17 @@ if [[ $samples -eq 1 ]];then
     echo
 
     build_sample() {
-        cd $2
+        cd "$2"
 
         echo "Building $1"
 
         # TODO(ivanpauno): Add release apk option
         ./gradlew assembleDebug
 
-        mkdir -p $prefix/target/apks/$1
+        mkdir -p "$prefix/target/apks/$1"
 
         echo "Copying generated apks inside $prefix/target/apks/$1"
-        find . -type f -name "*.apk" -exec cp {} $prefix/target/apks/$1 \;
+        find . -type f -name "*.apk" -exec cp {} "$prefix/target/apks/$1" \;
         cd $my_loc
     }
 

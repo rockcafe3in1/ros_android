@@ -11,7 +11,7 @@ set -e
 
 source $SCRIPT_DIR/utils.sh
 
-if [ $# != 1 ] || [ $1 == '-h' ] || [ $1 == '--help' ]; then
+if [ $# != 1 ] || [ "$1" == '-h' ] || [ "$1" == '--help' ]; then
     echo "Usage: $0 boost_prefix_path"
     echo "  example: $0 /home/user/ros_android/output/libs/boost"
     exit 1
