@@ -13,10 +13,9 @@ source $my_loc/config.sh
 source $my_loc/utils.sh
 debugging=0
 skip=0
-portable=0
 help=0
 samples=0
-user_workspace=""
+declare -a plugin_search_paths
 
 # verbose is a bool flag indicating if we want more verbose output in
 # the build process. Useful for debugging build system or compiler errors.
@@ -29,33 +28,57 @@ fi
 
 while [[ $# -gt 0 ]]
 do
-    if [[ $1 == "--help" ]] ||  [[ $1 == "-h" ]] ; then
-        help=1
-    elif [[ $1 == "--skip" ]] ; then
-        skip=1
-    elif [[ $1 == "--debug-symbols" ]] ; then
-        debugging=1
-    elif [[ $1 == "--portable" ]] ; then
-        portable=1
-    elif [[ $1 == "--extends-workspace" ]] ; then
-        if [ -d $2 ]; then
-            user_workspace=$2
-        else
-            echo "--extends-workspace should be folowed by a directory"
+    key="$1"
+    case $key in
+        -h|--help)
             help=1
-        fi
-        shift
-    elif [[ $1 == "--samples" ]] ; then
-        samples=1
-    elif [[ $1 == "--verbose" ]] ; then
-        verbose=1
-    elif [[ ! -z prefix ]]; then
-        if [ ! -d $1 ]; then
-            mkdir -p $1
-        fi
-        prefix=$(cd $1 && pwd)
-    fi
-
+        ;;
+        --skip)
+            skip=1
+        ;;
+        --debug-symbols)
+            debugging=1
+        ;;
+        -p|--plugin-search-paths)
+            while [[ -d $2 && $# -gt 0 ]]; do
+                plugin_search_paths+=("$(cd "$2" && pwd)")
+                shift
+            done
+        ;;
+        -s|--samples)
+            samples=1
+        ;;
+        -v|--verbose)
+            verbose=1
+        ;;
+        -o|--output)
+            if [[ ! -z prefix ]]; then
+                if [ ! -d "$2" ]; then
+                    mkdir -p "$2"
+                fi
+                prefix=$(cd $2 && pwd)
+            else
+                echo "You have specified more than one prefix"
+                help=1
+                break
+            fi
+            shift
+        ;;
+        *)
+            if [[ ! -z prefix ]]; then
+                if [ ! -d "$1" ]; then
+                    set +e
+                    mkdir -p "$1" &> /dev/null || help=1; break
+                    set -e
+                fi
+                prefix=$(cd $1 && pwd)
+            else
+                echo "You have specified more than one prefix"
+                help=1
+                break
+            fi
+        ;;
+    esac
     shift
 done
 
@@ -64,11 +87,19 @@ if [[ -z prefix ]]; then
 fi
 
 if [[ $help -eq 1 ]] ; then
-    echo "Usage: $0 prefix_path [-h | --help] [--skip] [--debug-symbols] [--extends-workspace path]"
-    echo "  example: $0 /home/user/my_workspace"
-    echo " --extends-workspace path: Pluginlib will also search in this path for plugins."
-    echo " --samples: Path specified by --extends-workspace will be built as a catkin_ws."
-    echo " --verbose: Indicates more verbose output. Useful for debugging."
+    echo "Usage: $0 prefix_path [-h | --help] [--skip] [-s | --samples] [--debug-symbols] [-p | --plugin-search-paths path_list] [-v | --verbose]"
+    echo "prefix_path can be specified also after -o | --output"
+    echo "  example: $0 /home/user/my_workspace --plugin-search-paths /home/user/other_workspace_to_search_plugins /home/user/another_workspace_to_search_plugins --samples"
+    echo " prefix_path: Output directory. Structure ->"
+    echo "              --- catkin_ws: Catkin workspace where ros packages are downloaded and built."
+    echo "              --- libs: Directory where other libraries are downloaded."
+    echo "              --- target: Directory where things (libraries, binaries, includes, extras, etc) are installed."
+    echo " -p | --plugin-search-paths path1 [path2 ...]: Additional directories in which pluginlib plugins are searched."
+    echo " -s | --samples: Build the provided example workspace. Also, search plugins there."
+    echo " -v | --verbose: Indicates more verbose output. Useful for debugging."
+    echo " --skip: Avoid downloading ros packages again."
+    echo " -h | --help: Print this."
+    echo " --debug-symbols: Build all with debug symbols."
     exit 1
 fi
 
@@ -80,6 +111,13 @@ fi
 
 if [[ $debugging -eq 1 ]]; then
    echo "-- Building workspace WITH debugging symbols"
+else
+   echo "-- Building workspace without debugging symbols"
+fi
+
+if [[ $samples -eq 1 ]]; then
+   echo "-- Building sample workspace"
+   plugin_search_paths+=("${my_loc}/example_workspace")
 else
    echo "-- Building workspace without debugging symbols"
 fi
@@ -325,7 +363,7 @@ if [ $use_pluginlib -ne 0 ]; then
     echo
 
     pluginlib_helper_file=pluginlib_helper.cpp
-    $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src $user_workspace -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
+    $my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src ${plugin_search_paths[*]} -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
     cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
     line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
     # temporally turn off error detection
@@ -388,14 +426,18 @@ else
     run_cmd build_cpp -w $prefix/catkin_ws -p $prefix -b Release -v $verbose
 fi
 
-if [[ $samples -eq 1 && "$user_workspace" != "" ]];then
+if [[ $samples -eq 1 ]];then
     echo
     echo -e '\e[34mBuilding sample apps.\e[39m'
     echo
 
+    source $prefix/target/setup.bash
+
+    # NOTE(ivanpauno): Samples are built with verbosity, as usually gradle fails when downloading packages.
+    # Maybe, an intermediate verbosity option could be used here
     if [[ $debugging -eq 1 ]];then
-        run_cmd build_cpp -w $user_workspace -p $prefix -b Debug -v $verbose
+        run_cmd build_cpp -w ${my_loc}/example_workspace -p $prefix -b Debug -v 1
     else
-        run_cmd build_cpp -w $user_workspace -p $prefix -b Release -v $verbose
+        run_cmd build_cpp -w ${my_loc}/example_workspace -p $prefix -b Release -v 1
     fi
 fi

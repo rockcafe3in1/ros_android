@@ -6,13 +6,11 @@ android {
     defaultConfig {
         applicationId = 'com.example.hello_ros'
         minSdkVersion 24
-        targetSdkVersion 24
+        targetSdkVersion 26
         externalNativeBuild {
             cmake {
-                arguments   '-DANDROID_STL=c++_shared',
-                            '-DCMAKE_INSTALL_PREFIX=' + System.getenv('TARGET_DIR'),
-                            '-DCMAKE_FIND_ROOT_PATH=' + System.getenv('TARGET_DIR'),
-                            '-DCMAKE_PREFIX_PATH=' + System.getenv('TARGET_DIR'),
+                arguments   '-DANDROID_STL=' + (System.getenv('ANDROID_STL') ?: 'c++_static'),
+                            '-DCMAKE_FIND_ROOT_PATH=' + System.getenv('CMAKE_PREFIX_PATH').replaceAll(':', ';'),
                             '-DBUILD_TESTING=OFF',
                             '-DCATKIN_ENABLE_TESTING=OFF'
             }
