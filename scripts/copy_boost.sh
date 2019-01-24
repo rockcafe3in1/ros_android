@@ -3,6 +3,7 @@
 # See help for required positional arguments.
 #
 # Required environment variables:
+# - ANDROID_ABI: Selected Android Binary Interface.
 # - SCRIPT_DIR: where utility scripts are located.
 # - TARGET_DIR: where to copy boost files.
 
@@ -25,7 +26,7 @@ echo
 
 [ "$TARGET_DIR" = "" ] && die 'could not find target basedir. Please set $TARGET_DIR environment variable.'
 mkdir -p $TARGET_DIR/lib
-cd $prefix/build/out/arm64-v8a/lib/
+cd $prefix/build/out/$ANDROID_ABI/lib/
 for i in *.a # Rename and move libraries (remove the gcc type, so on)
 do
     #mv "$i" "`echo $i | sed 's/000//'`"
