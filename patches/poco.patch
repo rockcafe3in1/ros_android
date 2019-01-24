@@ -1,5 +1,5 @@
---- libs/poco-1.8.0/Foundation/include/Poco/SharedLibrary.h
-+++ libs/poco-1.8.0/Foundation/include/Poco/SharedLibrary.h
+--- libs/poco/Foundation/include/Poco/SharedLibrary.h
++++ libs/poco/Foundation/include/Poco/SharedLibrary.h
 @@ -23,7 +23,9 @@
  #include "Poco/Foundation.h"
  
@@ -11,8 +11,8 @@
  #include "Poco/SharedLibrary_HPUX.h"
  #elif defined(POCO_VXWORKS)
  #include "Poco/SharedLibrary_VX.h"
---- libs/poco-1.8.0/Foundation/src/SharedLibrary.cpp
-+++ libs/poco-1.8.0/Foundation/src/SharedLibrary.cpp
+--- libs/poco/Foundation/src/SharedLibrary.cpp
++++ libs/poco/Foundation/src/SharedLibrary.cpp
 @@ -18,7 +18,9 @@
  #include "Poco/Exception.h"
  
@@ -25,7 +25,7 @@
  #elif defined(POCO_VXWORKS)
  #include "SharedLibrary_VX.cpp"
 --- /dev/null
-+++ libs/poco-1.8.0/Foundation/src/SharedLibrary_ANDROID_STATIC.cpp
++++ libs/poco/Foundation/src/SharedLibrary_ANDROID_STATIC.cpp
 @@ -0,0 +1,119 @@
 +//
 +// SharedLibrary_ANDROID.cpp
@@ -147,7 +147,7 @@
 +
 +} // namespace Poco
 --- /dev/null
-+++ libs/poco-1.8.0/build/config/Android_static
++++ libs/poco/build/config/Android_static
 @@ -0,0 +1,91 @@
 +#
 +# $Id: //poco/1.4/build/config/Android#3 $

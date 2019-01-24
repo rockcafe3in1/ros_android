@@ -1,39 +1,12 @@
+# Basic utilities.
+
 cmd_exists() {
-    command -v $1 > /dev/null 2>&1
+    command -v "$1" > /dev/null 2>&1
 }
 
 die() {
-    echo $1
+    echo "$1"
     exit 1
-}
-
-download() {
-    if [ ! -z $1 ]; then
-        cmd_exists curl && curl -L $1 -O || wget $1
-    else 
-        echo "skipping download of $1 as it's already local"
-    fi
-}
-
-download_bz2() {
-    echo "downloading $1"
-    ( cmd_exists curl && curl -L $1 || wget -O - $1 ) | tar jx -C $2
-}
-
-download_gz() {
-    echo "downloading $1"
-    ( cmd_exists curl && curl -L $1 || wget -O - $1 ) | tar zx -C $2
-}
-
-download_zip() {
-    cmd_exists unzip || die 'could not find unzip'
-
-    echo "downloading $1"
-
-    tmpdir=$(mktemp -d /tmp/rba.XXXX)
-    tmpfile=$tmpdir/gtest.zip
-    ( cmd_exists curl && curl -L $1 -o $tmpfile || wget $1 -O $tmpfile ) && unzip $tmpfile -d $2
-    rm -rf $tmpdir
 }
 
 cmake_build() {
@@ -45,7 +18,7 @@ cmake_build() {
     target=$TARGET_DIR
     python=$(which python)
 
-    cd $1
+    cd "$1"
     mkdir -p build && cd build
     cmake .. -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
@@ -59,7 +32,7 @@ cmake_build() {
 # Check if patch hasn't already applied and apply it
 apply_patch() {
     echo "Checking patch: $1"
-    patch=$1
+    patch="$1"
     shift
     if [ "$#" -eq 0 ]; then
         set -- -d $prefix

@@ -1,8 +1,15 @@
 #!/bin/bash
+# Builds catkin workspace with ROS packages and catkinized dependencies.
+# See help for required arguments. 
+#
+# Required environment variables:
+# - BASE_DIR: where android.toolchain.cmake is located.
+# - SCRIPT_DIR: where utility scripts are located.
+# - OUTPUT_DIR: default output directory if path argument is not set.
 
 # print a help screen
 function print_help {
-    echo "Usage: $0 [options] -p prefix_path [catkin build args...]"
+    echo "Usage: $0 [options] -p OUTPUT_DIR [catkin build args...]"
     echo "Options:"
     echo "  -p --prefix <path> output directory (required)"
     echo "  -w --workspace <path> catkin workspace to be built. (required)"
@@ -13,7 +20,7 @@ function print_help {
     echo "  -h --help display this help screen."
     echo
     echo "Example:"
-    echo "    $0 -p /home/user/my_workspace"
+    echo "    $0 -p /home/user/ros_android/output"
     echo
 }
 
@@ -27,12 +34,8 @@ fi
 CMAKE_BUILD_TYPE=Release
 VERBOSE=""
 
-# get the base folder
-my_loc="$(cd "$(dirname $0)" && pwd)"
-
 # source utilities to our environment
-source $my_loc/config.sh
-source $my_loc/utils.sh
+source $SCRIPT_DIR/utils.sh
 
 
 # process options
@@ -58,8 +61,8 @@ do
             print_help
             exit 0
         ;;
-        -p|--prefix)
-            PREFIX_PATH=${2?"Usage: $0 -p <PREFIX_PATH>"}
+        -p|--path)
+            OUTPUT_DIR=${2?"Usage: $0 -p <OUTPUT_DIR>"}
             shift # past argument
         ;;
         -w|--workspace)
@@ -67,7 +70,7 @@ do
             shift # past argument
         ;;
         *)
-            CATKIN_ARGS+=($1)
+            CATKIN_ARGS+=("$1")
         ;;
     esac
     shift # past argument or value
@@ -76,7 +79,7 @@ done
 # Abort script on any failures
 set -e
 
-if [ "$PREFIX_PATH" = "" ]; then
+if [ -z "$OUTPUT_DIR" ]; then
   print_help
   exit 1
 fi
@@ -86,10 +89,10 @@ if [ "$WORKSPACE" = "" ]; then
   exit 1
 fi
 
-: ${RBA_TOOLCHAIN:=$ANDROID_NDK/build/cmake/android.toolchain.cmake}
+: ${RBA_TOOLCHAIN:=$BASE_DIR/android.toolchain.cmake}
 
 # get the prefix path
-prefix=$(cd $PREFIX_PATH && pwd)
+prefix=$(cd $OUTPUT_DIR && pwd)
 TARGET_PATH=$prefix/target
 
 python=$(which python)
