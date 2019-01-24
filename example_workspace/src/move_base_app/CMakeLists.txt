@@ -3,7 +3,6 @@ project(move_base_app)
 
 find_package(catkin REQUIRED rosjava_build_tools)
 
-# Set the gradle targets you want catkin's make to run by default, e.g.
-catkin_android_setup(assembleDebug)
+catkin_android_setup(assemble${CMAKE_BUILD_TYPE})
 
 catkin_package()

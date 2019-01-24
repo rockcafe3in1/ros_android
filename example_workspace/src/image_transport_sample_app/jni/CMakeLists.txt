@@ -22,7 +22,6 @@ find_package(catkin REQUIRED COMPONENTS roscpp std_msgs rosconsole image_transpo
 include_directories(${catkin_INCLUDE_DIRS})
 
 # build native_app_glue as a static lib
-set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
 add_library(native_app_glue STATIC
     ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c)
 
@@ -43,11 +42,15 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # This is to be sure that the symbols of this libraries aren't dropped
 # Also, put them in catkin find_package, in order to solve transitive dependencies without problems.
+find_library(image_transport_plugins_PLUGIN NAMES image_transport_plugins)
+find_library(theora_image_transport_PLUGIN NAMES theora_image_transport)
+find_library(compressed_image_transport_PLUGIN NAMES compressed_image_transport)
+
 SET (WHOLE_ARCHIVE_LIBRARIES
      -Wl,--whole-archive
-     $ENV{TARGET_DIR}/lib/libimage_transport_plugins.a
-     $ENV{TARGET_DIR}/lib/libtheora_image_transport.a
-     $ENV{TARGET_DIR}/lib/libcompressed_image_transport.a
+     ${image_transport_plugins_PLUGIN}
+     ${theora_image_transport_PLUGIN}
+     ${compressed_image_transport_PLUGIN}
      -Wl,--no-whole-archive
 )
 

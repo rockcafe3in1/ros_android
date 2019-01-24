@@ -22,7 +22,6 @@ find_package(catkin REQUIRED COMPONENTS roscpp std_msgs rosconsole pluginlib_tut
 include_directories(${catkin_INCLUDE_DIRS})
 
 # build native_app_glue as a static lib
-set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
 add_library(native_app_glue STATIC
     ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c)
 
@@ -43,9 +42,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # This is to be sure that the symbols of this libraries aren't dropped
 # Also, put them in catkin find_package, in order to solve transitive dependencies without problems.
+find_library(pluginlib_tutorials_PLUGIN NAMES pluginlib_tutorials)
+
 SET (WHOLE_ARCHIVE_LIBRARIES
      -Wl,--whole-archive
-     $ENV{TARGET_DIR}/lib/libpluginlib_tutorials.a
+     ${pluginlib_tutorials_PLUGIN}
      -Wl,--no-whole-archive
 )
 

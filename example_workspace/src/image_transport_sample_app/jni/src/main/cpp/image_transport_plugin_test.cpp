@@ -88,8 +88,8 @@ void android_main(struct android_app* state)
     int events;
     struct android_poll_source* source;
 
-    // Poll android events, without locking
-    while (ALooper_pollAll(0, NULL, &events, (void**)&source) >= 0) {
+    // Poll android events locking
+    while (ALooper_pollAll(-1, NULL, &events, (void**)&source) >= 0) {
         // Process this event
         if (source != NULL) {
             source->process(state, source);

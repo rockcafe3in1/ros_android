@@ -22,7 +22,6 @@ find_package(catkin REQUIRED COMPONENTS roscpp move_base)
 include_directories(${catkin_INCLUDE_DIRS})
 
 # build native_app_glue as a static lib
-set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
 add_library(native_app_glue STATIC
     ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c)
 
@@ -43,17 +42,26 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # This is to be sure that the symbols of this libraries aren't dropped
 # Also, put them in catkin find_package, in order to solve transitive dependencies without problems.
+find_library(layers_PLUGIN NAMES layers)
+find_library(dwa_local_planner_PLUGIN NAMES dwa_local_planner)
+find_library(clear_costmap_recovery_PLUGIN NAMES clear_costmap_recovery)
+find_library(rotate_recovery_PLUGIN NAMES rotate_recovery)
+find_library(global_planner_PLUGIN NAMES global_planner)
+find_library(navfn_PLUGIN NAMES navfn)
+find_library(trajectory_planner_ros_PLUGIN NAMES trajectory_planner_ros)
+find_library(carrot_planner_PLUGIN NAMES carrot_planner)
+find_library(move_slow_and_clear_PLUGIN NAMES move_slow_and_clear)
+
 SET (WHOLE_ARCHIVE_LIBRARIES
      -Wl,--whole-archive
-     $ENV{TARGET_DIR}/lib/liblayers.a
-     $ENV{TARGET_DIR}/lib/libdwa_local_planner.a
-     $ENV{TARGET_DIR}/lib/libclear_costmap_recovery.a
-     $ENV{TARGET_DIR}/lib/librotate_recovery.a
-     $ENV{TARGET_DIR}/lib/libglobal_planner.a
-     $ENV{TARGET_DIR}/lib/libnavfn.a
-     $ENV{TARGET_DIR}/lib/libtrajectory_planner_ros.a
-     $ENV{TARGET_DIR}/lib/libcarrot_planner.a
-     $ENV{TARGET_DIR}/lib/libmove_slow_and_clear.a
+     ${layers_PLUGIN}
+     ${dwa_local_planner_PLUGIN}
+     ${clear_costmap_recovery_PLUGIN}
+     ${rotate_recovery_PLUGIN}
+     ${navfn_PLUGIN}
+     ${trajectory_planner_ros_PLUGIN}
+     ${carrot_planner_PLUGIN}
+     ${move_slow_and_clear_PLUGIN}
      -Wl,--no-whole-archive
 )
 

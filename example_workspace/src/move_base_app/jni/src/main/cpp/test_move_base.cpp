@@ -29,6 +29,7 @@ void android_main(android_app *state) {
         log("ROS MASTER IS UP!");
     } else {
         log("NO ROS MASTER.");
+        ANativeActivity_finish(state->activity);
     }
     log(master_uri.c_str());
 
@@ -37,14 +38,15 @@ void android_main(android_app *state) {
     tf::TransformListener tf(ros::Duration(10));
     move_base::MoveBase move_base(tf);
 
-    ros::WallRate loop_rate(100);
-    
+    ros::AsyncSpinner spinner(4);
+    spinner.start();
+
     while(1) {
         int events;
         struct android_poll_source* source;
 
-        // Poll android events, without locking
-        while (ALooper_pollAll(0, NULL, &events, (void**)&source) >= 0) {
+        // Poll android events. Check whatever ros died every five seconds.
+        while (ALooper_pollAll(5000, NULL, &events, (void**)&source) >= 0) {
             // Process this event
             if (source != NULL) {
                 source->process(state, source);
@@ -55,11 +57,9 @@ void android_main(android_app *state) {
                 log("APP DESTROYED BYE BYE");
                 return;
             }
-
-            if (ros::ok()) {
-                ros::spinOnce();
-                loop_rate.sleep();
-            }
+        }
+        if (!ros::ok() || !ros::master::check()) {
+            ANativeActivity_finish(state->activity);
         }
     }
 }
