@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pluginlib_sample</name>
+  <version>0.0.1</version>
+  <description>Pluginlib example app with ros on android</description>
+
+  <maintainer email="ivanpauno@ekumenlabs.com">Ivan Paunovic</maintainer>
+
+  <license>Apache 2.0 License</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>rosconsole</depend>
+  <depend>pluginlib_tutorials</depend>
+
+</package>

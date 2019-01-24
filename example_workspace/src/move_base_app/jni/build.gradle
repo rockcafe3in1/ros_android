@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId = 'com.example.nodelet_example'
+        applicationId = 'com.example.move_base_app'
         minSdkVersion 24
         targetSdkVersion 26
         externalNativeBuild {
