@@ -708,10 +708,10 @@
     local-name: vision_opencv/vision_opencv
     uri: https://github.com/ros-gbp/vision_opencv-release/archive/release/kinetic/vision_opencv/1.12.8-0.tar.gz
     version: vision_opencv-release-release-kinetic-vision_opencv-1.12.8-0
-- git:
-    local-name: rosjava/rosjava_build_tools
-    uri: https://github.com/rosjava/rosjava_build_tools
-    version: kinetic
+- tar:
+    local-name: xacro
+    uri: https://github.com/ros-gbp/xacro-release/archive/release/kinetic/xacro/1.11.3-0.tar.gz
+    version: xacro-release-release-kinetic-xacro-1.11.3-0
 - tar:
     local-name: common_tutorials/nodelet_tutorial_math
     uri: https://github.com/ros-gbp/common_tutorials-release/archive/release/indigo/nodelet_tutorial_math/0.1.8-0.tar.gz
@@ -720,7 +720,3 @@
     local-name: common_tutorials/pluginlib_tutorials
     uri: https://github.com/ros-gbp/common_tutorials-release/archive/release/indigo/pluginlib_tutorials/0.1.8-0.tar.gz
     version: common_tutorials-release-release-indigo-pluginlib_tutorials-0.1.8-0
-- tar:
-    local-name: xacro
-    uri: https://github.com/ros-gbp/xacro-release/archive/release/kinetic/xacro/1.11.3-0.tar.gz
-    version: xacro-release-release-kinetic-xacro-1.11.3-0
