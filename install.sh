@@ -229,9 +229,6 @@ if [[ $samples -eq 1 ]];then
 
     # NOTE(ivanpauno): Samples are built with verbosity, as usually gradle fails when downloading packages.
     # Maybe, an intermediate verbosity option could be used here
-    if [[ $debugging -eq 1 ]];then
-        run_cmd build_catkin_workspace -w $my_loc/example_workspace -p $prefix -b Debug -v 1
-    else
-        run_cmd build_catkin_workspace -w $my_loc/example_workspace -p $prefix -b Release -v 1
-    fi
+    # NOTE(ivanpauno): The example workspace is built using Debug option. The idea is to avoid apk signing.
+    run_cmd build_catkin_workspace -w $my_loc/example_workspace -p $prefix -b Debug -v 1
 fi
