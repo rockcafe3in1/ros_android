@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RosHello</string>
+    <string name="masterIP_hint">Enter ros master IP address</string>
+    <string name="myIP_hint">Enter your IP address</string>
+    <string name="button_run">Run</string>
+    <string name="button_stop">Stop</string>
+    <string name="status_waiting">Enter valid IP addresses and press run to continue</string>
+    <string name="status_masterIP_error">Master IP address isn\'t valid</string>
+    <string name="status_myIP_error">Your IP address isn\'t valid</string>
+    <string name="status_check_master_error">Can\'t connect to ros master, check if the IPs are correct and check ROS_IP in the master.</string>
+    <string name="status_running">The app is running</string>
 </resources>
