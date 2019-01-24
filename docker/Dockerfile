@@ -43,4 +43,4 @@ ENTRYPOINT []
 
 VOLUME /opt/ros_android
 WORKDIR /opt/ros_android
-CMD ['bash']
+CMD ["bash"]

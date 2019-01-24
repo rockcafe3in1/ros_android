@@ -1,0 +1,17 @@
+--- catkin_ws/src/octomap/octomap/CMakeLists.txt
++++ catkin_ws/src/octomap/octomap/CMakeLists.txt
+@@ -92,6 +92,13 @@ IF(WIN32)
+   set(OCTOMATH_LIBRARY
+     "${CMAKE_IMPORT_LIBRARY_PREFIX}octomath${CMAKE_IMPORT_LIBRARY_SUFFIX}"
+   )
++ELSEIF(ANDROID)
++  set(OCTOMAP_LIBRARY
++    "${CMAKE_STATIC_LIBRARY_PREFIX}octomap${CMAKE_STATIC_LIBRARY_SUFFIX}"
++  )
++  set(OCTOMATH_LIBRARY
++    "${CMAKE_STATIC_LIBRARY_PREFIX}octomath${CMAKE_STATIC_LIBRARY_SUFFIX}"
++  )
+ ELSE()
+   set(OCTOMAP_LIBRARY
+     "${CMAKE_SHARED_LIBRARY_PREFIX}octomap${CMAKE_SHARED_LIBRARY_SUFFIX}"
+
