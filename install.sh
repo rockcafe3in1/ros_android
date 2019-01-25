@@ -1,4 +1,21 @@
 #!/bin/bash
+# See help message for usage instructions.
+
+print_help() {
+    echo "Usage: $0 prefix_path [-h | --help] [--skip] [-s | --samples] [--debug-symbols] [-p | --plugin-search-paths path_list] [-v | --verbose]"
+    echo "prefix_path can be specified also after -o | --output"
+    echo "  example: $0 /home/user/my_workspace --plugin-search-paths /home/user/other_workspace_to_search_plugins /home/user/another_workspace_to_search_plugins --samples"
+    echo " prefix_path: Output directory. Structure ->"
+    echo "              --- catkin_ws: Catkin workspace where ros packages are downloaded and built."
+    echo "              --- libs: Directory where other libraries are downloaded."
+    echo "              --- target: Directory where things (libraries, binaries, includes, extras, etc) are installed."
+    echo " -p | --plugin-search-paths path1 [path2 ...]: Additional directories in which pluginlib plugins are searched."
+    echo " -s | --samples: Build the provided example workspace. Also, search plugins there."
+    echo " -v | --verbose: Indicates more verbose output. Useful for debugging."
+    echo " --skip: Avoid downloading ros packages again."
+    echo " -h | --help: Print this."
+    echo " --debug-symbols: Build all with debug symbols."
+}
 
 # Abort script on any failures
 set -e
@@ -6,10 +23,9 @@ set -e
 my_loc="$(cd "$(dirname $0)" && pwd)"
 debugging=0
 skip=0
-portable=0
 help=0
 samples=0
-user_workspace=""
+declare -a plugin_search_paths
 
 # verbose is a bool flag indicating if we want more verbose output in
 # the build process. Useful for debugging build system or compiler errors.
@@ -22,42 +38,66 @@ fi
 
 while [[ $# -gt 0 ]]
 do
-    if [[ "$1" == "--help" ]] ||  [[ "$1" == "-h" ]] ; then
-        help=1
-    elif [[ "$1" == "--skip" ]] ; then
-        skip=1
-    elif [[ "$1" == "--debug-symbols" ]] ; then
-        debugging=1
-    elif [[ "$1" == "--portable" ]] ; then
-        portable=1
-    elif [[ "$1" == "--extends-workspace" ]] ; then
-        if [ -d $2 ]; then
-            user_workspace=$2
-        else
-            echo "--extends-workspace should be folowed by a directory"
+    key="$1"
+    case $key in
+        -h|--help)
             help=1
-        fi
-        shift
-    elif [[ "$1" == "--samples" ]] ; then
-        samples=1
-    elif [[ ! -z prefix ]]; then
-        if [ ! -d "$1" ]; then
-            mkdir -p "$1"
-        fi
-        prefix=$(cd "$1" && pwd)
-    fi
-
+        ;;
+        --skip)
+            skip=1
+        ;;
+        --debug-symbols)
+            debugging=1
+        ;;
+        -p|--plugin-search-paths)
+            while [[ -d "$2" ]]; do
+                plugin_search_paths+=("$(cd "$2" && pwd)")
+                shift
+            done
+        ;;
+        -s|--samples)
+            samples=1
+        ;;
+        -v|--verbose)
+            verbose=1
+        ;;
+        -o|--output)
+            if [[ ! -z "$prefix" ]]; then
+                if [ ! -d "$2" ]; then
+                    mkdir -p "$2"
+                fi
+                prefix=$(cd "$2" && pwd)
+            else
+                echo "You have specified more than one prefix"
+                help=1
+                break
+            fi
+            shift
+        ;;
+        *)
+            if [[ ! -z "$prefix" ]]; then
+                if [ ! -d "$1" ]; then
+                    set +e
+                    mkdir -p "$1" || help=1; break
+                    set -e
+                fi
+                prefix=$(cd "$1" && pwd)
+            else
+                echo "You have specified more than one prefix"
+                help=1
+                break
+            fi
+        ;;
+    esac
     shift
 done
 
-if [[ -z prefix ]]; then
+if [[ -z "$prefix" ]]; then
     help=1
 fi
 
 if [[ $help -eq 1 ]] ; then
-    echo "Usage: $0 prefix_path [-h | --help] [--skip] [--debug-symbols] [--extends-workspace path]"
-    echo "  example: $0 /home/user/my_workspace"
-    echo " --extends-workspace path: Pluginlib will also search in this path for plugins."
+    print_help
     exit 1
 fi
 
@@ -74,6 +114,11 @@ if [[ $debugging -eq 1 ]]; then
    echo "-- Building workspace WITH debugging symbols"
 else
    echo "-- Building workspace without debugging symbols"
+fi
+
+if [[ $samples -eq 1 ]]; then
+   echo "-- Will build samples"
+   plugin_search_paths+=("${my_loc}/example_workspace")
 fi
 
 run_cmd() {
@@ -118,7 +163,7 @@ echo -e '\e[34mBuilding pluginlib support...\e[39m'
 echo
 
 pluginlib_helper_file=pluginlib_helper.cpp
-$my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src $user_workspace -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
+$my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src ${plugin_search_paths[*]} -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
 cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
 line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
 # temporally turn off error detection
@@ -174,10 +219,10 @@ echo
 
 if [[ $debugging -eq 1 ]];then
     echo "Build type = DEBUG"
-    run_cmd build_catkin_workspace -p $prefix -b Debug -v $verbose
+    run_cmd build_catkin_workspace -w $prefix/catkin_ws -p $prefix -b Debug -v $verbose
 else
     echo "Build type = RELEASE"
-    run_cmd build_catkin_workspace -p $prefix -b Release -v $verbose
+    run_cmd build_catkin_workspace -w $prefix/catkin_ws -p $prefix -b Release -v $verbose
 fi
 
 if [[ $samples -eq 1 ]];then
@@ -185,20 +230,10 @@ if [[ $samples -eq 1 ]];then
     echo -e '\e[34mBuilding sample apps.\e[39m'
     echo
 
-    build_sample() {
-        cd "$2"
+    source $TARGET_DIR/setup.bash
 
-        echo "Building $1"
-
-        # TODO(ivanpauno): Add release apk option
-        ./gradlew assembleDebug
-
-        mkdir -p "$prefix/target/apks/$1"
-
-        echo "Copying generated apks inside $prefix/target/apks/$1"
-        find . -type f -name "*.apk" -exec cp {} "$prefix/target/apks/$1" \;
-        cd $my_loc
-    }
-
-    [ -d $prefix/target/apks/hello_world ] || build_sample hello_world $my_loc/files/hello_world_example_app
+    # NOTE(ivanpauno): Samples are built with verbosity, as usually gradle fails when downloading packages.
+    # Maybe, an intermediate verbosity option could be used here
+    # NOTE(ivanpauno): The example workspace is built using Debug option. The idea is to avoid apk signing.
+    run_cmd build_catkin_workspace -w $my_loc/example_workspace -p $prefix -b Debug -v 1
 fi

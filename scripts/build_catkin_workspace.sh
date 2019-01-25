@@ -11,7 +11,8 @@
 function print_help {
     echo "Usage: $0 [options] -p OUTPUT_DIR [catkin build args...]"
     echo "Options:"
-    echo "  -p --path <path> target path to build (required)"
+    echo "  -p --prefix <path> output directory (required)"
+    echo "  -w --workspace <path> catkin workspace to be built. (required)"
     echo "  -b --build-type <cmake_build_type> build binaries with the corresponding cmake build flag"
     echo "                                     Release (default) / Debug / RelWithDebInfo"
     echo "  -v --verbose [<val>] output more verbose error messages"
@@ -64,6 +65,10 @@ do
             OUTPUT_DIR=${2?"Usage: $0 -p <OUTPUT_DIR>"}
             shift # past argument
         ;;
+        -w|--workspace)
+            WORKSPACE=${2?"Usage: $0 -r <WORKSPACE>"}
+            shift # past argument
+        ;;
         *)
             CATKIN_ARGS+=("$1")
         ;;
@@ -78,6 +83,12 @@ if [ -z "$OUTPUT_DIR" ]; then
   print_help
   exit 1
 fi
+
+if [ "$WORKSPACE" = "" ]; then
+  print_help
+  exit 1
+fi
+
 : ${RBA_TOOLCHAIN:=$BASE_DIR/android.toolchain.cmake}
 
 # get the prefix path
@@ -89,7 +100,7 @@ python_lib=/usr/lib/x86_64-linux-gnu/libpython2.7.so
 python_inc=/usr/include/python2.7
 python2_inc=/usr/include/x86_64-linux-gnu/python2.7
 
-cd $prefix/catkin_ws
+cd $WORKSPACE
 
 echo
 echo -e '\e[34mRunning catkin build.\e[39m'

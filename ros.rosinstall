@@ -716,3 +716,11 @@
     local-name: xacro
     uri: https://github.com/ros-gbp/xacro-release/archive/release/kinetic/xacro/1.11.3-0.tar.gz
     version: xacro-release-release-kinetic-xacro-1.11.3-0
+- tar:
+    local-name: common_tutorials/nodelet_tutorial_math
+    uri: https://github.com/ros-gbp/common_tutorials-release/archive/release/indigo/nodelet_tutorial_math/0.1.8-0.tar.gz
+    version: common_tutorials-release-release-indigo-nodelet_tutorial_math-0.1.8-0
+- tar:
+    local-name: common_tutorials/pluginlib_tutorials
+    uri: https://github.com/ros-gbp/common_tutorials-release/archive/release/indigo/pluginlib_tutorials/0.1.8-0.tar.gz
+    version: common_tutorials-release-release-indigo-pluginlib_tutorials-0.1.8-0
