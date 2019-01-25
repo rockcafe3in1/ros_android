@@ -1,4 +1,21 @@
 #!/bin/bash
+# See help message for usage instructions.
+
+print_help() {
+    echo "Usage: $0 prefix_path [-h | --help] [--skip] [-s | --samples] [--debug-symbols] [-p | --plugin-search-paths path_list] [-v | --verbose]"
+    echo "prefix_path can be specified also after -o | --output"
+    echo "  example: $0 /home/user/my_workspace --plugin-search-paths /home/user/other_workspace_to_search_plugins /home/user/another_workspace_to_search_plugins --samples"
+    echo " prefix_path: Output directory. Structure ->"
+    echo "              --- catkin_ws: Catkin workspace where ros packages are downloaded and built."
+    echo "              --- libs: Directory where other libraries are downloaded."
+    echo "              --- target: Directory where things (libraries, binaries, includes, extras, etc) are installed."
+    echo " -p | --plugin-search-paths path1 [path2 ...]: Additional directories in which pluginlib plugins are searched."
+    echo " -s | --samples: Build the provided example workspace. Also, search plugins there."
+    echo " -v | --verbose: Indicates more verbose output. Useful for debugging."
+    echo " --skip: Avoid downloading ros packages again."
+    echo " -h | --help: Print this."
+    echo " --debug-symbols: Build all with debug symbols."
+}
 
 # Abort script on any failures
 set -e
@@ -33,7 +50,7 @@ do
             debugging=1
         ;;
         -p|--plugin-search-paths)
-            while [[ -d $2 && $# -gt 0 ]]; do
+            while [[ -d "$2" ]]; do
                 plugin_search_paths+=("$(cd "$2" && pwd)")
                 shift
             done
@@ -45,11 +62,11 @@ do
             verbose=1
         ;;
         -o|--output)
-            if [[ ! -z prefix ]]; then
+            if [[ ! -z "$prefix" ]]; then
                 if [ ! -d "$2" ]; then
                     mkdir -p "$2"
                 fi
-                prefix=$(cd $2 && pwd)
+                prefix=$(cd "$2" && pwd)
             else
                 echo "You have specified more than one prefix"
                 help=1
@@ -58,13 +75,13 @@ do
             shift
         ;;
         *)
-            if [[ ! -z prefix ]]; then
+            if [[ ! -z "$prefix" ]]; then
                 if [ ! -d "$1" ]; then
                     set +e
-                    mkdir -p "$1" &> /dev/null || help=1; break
+                    mkdir -p "$1" || help=1; break
                     set -e
                 fi
-                prefix=$(cd $1 && pwd)
+                prefix=$(cd "$1" && pwd)
             else
                 echo "You have specified more than one prefix"
                 help=1
@@ -75,24 +92,12 @@ do
     shift
 done
 
-if [[ -z prefix ]]; then
+if [[ -z "$prefix" ]]; then
     help=1
 fi
 
 if [[ $help -eq 1 ]] ; then
-    echo "Usage: $0 prefix_path [-h | --help] [--skip] [-s | --samples] [--debug-symbols] [-p | --plugin-search-paths path_list] [-v | --verbose]"
-    echo "prefix_path can be specified also after -o | --output"
-    echo "  example: $0 /home/user/my_workspace --plugin-search-paths /home/user/other_workspace_to_search_plugins /home/user/another_workspace_to_search_plugins --samples"
-    echo " prefix_path: Output directory. Structure ->"
-    echo "              --- catkin_ws: Catkin workspace where ros packages are downloaded and built."
-    echo "              --- libs: Directory where other libraries are downloaded."
-    echo "              --- target: Directory where things (libraries, binaries, includes, extras, etc) are installed."
-    echo " -p | --plugin-search-paths path1 [path2 ...]: Additional directories in which pluginlib plugins are searched."
-    echo " -s | --samples: Build the provided example workspace. Also, search plugins there."
-    echo " -v | --verbose: Indicates more verbose output. Useful for debugging."
-    echo " --skip: Avoid downloading ros packages again."
-    echo " -h | --help: Print this."
-    echo " --debug-symbols: Build all with debug symbols."
+    print_help
     exit 1
 fi
 
