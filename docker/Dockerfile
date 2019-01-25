@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y openjdk-8-jdk
 RUN wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
 RUN unzip sdk-tools-linux-4333796.zip -d /opt/android/sdk
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2" "platform-tools" "platforms;android-26" "cmake;3.6.4111459" --sdk_root=/opt/android/sdk
+RUN yes | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2" "build-tools;28.0.2" "platform-tools" "platforms;android-26" "platforms;android-28" "cmake;3.6.4111459" --sdk_root=/opt/android/sdk
 ENV PATH /opt/android/sdk/tools:/opt/android/sdk/platform-tools:/opt/android/sdk/cmake/3.6.4111459/bin:$PATH
 
 # Install Python libraries
