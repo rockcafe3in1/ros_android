@@ -25,10 +25,9 @@ prefix=$(cd $2 && pwd)
 cd $prefix
 mkdir -p catkin_ws/src && cd catkin_ws
 
-if [ ! -f src/.rosinstall ]; then
-  ln -s $rosinstall_file src/.rosinstall
+pushd src
+if [ ! -f .rosinstall ]; then
+  ln -s $rosinstall_file .rosinstall
 fi
-
-cd src/
 wstool update -j$PARALLEL_JOBS
-cd ..
+popd
