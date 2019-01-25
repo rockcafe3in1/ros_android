@@ -27,15 +27,13 @@ rosinstall_file="$1"
 lib_prefix=$(cd "$2" && pwd)
 files_prefix=$(cd "$3" && pwd)
 
-# Get everything
-if [ -f $lib_prefix/.rosinstall ]; then
-  pushd $lib_prefix
-  wstool merge $rosinstall_file --merge-replace
-  wstool update -j$PARALLEL_JOBS
-  popd
-else
-  wstool init -j$PARALLEL_JOBS $lib_prefix $rosinstall_file
+
+pushd $lib_prefix
+if [ ! -f .rosinstall ]; then
+  ln -s $rosinstall_file .rosinstall
 fi
+wstool update -j$PARALLEL_JOBS
+popd
 
 # Library-specific patches / actions.
 
