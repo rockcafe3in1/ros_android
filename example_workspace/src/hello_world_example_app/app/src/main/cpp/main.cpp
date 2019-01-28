@@ -18,14 +18,22 @@ class HelloRos : public ros_android::MainThread {
 
       // Creating a publisher and a subscriber
       // When something is received in chatter topic, a message is published in a_chatter topic
-      chatter_pub = n.advertise<std_msgs::String>("a_chatter", 1000);
+      chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
       ros::Subscriber sub = n.subscribe<std_msgs::String>("chatter", 1000, std::bind(&HelloRos::chatterCallback, this, std::placeholders::_1));
 
       // Rate 1Hz
       ros::WallRate loop_rate(1);
 
+      int loop_count = 0;
       while(ros::ok()) {
         ros::spinOnce();
+
+        std_msgs::String msgo;
+        std::stringstream ss;
+        ss << "hello world from android ndk " << loop_count++;
+        msgo.data = ss.str();
+        chatter_pub.publish(msgo);
+
         loop_rate.sleep();
       }
     }
@@ -36,18 +44,10 @@ class HelloRos : public ros_android::MainThread {
     }
 
   private:
-    int loop_count_ = 0;
     ros::Publisher chatter_pub;
 
     void chatterCallback(const std_msgs::String::ConstPtr& msg){
-      ROS_INFO("%s", msg->data.c_str());
-      loop_count_++;
-      std_msgs::String msgo;
-      std::stringstream ss;
-      ss << "hello world from android ndk " << loop_count_;
-      msgo.data = ss.str();
-      chatter_pub.publish(msgo);
-      ROS_INFO("%s", msg->data.c_str());
+      ROS_INFO("Received message: %s", msg->data.c_str());
     }
 };
 

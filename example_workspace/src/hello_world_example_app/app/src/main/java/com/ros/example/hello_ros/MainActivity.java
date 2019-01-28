@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +15,9 @@ import java.lang.Runnable;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 public class MainActivity extends Activity {
     static {
@@ -36,13 +39,14 @@ public class MainActivity extends Activity {
         @Override
         public native void run();
         public native void stop();
-        public native boolean checkRosMaster(String masterIP, String myIP);
+        public native boolean checkRosMaster(List<Pair<String, String>> remappings);
         private native void __RosThread();
     }
 
     private RosThread mainThread;
     private EditText masterIP;
     private EditText myIP;
+    private EditText remappingArgs;
     private Button runButton;
     private TextView statusText;
     private Status status;
@@ -55,6 +59,7 @@ public class MainActivity extends Activity {
 
         masterIP = (EditText) findViewById(R.id.master_ip);
         myIP = (EditText) findViewById(R.id.my_ip);
+        remappingArgs = (EditText) findViewById(R.id.remapping_args);
         runButton = (Button) findViewById(R.id.run_button);
         statusText = (TextView) findViewById(R.id.status);
         status = Status.WAITING;
@@ -116,7 +121,25 @@ public class MainActivity extends Activity {
                 }
                 Log.i(TAG, "my ip is fine: " + sMyIP);
 
-                if (! mainThread.checkRosMaster(sMasterIP, sMyIP)) {
+                List<Pair<String, String>> remappings = new ArrayList();
+                Pair<String, String> master = new Pair<String, String>("__master", "http://" + sMasterIP + ":11311");
+                Pair<String, String> ip = new Pair<String, String>("__ip", sMyIP);
+                remappings.add(master);
+                remappings.add(ip);
+
+                // Parse remappings - basic error handling.
+                try {
+                    String[] remappingExtras = remappingArgs.getText().toString().split(" ");
+                    for (String remapping : remappingExtras) {
+                        String[] remappingBits = remapping.split(":=");
+                        Pair<String, String> remappingPair = new Pair<String, String>(remappingBits[0], remappingBits[1]);
+                        remappings.add(remappingPair);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Could not parse remappings properly.", e);
+                }
+
+                if (! mainThread.checkRosMaster(remappings)) {
                     statusText.setText(R.string.status_check_master_error);
                     break;
                 }

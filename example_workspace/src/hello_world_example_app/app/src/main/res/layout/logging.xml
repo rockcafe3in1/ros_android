@@ -25,6 +25,12 @@
         android:hint="@string/myIP_hint"
         android:digits="0123456789." />
 
+    <EditText
+        android:id="@+id/remapping_args"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/remapping_args_hint" />
+
     <Button
         android:id="@+id/run_button"
         android:layout_width="wrap_content"

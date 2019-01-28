@@ -29,7 +29,7 @@ JNIEXPORT void JNICALL Java_com_ros_example_hello_1ros_MainActivity_00024RosThre
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_ros_example_hello_1ros_MainActivity_00024RosThread_checkRosMaster
-  (JNIEnv *, jobject, jstring, jstring);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_ros_example_hello_ros_MainActivity_RosThread

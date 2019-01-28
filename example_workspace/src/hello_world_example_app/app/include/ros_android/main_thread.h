@@ -17,7 +17,7 @@ class MainThread {
 
     virtual void run() = 0;
     virtual void stop() = 0;
-    bool check_ros_master(std::string master_ip, std::string my_ip);
+    bool check_ros_master(const std::vector<std::pair<std::string, std::string>> remapings);
   private:
     std::string node_name;
 
