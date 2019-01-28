@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
 
     private RosThread mainThread;
     private EditText masterIP;
+    private EditText masterPort;
     private EditText myIP;
     private EditText remappingArgs;
     private Button runButton;
@@ -64,6 +65,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.logging);
 
         masterIP = (EditText) findViewById(R.id.master_ip);
+        masterPort = (EditText) findViewById(R.id.master_port);
         myIP = (EditText) findViewById(R.id.my_ip);
         remappingArgs = (EditText) findViewById(R.id.remapping_args);
         runButton = (Button) findViewById(R.id.run_button);
@@ -77,6 +79,10 @@ public class MainActivity extends Activity {
         String masterIPPreference = sharedPreferences.getString(getString(R.string.pref_master_ip_key),
                 getResources().getString(R.string.pref_master_ip_default));
         masterIP.setText(masterIPPreference);
+
+        String masterPortPreference = sharedPreferences.getString(getString(R.string.pref_master_port_key),
+                getResources().getString(R.string.pref_master_port_default));
+        masterPort.setText(masterPortPreference);
 
         String remappingsPreference = sharedPreferences.getString(getString(R.string.pref_remappings_key),
                 getResources().getString(R.string.pref_remappings_default));
@@ -118,6 +124,7 @@ public class MainActivity extends Activity {
     private void runButtonCallback() {
         switch (status) {
             case WAITING:
+                // Master IP.
                 String sMasterIP = masterIP.getText().toString();
                 if (!sMasterIP.matches(IP_REGEX_EXPRESSION)) {
                     statusText.setText(R.string.status_masterIP_error);
@@ -125,6 +132,22 @@ public class MainActivity extends Activity {
                 }
                 Log.i(TAG, "master ip is fine: " + sMasterIP);
 
+                // Master port
+                String sMasterPort = masterPort.getText().toString();
+                int iMasterPort = -1;
+                try {
+                    iMasterPort = Integer.parseInt(sMasterPort);
+                } catch (Exception e) {
+                    Log.w(TAG, "invalid master port.");
+                }
+
+                if (iMasterPort < 0 || iMasterPort > 65535) {
+                    statusText.setText(R.string.status_master_port_error);
+                    break;
+                }
+                Log.i(TAG, "master port is fine: " + sMasterPort);
+
+                // Device's IP.
                 String sMyIP = myIP.getText().toString();
                 if (!sMyIP.matches(IP_REGEX_EXPRESSION)) {
                     statusText.setText(R.string.status_myIP_error);
@@ -132,8 +155,9 @@ public class MainActivity extends Activity {
                 }
                 Log.i(TAG, "my ip is fine: " + sMyIP);
 
+                // Remapping arguments.
                 List<Pair<String, String>> remappings = new ArrayList();
-                Pair<String, String> master = new Pair<String, String>("__master", "http://" + sMasterIP + ":11311");
+                Pair<String, String> master = new Pair<String, String>("__master", "http://" + sMasterIP + ":" + sMasterPort);
                 Pair<String, String> ip = new Pair<String, String>("__ip", sMyIP);
                 remappings.add(master);
                 remappings.add(ip);
@@ -169,6 +193,7 @@ public class MainActivity extends Activity {
 
                 Editor sharedPreferencesEditor = sharedPreferences.edit();
                 sharedPreferencesEditor.putString(getString(R.string.pref_master_ip_key), sMasterIP);
+                sharedPreferencesEditor.putString(getString(R.string.pref_master_port_key), sMasterPort);
                 sharedPreferencesEditor.putString(getString(R.string.pref_remappings_key), sRemappingArgs);
                 sharedPreferencesEditor.apply();
                 break;

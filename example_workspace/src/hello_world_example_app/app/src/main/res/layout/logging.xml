@@ -19,6 +19,13 @@
         android:digits="0123456789." />
 
     <EditText
+        android:id="@+id/master_port"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/master_port_hint"
+        android:digits="0123456789" />
+
+    <EditText
         android:id="@+id/my_ip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
