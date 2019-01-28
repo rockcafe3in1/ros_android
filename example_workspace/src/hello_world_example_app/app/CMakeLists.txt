@@ -25,7 +25,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 # now build app's shared lib
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Werror")
 
-add_library(native-activity SHARED src/main/jni/com_ros_example_hello_ros_MainActivity_RosThread.cpp src/main/cpp/main.cpp src/main/cpp/main_thread.cpp)
+add_library(native-activity SHARED src/main/jni/org_ros_android_example_hello_ros_MainActivity_RosThread.cpp src/main/cpp/main.cpp src/main/cpp/main_thread.cpp)
 
 
 # add lib dependencies

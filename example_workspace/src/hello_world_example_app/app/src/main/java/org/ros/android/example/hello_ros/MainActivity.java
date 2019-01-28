@@ -1,4 +1,4 @@
-package com.ros.example.hello_ros;
+package org.ros.android.example.hello_ros;
 
 import android.Manifest;
 import android.app.Activity;
