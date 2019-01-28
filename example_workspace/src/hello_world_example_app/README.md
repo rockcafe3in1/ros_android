@@ -34,3 +34,11 @@ If you already have compiled the basic catkin workspace, you can enter the docke
 		adb logcat
 
   You should see the heartbeat messages as well as any message you publish to `/chatter` topic in Android's log.
+
+### Remapping arguments
+
+You can also remap topics as if you were launching a ROS console application. For example, to remap the topic enter the following:
+
+	/chatter:=/custom_topic
+
+In this case, you will see the output in `/custom_topic` instead.
