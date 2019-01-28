@@ -24,6 +24,8 @@ public class MainActivity extends Activity {
         System.loadLibrary("native-activity");
     }
 
+    private static final String IP_REGEX_EXPRESSION =
+            "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
     private final String TAG = "HELLO-WORLD-EXAMPLE";
 
     private enum Status {
@@ -102,20 +104,17 @@ public class MainActivity extends Activity {
     }
 
     private void runButtonCallback() {
-        String ipRegexExpression =
-            "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-
         switch (status) {
             case WAITING:
                 String sMasterIP = masterIP.getText().toString();
-                if (! sMasterIP.matches(ipRegexExpression)) {
+                if (!sMasterIP.matches(IP_REGEX_EXPRESSION)) {
                     statusText.setText(R.string.status_masterIP_error);
                     break;
                 }
                 Log.i(TAG, "master ip is fine: " + sMasterIP);
 
                 String sMyIP = myIP.getText().toString();
-                if (! sMyIP.matches(ipRegexExpression)) {
+                if (!sMyIP.matches(IP_REGEX_EXPRESSION)) {
                     statusText.setText(R.string.status_myIP_error);
                     break;
                 }
@@ -128,18 +127,23 @@ public class MainActivity extends Activity {
                 remappings.add(ip);
 
                 // Parse remappings - basic error handling.
-                try {
-                    String[] remappingExtras = remappingArgs.getText().toString().split(" ");
-                    for (String remapping : remappingExtras) {
-                        String[] remappingBits = remapping.split(":=");
-                        Pair<String, String> remappingPair = new Pair<String, String>(remappingBits[0], remappingBits[1]);
-                        remappings.add(remappingPair);
+                String sRemappingArgs = remappingArgs.getText().toString();
+                if (!"".equals(sRemappingArgs)) {
+                    try {
+                        String[] remappingExtras = remappingArgs.getText().toString().split(" ");
+                        for (String remapping : remappingExtras) {
+                            String[] remappingBits = remapping.split(":=");
+                            Pair<String, String> remappingPair = new Pair<String, String>(remappingBits[0], remappingBits[1]);
+                            remappings.add(remappingPair);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Could not parse remappings properly.", e);
                     }
-                } catch (Exception e) {
-                    Log.e(TAG, "Could not parse remappings properly.", e);
+                } else {
+                    Log.i(TAG, "No remapping arguments provided.");
                 }
 
-                if (! mainThread.checkRosMaster(remappings)) {
+                if (!mainThread.checkRosMaster(remappings)) {
                     statusText.setText(R.string.status_check_master_error);
                     break;
                 }

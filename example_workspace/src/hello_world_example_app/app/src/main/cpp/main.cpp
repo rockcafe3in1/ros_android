@@ -11,13 +11,11 @@ class HelloRos : public ros_android::MainThread {
     HelloRos() : ros_android::MainThread("hello_ros") {}
 
     virtual void run() override {
-      ros::NodeHandle n;
-
       /* Write your main code here */
-      ROS_INFO("GOING TO PUBLISHER");
+      ros::NodeHandle n;
+      ROS_INFO("Starting hello_ros main thread.");
 
-      // Creating a publisher and a subscriber
-      // When something is received in chatter topic, a message is published in a_chatter topic
+      // Creating a publisher and a subscriber; do a loopback in /chatter topic.
       chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
       ros::Subscriber sub = n.subscribe<std_msgs::String>("chatter", 1000, std::bind(&HelloRos::chatterCallback, this, std::placeholders::_1));
 
@@ -25,12 +23,12 @@ class HelloRos : public ros_android::MainThread {
       ros::WallRate loop_rate(1);
 
       int loop_count = 0;
-      while(ros::ok()) {
+      while (ros::ok()) {
         ros::spinOnce();
 
         std_msgs::String msgo;
         std::stringstream ss;
-        ss << "hello world from android ndk " << loop_count++;
+        ss << "Hello world from android ndk " << loop_count++;
         msgo.data = ss.str();
         chatter_pub.publish(msgo);
 
@@ -46,7 +44,7 @@ class HelloRos : public ros_android::MainThread {
   private:
     ros::Publisher chatter_pub;
 
-    void chatterCallback(const std_msgs::String::ConstPtr& msg){
+    void chatterCallback(const std_msgs::String::ConstPtr& msg) {
       ROS_INFO("Received message: %s", msg->data.c_str());
     }
 };
