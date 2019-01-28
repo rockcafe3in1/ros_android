@@ -2,7 +2,10 @@ package org.ros.android.example.hello_ros;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -52,6 +55,7 @@ public class MainActivity extends Activity {
     private Button runButton;
     private TextView statusText;
     private Status status;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +70,17 @@ public class MainActivity extends Activity {
         statusText = (TextView) findViewById(R.id.status);
         status = Status.WAITING;
 
-        Log.i(TAG, "new RosThread");
         mainThread = new RosThread();
-        Log.i(TAG, "end RosThread constructor");
+
+        // Handle shared preferences
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String masterIPPreference = sharedPreferences.getString(getString(R.string.pref_master_ip_key),
+                getResources().getString(R.string.pref_master_ip_default));
+        masterIP.setText(masterIPPreference);
+
+        String remappingsPreference = sharedPreferences.getString(getString(R.string.pref_remappings_key),
+                getResources().getString(R.string.pref_remappings_default));
+        remappingArgs.setText(remappingsPreference);
 
         runButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +166,11 @@ public class MainActivity extends Activity {
 
                 new Thread(mainThread).start();
                 status = Status.RUNNING;
+
+                Editor sharedPreferencesEditor = sharedPreferences.edit();
+                sharedPreferencesEditor.putString(getString(R.string.pref_master_ip_key), sMasterIP);
+                sharedPreferencesEditor.putString(getString(R.string.pref_remappings_key), sRemappingArgs);
+                sharedPreferencesEditor.apply();
                 break;
 
             case RUNNING:
