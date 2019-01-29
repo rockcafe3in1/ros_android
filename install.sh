@@ -74,6 +74,11 @@ do
             fi
             shift
         ;;
+        -*)
+            echo "Unrecognized option: $1"
+            help=1
+            break
+        ;;
         *)
             if [[ -z "$prefix" ]]; then
                 if [ ! -d "$1" ]; then
