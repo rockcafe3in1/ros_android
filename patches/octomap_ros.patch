@@ -1,0 +1,14 @@
+--- catkin_ws/src/octomap_ros/CMakeLists.txt
++++ catkin_ws/src/octomap_ros/CMakeLists.txt
+@@ -23,7 +23,10 @@ include_directories(include ${catkin_INCLUDE_DIRS})
+ add_library(${PROJECT_NAME} src/conversions.cpp)
+ 
+ install(TARGETS ${PROJECT_NAME} 
+-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
++  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
++  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
++  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
++)
+ 
+ install(DIRECTORY include/octomap_ros/
+   DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}/octomap_ros/
