@@ -306,7 +306,7 @@
 - tar:
     local-name: laser_assembler
     uri: https://github.com/ros-gbp/laser_assembler-release/archive/release/kinetic/laser_assembler/1.7.4-0.tar.gz
-    version: laser_assembler-release-release-kinetic-laser_assembler-1.7.4-0
+    version: laser_assembler-release-release-kinetic-laser_assembler
 - tar:
     local-name: laser_filters
     uri: https://github.com/ros-gbp/laser_filters-release/archive/release/kinetic/laser_filters/1.8.5-0.tar.gz
@@ -447,7 +447,7 @@
 - tar:
     local-name: opencv3
     uri: https://github.com/ros-gbp/opencv3-release/archive/release/kinetic/opencv3/3.3.1-5.tar.gz
-    version: opencv3-release-release-kinetic-opencv3-3.3.1-5
+    version: opencv3-release-release-kinetic-opencv3
 - tar:
     local-name: orocos_kinematics_dynamics/orocos_kdl
     uri: https://github.com/smits/orocos-kdl-release/archive/release/kinetic/orocos_kdl/1.3.1-0.tar.gz
