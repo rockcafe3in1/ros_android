@@ -62,10 +62,6 @@
     local-name: qhull
     uri: http://www.qhull.org/download/qhull-2015-src-7.2.0.tgz
     version: qhull-2015.2
-- git:
-    local-name: rospkg
-    uri: https://github.com/ros-infrastructure/rospkg.git
-    version: 93b1b72f256badf22ccc926b22646f2e83b720fd
 - tar:
     local-name: sdl
     uri: https://www.libsdl.org/release/SDL-1.2.15.tar.gz
