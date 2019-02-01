@@ -62,7 +62,7 @@ do
             verbose=1
         ;;
         -o|--output)
-            if [[ ! -z "$prefix" ]]; then
+            if [[ -z "$prefix" ]]; then
                 if [ ! -d "$2" ]; then
                     mkdir -p "$2"
                 fi
@@ -74,11 +74,16 @@ do
             fi
             shift
         ;;
+        -*)
+            echo "Unrecognized option: $1"
+            help=1
+            break
+        ;;
         *)
-            if [[ ! -z "$prefix" ]]; then
+            if [[ -z "$prefix" ]]; then
                 if [ ! -d "$1" ]; then
                     set +e
-                    mkdir -p "$1" || help=1; break
+                    mkdir -p "$1"
                     set -e
                 fi
                 prefix=$(cd "$1" && pwd)
