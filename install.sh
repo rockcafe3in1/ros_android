@@ -106,7 +106,11 @@ if [[ $help -eq 1 ]] ; then
     exit 1
 fi
 
-source $my_loc/scripts/config.sh $prefix
+# Export common paths
+source $my_loc/scripts/config.sh
+export OUTPUT_DIR="$prefix"
+export TARGET_DIR=$OUTPUT_DIR/target
+export LIBS_DIR=$OUTPUT_DIR/libs
 source $SCRIPT_DIR/utils.sh
 
 if [[ $skip -eq 1 ]]; then
@@ -129,7 +133,12 @@ fi
 run_cmd() {
     cmd="$1".sh
     shift
-    $SCRIPT_DIR/$cmd $@ || die "$cmd $@ died with error code $?"
+    if [ -x $SCRIPT_DIR/$cmd ]; then
+        cmd=$SCRIPT_DIR/$cmd
+    elif [ -x $BASE_DIR/$cmd ]; then
+        cmd=$BASE_DIR/$cmd
+    fi
+    $cmd "$@" || die "$cmd $@ died with error code $?"
 }
 
 if [ -z $ANDROID_NDK_HOME ] ; then
@@ -240,5 +249,5 @@ if [[ $samples -eq 1 ]];then
     # NOTE(ivanpauno): Samples are built with verbosity, as usually gradle fails when downloading packages.
     # Maybe, an intermediate verbosity option could be used here
     # NOTE(ivanpauno): The example workspace is built using Debug option. The idea is to avoid apk signing.
-    run_cmd build_catkin_workspace -w $my_loc/example_workspace -p $prefix -b Debug -v 1
+    run_cmd build_catkin_workspace -w $my_loc/example_workspace -p $my_loc/example_workspace -e $TARGET_DIR -b Debug -v 1
 fi

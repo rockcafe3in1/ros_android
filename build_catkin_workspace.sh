@@ -2,15 +2,19 @@
 # Builds catkin workspace with ROS packages and catkinized dependencies.
 # See help for required arguments. 
 #
-# Required environment variables:
-# - BASE_DIR: where android.toolchain.cmake is located.
-# - SCRIPT_DIR: where utility scripts are located.
+# Used environment variables:
 # - OUTPUT_DIR: default output directory if path argument is not set.
+
+# Abort script on any failures
+set -e
+
+my_loc="$(cd "$(dirname $0)" && pwd)"
 
 # print a help screen
 function print_help {
     echo "Usage: $0 [options] -p OUTPUT_DIR [catkin build args...]"
     echo "Options:"
+    echo "  -e --extend <path> catkin workspace to extend"
     echo "  -p --prefix <path> output directory (required)"
     echo "  -w --workspace <path> catkin workspace to be built. (required)"
     echo "  -b --build-type <cmake_build_type> build binaries with the corresponding cmake build flag"
@@ -35,11 +39,12 @@ CMAKE_BUILD_TYPE=Release
 VERBOSE=""
 
 # source utilities to our environment
+source $my_loc/scripts/config.sh
 source $SCRIPT_DIR/utils.sh
-
 
 # process options
 CATKIN_ARGS=()
+EXTEND=()
 while [[ $# > 0 ]]
 do
     key="$1"
@@ -69,6 +74,10 @@ do
             WORKSPACE=${2?"Usage: $0 -r <WORKSPACE>"}
             shift # past argument
         ;;
+        -e|--extend)
+            EXTEND+=("${2?:"Usage: $0 -e <DEVEL/INSTALLSPACE>"}")
+            shift # past argument
+        ;;
         *)
             CATKIN_ARGS+=("$1")
         ;;
@@ -95,6 +104,14 @@ fi
 prefix=$(cd $OUTPUT_DIR && pwd)
 TARGET_PATH=$prefix/target
 
+# extend workspaces
+if [ ${#EXTEND} -gt 0 ]; then
+  catkin_extend="--extend ${EXTEND[0]}"
+else
+  catkin_extend="--no-extend"
+fi
+CMAKE_FIND_ROOT_PATH=($prefix "${EXTEND[@]}")
+
 python=$(which python)
 python_lib=/usr/lib/x86_64-linux-gnu/libpython2.7.so
 python_inc=/usr/include/python2.7
@@ -107,14 +124,14 @@ echo -e '\e[34mRunning catkin build.\e[39m'
 echo
 
 catkin config \
-  --no-extend \
+  $catkin_extend \
   --install-space $TARGET_PATH \
   --install \
   --isolate-devel \
   --cmake-args \
     -DCMAKE_TOOLCHAIN_FILE=$RBA_TOOLCHAIN \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-    -DCMAKE_FIND_ROOT_PATH=$prefix \
+    -DCMAKE_FIND_ROOT_PATH=$(IFS=";"; echo "${CMAKE_FIND_ROOT_PATH[*]}") \
     -DANDROID_ABI=${ANDROID_ABI} -DANDROID_PLATFORM=${ANDROID_PLATFORM} -DANDROID_STL=${ANDROID_STL} \
     -DPYTHON_EXECUTABLE=$python -DPYTHON_LIBRARY=$python_lib \
     -DPYTHON_INCLUDE_DIR=$python_inc -DPYTHON_INCLUDE_DIR2=$python2_inc \
