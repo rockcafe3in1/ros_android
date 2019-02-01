@@ -9,8 +9,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -51,7 +55,8 @@ public class MainActivity extends Activity {
     private RosThread mainThread;
     private EditText masterIP;
     private EditText masterPort;
-    private EditText myIP;
+    private CheckBox myIPCheckBox;
+    private Spinner myIP;
     private EditText remappingArgs;
     private Button runButton;
     private TextView statusText;
@@ -66,7 +71,8 @@ public class MainActivity extends Activity {
 
         masterIP = (EditText) findViewById(R.id.master_ip);
         masterPort = (EditText) findViewById(R.id.master_port);
-        myIP = (EditText) findViewById(R.id.my_ip);
+        myIPCheckBox = (CheckBox) findViewById(R.id.my_ip_checkbox);
+        myIP = (Spinner) findViewById(R.id.my_ip);
         remappingArgs = (EditText) findViewById(R.id.remapping_args);
         runButton = (Button) findViewById(R.id.run_button);
         statusText = (TextView) findViewById(R.id.status);
@@ -95,10 +101,12 @@ public class MainActivity extends Activity {
             }
         });
 
-        String ip = getLocalIpAddress();
-        if (ip != null) {
-            myIP.setText(ip);
-        }
+        List<String> ipAddressList = getLocalIpAddresses();
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, ipAddressList);
+        adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+        myIP.setAdapter(adapter);
+        onCheckboxClicked(myIPCheckBox);
     }
 
     @Override
@@ -124,6 +132,9 @@ public class MainActivity extends Activity {
     private void runButtonCallback() {
         switch (status) {
             case WAITING:
+                // Remapping arguments.
+                List<Pair<String, String>> remappings = new ArrayList();
+
                 // Master IP.
                 String sMasterIP = masterIP.getText().toString();
                 if (!sMasterIP.matches(IP_REGEX_EXPRESSION)) {
@@ -146,21 +157,20 @@ public class MainActivity extends Activity {
                     break;
                 }
                 Log.i(TAG, "master port is fine: " + sMasterPort);
+                Pair<String, String> master = new Pair<String, String>("__master", "http://" + sMasterIP + ":" + sMasterPort);
+                remappings.add(master);
 
                 // Device's IP.
-                String sMyIP = myIP.getText().toString();
-                if (!sMyIP.matches(IP_REGEX_EXPRESSION)) {
-                    statusText.setText(R.string.status_myIP_error);
-                    break;
+                if (myIPCheckBox.isChecked()) {
+                    String sMyIP = String.valueOf(myIP.getSelectedItem());
+                    if (!sMyIP.matches(IP_REGEX_EXPRESSION)) {
+                        statusText.setText(R.string.status_myIP_error);
+                        break;
+                    }
+                    Log.i(TAG, "my ip is fine: " + sMyIP);
+                    Pair<String, String> ip = new Pair<String, String>("__ip", sMyIP);
+                    remappings.add(ip);
                 }
-                Log.i(TAG, "my ip is fine: " + sMyIP);
-
-                // Remapping arguments.
-                List<Pair<String, String>> remappings = new ArrayList();
-                Pair<String, String> master = new Pair<String, String>("__master", "http://" + sMasterIP + ":" + sMasterPort);
-                Pair<String, String> ip = new Pair<String, String>("__ip", sMyIP);
-                remappings.add(master);
-                remappings.add(ip);
 
                 // Parse remappings - basic error handling.
                 String sRemappingArgs = remappingArgs.getText().toString();
@@ -208,21 +218,33 @@ public class MainActivity extends Activity {
         }
     }
 
-    private String getLocalIpAddress(){
+    public void onCheckboxClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        switch(view.getId()) {
+            case R.id.my_ip_checkbox:
+                myIP.setEnabled(checked);
+                myIP.setClickable(checked);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private List<String> getLocalIpAddresses() {
+        List<String> availableIPAddresses = new ArrayList<String>();
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-            en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
+            for (NetworkInterface netInterface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                for (InetAddress inetAddress : Collections.list(netInterface.getInetAddresses())) {
                     if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                        return inetAddress.getHostAddress();
+                        availableIPAddresses.add(inetAddress.getHostAddress());
                     }
                 }
             }
         } catch (Exception ex) {
             Log.e("IP Address", ex.toString());
         }
-        return null;
+        return availableIPAddresses;
     }
 }

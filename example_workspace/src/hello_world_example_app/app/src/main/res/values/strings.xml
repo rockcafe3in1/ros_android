@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RosHello</string>
-    <string name="masterIP_hint">Enter ros master IP address</string>
-    <string name="master_port_hint">Enter ros master port</string>
-    <string name="myIP_hint">Enter your IP address</string>
+    <string name="masterIP_hint">ROS master IP</string>
+    <string name="master_port_hint">ROS master port</string>
+    <string name="my_ip_checkbox">Force ROS_IP</string>
     <string name="remapping_args_hint">Enter extra remapping arguments</string>
     <string name="button_run">Run</string>
     <string name="button_stop">Stop</string>

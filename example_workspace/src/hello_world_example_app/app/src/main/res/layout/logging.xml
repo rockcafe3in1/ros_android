@@ -11,26 +11,45 @@
         android:text="@string/status_waiting"
         android:digits="0123456789." />
 
-    <EditText
-        android:id="@+id/master_ip"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/masterIP_hint"
-        android:digits="0123456789." />
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/master_port"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/master_port_hint"
-        android:digits="0123456789" />
+        <EditText
+            android:id="@+id/master_ip"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/masterIP_hint"
+            android:digits="0123456789." />
 
-    <EditText
-        android:id="@+id/my_ip"
-        android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/master_port"
+            android:layout_width="0dp"
+            android:layout_weight="0.9"
+            android:layout_height="wrap_content"
+            android:hint="@string/master_port_hint"
+            android:digits="0123456789" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/myIP_hint"
-        android:digits="0123456789." />
+        android:orientation="horizontal">
+
+        <CheckBox android:id="@+id/my_ip_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_ip_checkbox"
+            android:checked="false"
+            android:onClick="onCheckboxClicked"/>
+
+        <Spinner
+            android:id="@+id/my_ip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/remapping_args"
