@@ -10,7 +10,7 @@ The result workspace with the code and the compiled libraries will be placed in 
 
 You can use the sample applications as a guide to build an Android app on top of the cross compiled libraries using Catkin, Gradle and CMake.
 
-## Installation - under the hood
+## [Installation - under the hood](#installation)
 
 Build docker image and run it:
     
@@ -45,3 +45,21 @@ The following steps should serve as a guide when adding new packages or dependen
 - Add a patch if necessary to `patches` directory.
 - If it's a system dependency, add a build rule to `install.sh`. According to the library, it may be necessary to use `build_library` script or adding a special rule to `build_library_with_toolchain`.
 - That's it! Test your build and watch out build errors. Using `verbose` flags when building should help finding hints about the problems that may arise.
+
+## Building your own apps and libraries on top of ROS cross-compiled workspace
+
+You can use `build_catkin_workspace` as a standalone script to build your Android application or library as a catkin package,
+making use of the ROS cross compiled libraries and system dependencies. The examples under [example_workspace](https://github.com/Intermodalics/ros_android/tree/kinetic/example_workspace/src) can be used as a starting point and as a reference to build your code; in short they are Gradle projects wrapped as Catkin packages.
+
+Here's some guidelines to take into account when creating new projects, using `hello_world` app as an example:
+- Your code should have the structure of a ROS Android package, with a top level `CMakeLists` to make Gradle interact with Catkin. Take [this CMakeLists file](https://github.com/Intermodalics/ros_android/blob/kinetic/example_workspace/src/hello_world_example_app/CMakeLists.txt) as an example.
+- A [package.xml](https://github.com/Intermodalics/ros_android/blob/kinetic/example_workspace/src/hello_world_example_app/package.xml) has to be created, declaring Catkin as the build tool, and the ROS dependencies.
+- In the [bottom level gradle buildscript](https://github.com/Intermodalics/ros_android/blob/kinetic/example_workspace/src/hello_world_example_app/app/build.gradle), add the necessary arguments to the `externalNativeBuild` block, and specify ABI filters as in [here](https://github.com/Intermodalics/ros_android/blob/kinetic/example_workspace/src/hello_world_example_app/app/build.gradle#L10-L23). Then, specify the path to the bottom level CMakeLists file as in [here](https://github.com/Intermodalics/ros_android/blob/kinetic/example_workspace/src/hello_world_example_app/app/build.gradle#L31-L36).
+- Finally, write your [bottom level CMakeLists file](https://github.com/Intermodalics/ros_android/blob/kinetic/example_workspace/src/hello_world_example_app/app/src/main/cpp/CMakeLists.txt). Note that the way of finding and adding packages as dependencies should be just as in any regular Catkin project.
+
+Once your project is ready to be built, place it inside a catkin workspace (i.e. `/path/to/your/workspace/src`). Then, it can be built with the standalone script like this:
+```
+build_catkin_workspace.sh -w /path/to/your/workspace -p /path/to/install_space -e /path/to/workspace -b Debug -v 1
+```
+
+where `/path/to/workspace` is the root directory of the cross compiled packages and libraries in the [installation step](#installation). Debug and verbose flags are recommended while developing.
