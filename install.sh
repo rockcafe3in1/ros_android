@@ -244,8 +244,6 @@ if [[ $samples -eq 1 ]];then
     echo -e '\e[34mBuilding sample apps.\e[39m'
     echo
 
-    source $TARGET_DIR/setup.bash
-
     # NOTE(ivanpauno): Samples are built with verbosity, as usually gradle fails when downloading packages.
     # Maybe, an intermediate verbosity option could be used here
     # NOTE(ivanpauno): The example workspace is built using Debug option. The idea is to avoid apk signing.
