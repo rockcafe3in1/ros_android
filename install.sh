@@ -189,6 +189,12 @@ echo
 echo -e '\e[34mBuilding library dependencies.\e[39m'
 echo
 
+# Copy c++_shared library to target space
+if [ "$ANDROID_STL" = "c++_shared" ]; then
+    mkdir -p $TARGET_DIR/lib
+    cp -uv $ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++/libs/$ANDROID_ABI/libc++_shared.so $TARGET_DIR/lib
+fi
+
 # if the library doesn't exist, then build it
 [ -f $TARGET_DIR/lib/libbz2.a ] || run_cmd build_library_with_cmake bzip2 $LIBS_DIR/bzip2
 [ -f $TARGET_DIR/lib/libuuid.a ] || run_cmd build_library_with_cmake uuid $LIBS_DIR/uuid
