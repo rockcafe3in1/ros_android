@@ -89,7 +89,7 @@ if [ "$WORKSPACE" = "" ]; then
   exit 1
 fi
 
-: ${RBA_TOOLCHAIN:=$BASE_DIR/android.toolchain.cmake}
+: ${RBA_TOOLCHAIN:=$BASE_DIR/cmake/android.toolchain.cmake}
 
 # get the prefix path
 prefix=$(cd $OUTPUT_DIR && pwd)
