@@ -155,10 +155,10 @@ mkdir -p $LIBS_DIR
 
 [ -d $TARGET_DIR ] || mkdir -p $TARGET_DIR
 
-export RBA_TOOLCHAIN=$my_loc/android.toolchain.cmake
+export RBA_TOOLCHAIN=$my_loc/cmake/android.toolchain.cmake
 
 # Get all library dependencies.
-run_cmd get_system_dependencies $my_loc/system_deps.rosinstall $LIBS_DIR $my_loc/files
+run_cmd get_system_dependencies $my_loc/system_deps.rosinstall $LIBS_DIR
 
 echo
 echo -e '\e[34mGetting ROS packages\e[39m'
@@ -177,8 +177,7 @@ echo -e '\e[34mBuilding pluginlib support...\e[39m'
 echo
 
 pluginlib_helper_file=pluginlib_helper.cpp
-$my_loc/files/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src ${plugin_search_paths[*]} -cppout $my_loc/files/pluginlib_helper/$pluginlib_helper_file
-cp $my_loc/files/pluginlib_helper/$pluginlib_helper_file $prefix/catkin_ws/src/pluginlib/src/
+$my_loc/scripts/pluginlib_helper/pluginlib_helper.py -scanroot $prefix/catkin_ws/src ${plugin_search_paths[*]} -cppout $prefix/catkin_ws/src/pluginlib/src/$pluginlib_helper_file
 line="add_library(pluginlib STATIC src/pluginlib_helper.cpp)"
 # temporally turn off error detection
 set +e
@@ -197,6 +196,12 @@ set -e
 echo
 echo -e '\e[34mBuilding library dependencies.\e[39m'
 echo
+
+# Copy c++_shared library to target space
+if [ "$ANDROID_STL" = "c++_shared" ]; then
+    mkdir -p $TARGET_DIR/lib
+    cp -uv $ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++/libs/$ANDROID_ABI/libc++_shared.so $TARGET_DIR/lib
+fi
 
 # if the library doesn't exist, then build it
 [ -f $TARGET_DIR/lib/libbz2.a ] || run_cmd build_library_with_cmake bzip2 $LIBS_DIR/bzip2

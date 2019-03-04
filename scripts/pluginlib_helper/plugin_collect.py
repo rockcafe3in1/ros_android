@@ -5,23 +5,9 @@ from plugin_description import PluginDescription
 import os, sys, inspect
 import collections
 import re
-
-
-# I need rospkg. Tell me where it is!
-import_folder = "files/rospkg/src/rospkg/"
-DEBUG = False
-
-# get the real path to the script in case it is a symlink
-cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
-if cmd_folder not in sys.path:
-   sys.path.insert(0, cmd_folder)
-
-# add folder to the path so we can import modules from it
-cmd_subfolder = os.path.realpath(os.path.abspath(os.path.join(os.path.split(inspect.getfile(inspect.currentframe()))[0], import_folder)))
-if cmd_subfolder not in sys.path:
-   sys.path.insert(0, cmd_subfolder)
-
 from rospkg import RosPack
+
+DEBUG = False
 
 
 def test():
