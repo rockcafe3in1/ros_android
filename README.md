@@ -72,7 +72,7 @@ Unlike regular ROS development under Linux, plugins are compiled as static libra
 The `nodelet` sample application [CMakeLists](https://github.com/Intermodalics/ros_android/blob/kinetic/example_workspace/src/nodelet_sample_app/jni/CMakeLists.txt) is a good example to start with; note that `-Wl, --whole-archive` flags are used for plugins in particular to prevent the linker from stripping symbols that need to be included. In general terms, a structure like this one should work:
 
 ```
-find_package(catkin REQUIRED COMPONENTS plugin_package_name)	# Add all required catkin components as well.
+find_package(catkin REQUIRED COMPONENTS plugin_package_name)    # Add all required catkin components as well.
 
 find_library(plugin_name_PLUGIN NAMES plugin_name) # List all the required plugins.
 
@@ -84,8 +84,8 @@ SET (WHOLE_ARCHIVE_LIBRARIES
 
 # add lib dependencies
 target_link_libraries(${PROJECT_NAME}
-	# Add app required libraries e.g. android here.
-    ${catkin_LIBRARIES}
+    # Add app required libraries e.g. android here.
     ${WHOLE_ARCHIVE_LIBRARIES}
+    ${catkin_LIBRARIES}
 )
 ```
