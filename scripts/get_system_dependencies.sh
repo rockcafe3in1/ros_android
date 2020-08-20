@@ -21,6 +21,11 @@ echo
 echo -e '\e[34mGetting system libraries.\e[39m'
 echo
 
+echo
+echo -e 'Install wstool, apt-get install python-wstool'
+echo
+
+apt-get install python-wstool -y
 cmd_exists wstool || die 'wstool was not found'
 
 rosinstall_file="$1"
