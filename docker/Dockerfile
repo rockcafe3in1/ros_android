@@ -29,6 +29,9 @@ ENV PATH /opt/android/sdk/tools:/opt/android/sdk/platform-tools:/opt/android/sdk
 # Install Python libraries
 RUN apt-get install python-lxml -y
 
+# Install wstool
+RUN apt-get install python-wstool -y
+
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 
 # Use ccache
@@ -37,6 +40,12 @@ ENV USE_CCACHE 1
 ENV NDK_CCACHE /usr/bin/ccache
 ENV CCACHE_DIR /opt/roscpp_output/ccache
 ENV PATH /usr/lib/ccache:$PATH
+
+# Setup proxy
+ENV git config --global http.proxy http://host.docker.internal:58592
+ENV https_proxy=http://host.docker.internal:58592
+ENV http_proxy=http://host.docker.internal:58592
+ENV ALL_PROXY=socks5://host.docker.internal:51837
 
 # Clear entrypoint (do not source /opt/ros/kinetic)
 ENTRYPOINT []
