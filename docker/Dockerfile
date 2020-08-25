@@ -4,8 +4,8 @@ MAINTAINER Gary Servin <gary@ekumenlabs.com>
 MAINTAINER Juan Ignacio Ubeira <jubeira@ekumenlabs.com>
 
 # Setup proxy
-ENV http_proxy http://host.docker.internal:58591
-ENV https_proxy http://host.docker.internal:58591
+ENV http_proxy http://host.docker.internal:58592
+ENV https_proxy http://host.docker.internal:58592
 ENV ALL_PROXY socks5://host.docker.internal:51837
 
 # Install basic tools
