@@ -212,14 +212,14 @@ fi
 [ -f $TARGET_DIR/lib/libtinyxml2.a ] || run_cmd build_library_with_cmake tinyxml2 $LIBS_DIR/tinyxml2
 [ -f $TARGET_DIR/lib/libconsole_bridge.a ] || run_cmd build_library_with_cmake console_bridge $LIBS_DIR/console_bridge
 [ -f $TARGET_DIR/lib/liblz4.a ] || run_cmd build_library_with_cmake lz4 $LIBS_DIR/lz4/cmake_unofficial
-[ -f $TARGET_DIR/lib/libcurl.a ] || run_cmd build_library_with_toolchain curl $LIBS_DIR/curl
+[ -f $TARGET_DIR/lib/libcurl.a ] || run_cmd build_library_with_toolchain curl $LIBS_DIR/curl/curl-7.47.0
 [ -f $TARGET_DIR/include/urdf_model/model.h ] || run_cmd build_library_with_cmake urdfdom_headers $LIBS_DIR/urdfdom_headers
 [ -f $TARGET_DIR/lib/liburdfdom_model.a ] || run_cmd build_library_with_cmake urdfdom $LIBS_DIR/urdfdom
 [ -f $TARGET_DIR/lib/libiconv.a ] || run_cmd build_library_with_toolchain libiconv $LIBS_DIR/libiconv
 [ -f $TARGET_DIR/lib/libxml2.a ] || run_cmd build_library_with_toolchain libxml2 $LIBS_DIR/libxml2
 [ -f $TARGET_DIR/lib/libcollada-dom2.4-dp.a ] || run_cmd build_library_with_cmake collada_dom $LIBS_DIR/collada_dom
 [ -f $TARGET_DIR/lib/libassimp.a ] || run_cmd build_library_with_cmake assimp $LIBS_DIR/assimp
-[ -f $TARGET_DIR/include/eigen3/signature_of_eigen3_matrix_library ] || run_cmd build_library_with_cmake eigen $LIBS_DIR/eigen
+[ -f $TARGET_DIR/include/eigen3/signature_of_eigen3_matrix_library ] || run_cmd build_library_with_cmake eigen $LIBS_DIR/eigen/eigen-eigen-b3f3d4950030
 [ -f $TARGET_DIR/lib/libqhullstatic.a ] || run_cmd build_library_with_cmake qhull $LIBS_DIR/qhull
 [ -f $TARGET_DIR/lib/libyaml-cpp.a ] || run_cmd build_library_with_cmake yaml-cpp $LIBS_DIR/yaml-cpp
 [ -f $TARGET_DIR/lib/libflann_cpp_s.a ] || run_cmd build_library_with_cmake flann $LIBS_DIR/flann

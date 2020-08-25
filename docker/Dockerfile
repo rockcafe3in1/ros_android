@@ -3,11 +3,6 @@ MAINTAINER Julian Cerruti <jcerruti@ekumenlabs.com>
 MAINTAINER Gary Servin <gary@ekumenlabs.com>
 MAINTAINER Juan Ignacio Ubeira <jubeira@ekumenlabs.com>
 
-# Setup proxy
-ENV http_proxy http://host.docker.internal:58592
-ENV https_proxy http://host.docker.internal:58592
-ENV ALL_PROXY socks5://host.docker.internal:51837
-
 # Install basic tools
 RUN apt-get update && apt-get install -y wget git unzip tmux python-catkin-tools python-lxml automake autoconf
 
@@ -36,6 +31,9 @@ RUN apt-get install python-lxml -y
 
 # Install wstool
 RUN apt-get install python-wstool -y
+
+# Install libtoolize
+RUN apt-get install build-essential libtool -y
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 
