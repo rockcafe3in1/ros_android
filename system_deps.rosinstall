@@ -5,7 +5,7 @@
 - git:
     local-name: boost
     uri: https://github.com/moritz-wundke/Boost-for-Android.git
-    version: 286a548aa9b058402cc88766e818a0218725e163
+    version: f1e211ba41f20b29351e9b2c0a620e283c40b298
 - git:
     local-name: bullet
     uri: https://github.com/bulletphysics/bullet3
